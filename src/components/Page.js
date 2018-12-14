@@ -6,16 +6,97 @@ export default function Page() {
         <section className="hero">
             <div className="hero-body">
                 <div className="container">
-                    <nav className="breadcrumb" aria-label="breadcrumbs">
-                        <ul>
-                            <li>
-                                <Link activeClassName='is-active' to='/pages/introduction'>Introduction</Link>
-                            </li>
-                            <li className="is-active">
-                                <Link activeClassName='is-active' to='/pages/introduction/wallets'>wallets</Link>
-                            </li>
-                        </ul>
-                    </nav>
+                    <ul className="steps my-step-style has-content-centered is-hidden-mobile">
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction'>
+                                <span className="steps-marker is-black"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Overview</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/transactions'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Transactions</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment is-active">
+                            <Link to='/pages/introduction/wallets'>
+                                <span className="steps-marker">
+                                    <span className="icon">
+                                        <i className="fa fa-circle is-size-7"></i>
+                                    </span>
+                                </span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Wallets</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/mempool'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Mempool</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/mining'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Mining</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/consensus'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Consensus Algorithms</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/Security'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Security</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/collisions'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Collision</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/scalability'>
+                                <span className="steps-marker"></span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Scalability</p>
+                                </div>
+                            </Link>
+                        </li>
+                        <li className="steps-segment">
+                            <Link to='/pages/introduction/summary'>
+                                <span className="steps-marker">
+                                    <span className="icon">
+                                    <i className="fa fa-check is-size-7"></i>
+                                  </span>
+                                </span>
+                                <div className="steps-content">
+                                    <p className="is-size-5">Summary</p>
+                                </div>
+                            </Link>
+                        </li>
+                    </ul>
+
 
                     <h1 className="title has-text-centered">
                         Wallets
@@ -25,7 +106,7 @@ export default function Page() {
                         <p className='has-text-danger'>
                             here would the content of the page appear..
                         </p>
-                        <br />
+                        <br/>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet malesuada enim. Nulla
                             volutpat dapibus tempus. Duis sagittis enim non porttitor convallis. Etiam a dolor
                             vulputate, elementum lacus maximus, molestie libero. Donec accumsan accumsan egestas. Proin
@@ -36,17 +117,6 @@ export default function Page() {
                             ridiculus mus. Praesent eget tellus in libero sagittis porta. Vivamus aliquet lectus rutrum
                             lorem laoreet, ac ultricies tellus tincidunt. Vivamus non mauris ultricies, placerat turpis
                             eu, aliquet libero. Nunc aliquam dapibus turpis eget malesuada.</p>
-
-                        <p>Nullam scelerisque eget mi non luctus. Sed consequat urna sit amet urna vulputate varius. Sed
-                            non dolor elit. Sed non ligula vulputate, volutpat nisl ut, rutrum nulla. Integer bibendum
-                            pellentesque arcu at elementum. Sed pretium facilisis elementum. Aenean fermentum vel massa
-                            vitae iaculis. Quisque eget lacus vitae risus sodales cursus a vitae lectus.</p>
-<br />
-                        <p>Cras dolor tellus, suscipit nec vulputate id, congue at lacus. Praesent blandit bibendum
-                            felis, in lacinia tortor bibendum eu. Curabitur a lectus metus. Cras vel leo mi. Proin ut
-                            tristique dolor. Donec scelerisque mi eget lectus vehicula convallis. Ut iaculis vitae
-                            mauris id blandit. Donec accumsan blandit turpis in condimentum. Sed imperdiet eget nisi in
-                            auctor.</p>
 
                         <div className='level'>
                             <div className='level-left'>

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bulma": "^0.7.2",
+    "bulma-o-steps": "^1.0.9",
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
@@ -28,5 +29,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.1"
+  }
 }
