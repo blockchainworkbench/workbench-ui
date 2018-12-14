@@ -5,7 +5,7 @@ import PageList from "./search/PageList";
 
 export default function Search() {
     return (
-        <section className="hero">
+        <section className="hero is-fullheight-with-navbar" id='advanced-search'>
             <div className="hero-body">
                 <div className="container">
                     <h1 className="title has-text-centered">
