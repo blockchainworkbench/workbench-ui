@@ -50,6 +50,11 @@ code {
 .mr10 {
     margin-right: 10px;
 }
+
 .is-parent .tile:hover {
     background-color: azure;
+}
+
+.align-items-normal {
+    align-items: normal !important;
 }

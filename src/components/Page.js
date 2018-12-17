@@ -1,9 +1,11 @@
 import React from 'react';
 import {Link} from "react-router-dom";
+import TitleHeader from "./layout/TitleHeader";
 
 export default function Page() {
     return (
         <section className="hero">
+            <TitleHeader/>
             <div className="hero-body">
                 <div className="container">
                     <ul className="steps my-step-style has-content-centered is-hidden-mobile">

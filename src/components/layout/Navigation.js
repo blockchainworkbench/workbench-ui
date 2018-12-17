@@ -1,5 +1,6 @@
 import React from "react";
 import {NavLink} from 'react-router-dom';
+import { NavHashLink} from 'react-router-hash-link';
 
 export default function Navigation() {
     return (
@@ -8,9 +9,9 @@ export default function Navigation() {
                 <NavLink className='navbar-item' activeClassName='is-active' to='/pages/introduction'>
                     Introduction
                 </NavLink>
-                <NavLink className='navbar-item' activeClassName='is-active' to='/?advanced'>
+                <NavHashLink className='navbar-item' activeClassName='is-active' to='/#advanced'>
                     Advanced Search
-                </NavLink>
+                </NavHashLink>
                 <NavLink className='navbar-item' activeClassName='is-active' to='/login'>Login</NavLink>
             </div>
         </nav>);
