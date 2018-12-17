@@ -1,7 +1,7 @@
 {
   "main.css": "/workbench-ui/static/css/main.937e5357.chunk.css",
-  "main.js": "/workbench-ui/static/js/main.2e0899d4.chunk.js",
-  "main.js.map": "/workbench-ui/static/js/main.2e0899d4.chunk.js.map",
+  "main.js": "/workbench-ui/static/js/main.d98a92e7.chunk.js",
+  "main.js.map": "/workbench-ui/static/js/main.d98a92e7.chunk.js.map",
   "static/css/1.4af900ad.chunk.css": "/workbench-ui/static/css/1.4af900ad.chunk.css",
   "static/js/1.48c2b5fe.chunk.js": "/workbench-ui/static/js/1.48c2b5fe.chunk.js",
   "static/js/1.48c2b5fe.chunk.js.map": "/workbench-ui/static/js/1.48c2b5fe.chunk.js.map",
@@ -11,6 +11,6 @@
   "static/css/main.937e5357.chunk.css.map": "/workbench-ui/static/css/main.937e5357.chunk.css.map",
   "static/css/1.4af900ad.chunk.css.map": "/workbench-ui/static/css/1.4af900ad.chunk.css.map",
   "index.html": "/workbench-ui/index.html",
-  "precache-manifest.f75c994d280448ba2f942ddd072d293b.js": "/workbench-ui/precache-manifest.f75c994d280448ba2f942ddd072d293b.js",
+  "precache-manifest.f56df570fcaf5560223043c340bab894.js": "/workbench-ui/precache-manifest.f56df570fcaf5560223043c340bab894.js",
   "service-worker.js": "/workbench-ui/service-worker.js"
 }
