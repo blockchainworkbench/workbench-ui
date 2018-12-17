@@ -1,6 +1,5 @@
 import React from 'react';
 import Navigation from './layout/Navigation';
-import TitleHeader from "./layout/TitleHeader";
 import {BrowserRouter, Redirect, Route, Switch} from 'react-router-dom';
 import Home from './Home';
 import Login from './user/Login';

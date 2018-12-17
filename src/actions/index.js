@@ -4,7 +4,9 @@ export const ACTIONS = {
     REMOVE_CATEGORY_FILTER: "REMOVE_CATEGORY_FILTER",
     CHANGE_CATEGORY_FILTER_TYPE: "CHANGE_CATEGORY_FILTER_TYPE",
     SELECT_PAGE: "SELECT_PAGE",
-    UPDATE_PAGES: "UPDATE_PAGES"
+    PAGES_LOAD_SUCCCESS: "PAGES_LOAD_SUCCCESS",
+    PAGES_LOAD_ERROR: "PAGES_LOAD_ERROR",
+    LOAD_PAGES: "LOAD_PAGES"
 };
 
 export const DIFFICULTY = {
@@ -47,7 +49,16 @@ export const selectPage = pageId => ({
     pageId: pageId
 });
 
-export const updatePages = pages => ({
-    type: ACTIONS.UPDATE_PAGES,
+export const loadPagesSuccess = pages => ({
+    type: ACTIONS.PAGES_LOAD_SUCCCESS,
     pages: pages
+});
+
+export const loadPagesError = error => ({
+    type: ACTIONS.PAGES_LOAD_ERROR,
+    error: error
+});
+
+export const loadPages = () => ({
+    type: ACTIONS.LOAD_PAGES
 });

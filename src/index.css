@@ -58,3 +58,16 @@ code {
 .align-items-normal {
     align-items: normal !important;
 }
+
+.is-30x30 {
+    width: 30px;
+    height: 30px;
+}
+
+.loading {
+    padding-top: 0.7rem;
+}
+
+.float-left {
+    float: left;
+}

@@ -1,37 +1,26 @@
 import React from 'react';
 import PageListItem from './PageListItem';
 import {connect} from 'react-redux';
-import SampleData from '../../pages';
-import {updatePages} from '../../actions';
-import {DIFFICULTY, CATEGORY_FILTER_TYPE} from "../../actions";
+import {CATEGORY_FILTER_TYPE, loadPages} from '../../actions';
 import _ from 'lodash';
 
 class PageList extends React.Component {
     constructor(props) {
         super(props);
-        this.props.updatePages(SampleData.pages);
+        this.props.loadPages();
     }
 
     render() {
         let content = [];
         const rows = _.chunk(this.props.pages, 3);
-
-        for (let row of rows) {
-            content.push(<div className='tile is-ancestor'>
-                {row.map(page => <PageListItem key={page.id} page={page}/>)}
+        for (let row of rows.entries()) {
+            content.push(<div key={row[0]} className='tile is-ancestor'>
+                {row[1].map(page => <PageListItem key={page} page={page}/>)}
             </div>);
         }
         return content;
     }
 }
-
-const getVisiblePagesByDifficulty = (pages, difficulty) => {
-    let filteredPages = [...pages];
-    if (difficulty !== DIFFICULTY.ALL) {
-        filteredPages = filteredPages.filter(page => page.difficulty === difficulty);
-    }
-    return filteredPages;
-};
 
 const getVisiblePagesByCategories = (pages, categories, categoryFilterType) => {
     let filteredPages = [...pages];
@@ -66,8 +55,7 @@ const getFilteredCategoryPages = (pages, category) => {
 };
 
 const getVisiblePages = (pages, difficulty, categories, categoryFilterType) => {
-    const filteredDifficulty = getVisiblePagesByDifficulty(pages, difficulty);
-    return getVisiblePagesByCategories(filteredDifficulty, categories, categoryFilterType);
+    return getVisiblePagesByCategories(pages, categories, categoryFilterType);
 };
 
 const mapStateToProps = state => {
@@ -81,7 +69,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updatePages: pages => dispatch(updatePages(pages))
+        loadPages: () => dispatch(loadPages())
     };
 };
 
