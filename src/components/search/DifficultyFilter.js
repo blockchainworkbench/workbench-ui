@@ -14,7 +14,7 @@ class DifficultyFilter extends React.Component {
 
     render() {
         return (<div className='is-pulled-right mb10'>
-                <span className='has-text-grey-light'>Difficulty:</span>
+                <span className='has-text-grey-light float-left mr10'>Difficulty</span>
 
                 <div className='buttons has-addons'>
                     <button className={this.getClassesForDifficultyButton('all')}

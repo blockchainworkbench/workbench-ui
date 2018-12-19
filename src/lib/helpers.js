@@ -11,3 +11,7 @@ export const getDifficultyColorForTag = (difficulty) => {
             return "is-light"
     }
 };
+
+export const urlify = (string_value) => {
+    return string_value.split(' ').join('_').toLowerCase();
+};

@@ -19,7 +19,7 @@ class CategoryFilter extends React.Component {
         if (this.props.availableCategories.length > 0) {
             return (
                 <p className='has-text-grey-light'>
-                    <span className='float-left'>Available Categories: </span>
+                    <span className='float-left mr10'>Available Categories</span>
                     <span className='tags'>
                     {this.props.availableCategories.map(
                         cat => <span key={cat}
@@ -35,8 +35,8 @@ class CategoryFilter extends React.Component {
     render() {
         return (
             <div>
-                <div>{this.getAvailableCategoryList()}</div>
-                <div>
+                <div className='is-pulled-left'>{this.getAvailableCategoryList()}</div>
+                <div className='clearBoth'>
                     <form onSubmit={this.handleSubmit}>
                         <div className='field has-addons'>
                             <p className='control  is-expanded'>
