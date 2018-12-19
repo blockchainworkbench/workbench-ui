@@ -5,9 +5,16 @@ import Home from './Home';
 import Login from './user/Login';
 import Pages from './Pages';
 import Page from './Page';
+import {loadPages} from "../actions";
+import {connect} from "react-redux";
 
 
 class App extends React.Component {
+
+    componentDidMount() {
+        this.props.loadPages();
+    }
+
     render() {
         return (
             <BrowserRouter basename={process.env.PUBLIC_URL}>
@@ -27,4 +34,10 @@ class App extends React.Component {
     }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => {
+    return {
+        loadPages: () => dispatch(loadPages())
+    };
+};
+
+export default connect(null, mapDispatchToProps)(App);

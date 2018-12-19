@@ -1,14 +1,10 @@
 import React from 'react';
 import PageListItem from './PageListItem';
 import {connect} from 'react-redux';
-import {DIFFICULTY, CATEGORY_FILTER_TYPE, loadPages} from '../../actions';
+import {DIFFICULTY, CATEGORY_FILTER_TYPE} from '../../actions';
 import _ from 'lodash';
 
 class PageList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props.loadPages();
-    }
 
     render() {
         let content = [];
@@ -21,6 +17,7 @@ class PageList extends React.Component {
         return content;
     }
 }
+
 const getVisiblePagesByDifficulty = (pages, difficulty) => {
     let filteredPages = [...pages];
     if (difficulty !== DIFFICULTY.ALL) {
@@ -76,11 +73,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loadPages: () => dispatch(loadPages())
-    };
-};
 
-const ConnectedTopicList = connect(mapStateToProps, mapDispatchToProps)(PageList);
+const ConnectedTopicList = connect(mapStateToProps)(PageList);
 export default ConnectedTopicList;

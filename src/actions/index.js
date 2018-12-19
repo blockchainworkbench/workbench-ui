@@ -4,9 +4,13 @@ export const ACTIONS = {
     REMOVE_CATEGORY_FILTER: "REMOVE_CATEGORY_FILTER",
     CHANGE_CATEGORY_FILTER_TYPE: "CHANGE_CATEGORY_FILTER_TYPE",
     SELECT_PAGE: "SELECT_PAGE",
-    PAGES_LOAD_SUCCCESS: "PAGES_LOAD_SUCCCESS",
-    PAGES_LOAD_ERROR: "PAGES_LOAD_ERROR",
-    LOAD_PAGES: "LOAD_PAGES"
+    LOAD_PAGES: "LOAD_PAGES",
+    LOAD_PAGES_SUCCESS: "LOAD_PAGES_SUCCESS",
+    LOAD_PAGES_FAILURE: "LOAD_PAGES_FAILURE",
+    LOAD_PAGES_SUCCESS_SORTED: "LOAD_PAGES_SORTED",
+    LOAD_PAGE: "LOAD_PAGE",
+    LOAD_PAGE_SUCCESS: "LOAD_PAGE_SUCCESS",
+    LOAD_PAGE_FAILURE: "LOAD_PAGE_FAILURE"
 };
 
 export const DIFFICULTY = {
@@ -50,15 +54,35 @@ export const selectPage = pageId => ({
 });
 
 export const loadPagesSuccess = pages => ({
-    type: ACTIONS.PAGES_LOAD_SUCCCESS,
+    type: ACTIONS.LOAD_PAGES_SUCCESS,
     pages: pages
 });
 
 export const loadPagesError = error => ({
-    type: ACTIONS.PAGES_LOAD_ERROR,
+    type: ACTIONS.LOAD_PAGES_FAILURE,
     error: error
 });
 
 export const loadPages = () => ({
     type: ACTIONS.LOAD_PAGES
+});
+
+export const loadPagesSuccessSorted = categories => ({
+    type: ACTIONS.LOAD_PAGES_SUCCESS_SORTED,
+    categories: categories
+});
+
+export const loadPage = (pageUrl) => ({
+    type: ACTIONS.LOAD_PAGE,
+    pageUrl: pageUrl
+});
+
+export const loadPageSuccess = page => ({
+    type: ACTIONS.LOAD_PAGE,
+    page: page
+});
+
+export const loadPageError = error => ({
+    type: ACTIONS.LOAD_PAGE_FAILURE,
+    error: error
 });
