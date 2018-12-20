@@ -15,3 +15,11 @@ export const getDifficultyColorForTag = (difficulty) => {
 export const urlify = (string_value) => {
     return string_value.split(' ').join('_').toLowerCase();
 };
+
+export const buildPageUrl = (categoryName, pageTitle) => {
+    return `/pages/${urlify(categoryName)}/${urlify(pageTitle)}`;
+};
+
+export const buildCategoryUrl = (categoryName) => {
+    return `/pages/${urlify(categoryName)}`;
+};

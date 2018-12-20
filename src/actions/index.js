@@ -8,9 +8,9 @@ export const ACTIONS = {
     LOAD_PAGES_SUCCESS: "LOAD_PAGES_SUCCESS",
     LOAD_PAGES_FAILURE: "LOAD_PAGES_FAILURE",
     LOAD_PAGES_SUCCESS_SORTED: "LOAD_PAGES_SORTED",
-    LOAD_PAGE: "LOAD_PAGE",
-    LOAD_PAGE_SUCCESS: "LOAD_PAGE_SUCCESS",
-    LOAD_PAGE_FAILURE: "LOAD_PAGE_FAILURE"
+    LOAD_PAGE_CONTENT: "LOAD_PAGE_CONTENT",
+    LOAD_PAGE_CONTENT_SUCCESS: "LOAD_PAGE_CONTENT_SUCCESS",
+    LOAD_PAGE_CONTENT_FAILURE: "LOAD_PAGE_CONTENT_FAILURE"
 };
 
 export const DIFFICULTY = {
@@ -58,7 +58,7 @@ export const loadPagesSuccess = pages => ({
     pages: pages
 });
 
-export const loadPagesError = error => ({
+export const loadPagesFailure = error => ({
     type: ACTIONS.LOAD_PAGES_FAILURE,
     error: error
 });
@@ -72,17 +72,17 @@ export const loadPagesSuccessSorted = categories => ({
     categories: categories
 });
 
-export const loadPage = (pageUrl) => ({
-    type: ACTIONS.LOAD_PAGE,
+export const loadPageContent = (pageUrl) => ({
+    type: ACTIONS.LOAD_PAGE_CONTENT,
     pageUrl: pageUrl
 });
 
-export const loadPageSuccess = page => ({
-    type: ACTIONS.LOAD_PAGE,
+export const loadPageContentSuccess = page => ({
+    type: ACTIONS.LOAD_PAGE_CONTENT_SUCCESS,
     page: page
 });
 
-export const loadPageError = error => ({
-    type: ACTIONS.LOAD_PAGE_FAILURE,
+export const loadPageContentFailure = error => ({
+    type: ACTIONS.LOAD_PAGE_CONTENT_FAILURE,
     error: error
 });

@@ -1,12 +1,18 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
 import axios from 'axios';
-import {loadPagesError, loadPagesSuccess, loadPageError, loadPageSuccess, DIFFICULTY} from '../actions';
+import {
+    loadPagesFailure,
+    loadPagesSuccess,
+    loadPageContentFailure,
+    loadPageContentSuccess,
+    DIFFICULTY, ACTIONS
+} from '../actions';
 
 const BASE_URL = process.env.REACT_APP_JSONFEED_BASE;
 
 const pageSagas = [
-    takeLatest("LOAD_PAGES", workerFetchPageList),
-    takeLatest("LOAD_PAGE", workerFetchPage)
+    takeLatest(ACTIONS.LOAD_PAGES, workerFetchPageList),
+    takeLatest(ACTIONS.LOAD_PAGE_CONTENT, workerFetchPageContent)
 ];
 
 export default pageSagas;
@@ -31,16 +37,16 @@ function* workerFetchPageList() {
         yield put(loadPagesSuccess(pages));
     } catch (error) {
         console.log('error loading pages', error);
-        yield put(loadPagesError(error));
+        yield put(loadPagesFailure(error));
     }
 }
 
-function* workerFetchPage(action) {
+function* workerFetchPageContent(action) {
     try {
         const response = yield call(fetchUrl, BASE_URL + action.pageUrl);
-        const page = response.data;
-        yield put(loadPageSuccess(page));
+        yield put(loadPageContentSuccess(response.data));
     } catch (error) {
-        yield put(loadPageError(error));
+        console.log('error loading page content', error);
+        yield put(loadPageContentFailure(error));
     }
 }

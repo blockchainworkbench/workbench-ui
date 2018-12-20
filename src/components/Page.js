@@ -5,6 +5,7 @@ import CategorySteps from "./layout/CategorySteps";
 import connect from "react-redux/es/connect/connect";
 import {urlify} from "../lib/helpers";
 import PageContent from "./page/PageContent";
+import CategorySummary from "./page/CategorySummary";
 
 class Page extends React.Component {
 
@@ -19,14 +20,17 @@ class Page extends React.Component {
 
     render() {
         const page = this.getSelectedPage();
-
+        const pageName = this.props.match.params.page;
+        const categoryName = this.props.match.params.category;
         return (
             <section className="hero">
                 <TitleHeader/>
                 <div className="hero-body">
                     <div className="container">
                         <CategorySteps/>
-                        <PageContent page={page}/>
+                        {pageName !== 'summary'
+                            ? <PageContent page={page} category={categoryName}/>
+                            : <CategorySummary categoryTitle={categoryName}/>}
                     </div>
                 </div>
             </section>
