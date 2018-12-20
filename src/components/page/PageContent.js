@@ -4,6 +4,8 @@ import {connect} from "react-redux";
 import {buildPageUrl, buildCategoryUrl} from '../../lib/helpers';
 import {loadPageContent} from "../../actions";
 
+const ReactMarkdown = require('react-markdown');
+
 class PageContent extends React.Component {
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -20,7 +22,7 @@ class PageContent extends React.Component {
                     <h1 className="title has-text-centered">{this.props.page.title}</h1>
                     <div className="content">
                         {this.props.page.content
-                            ? this.props.page.content
+                            ? <ReactMarkdown source={this.props.page.content}/>
                             : <p className='has-text-centered'>
                                 <span className='icon loading has-text-info has-text-centered is-large'>
                                     <i className='fas fa-spinner fa-spin'/>
