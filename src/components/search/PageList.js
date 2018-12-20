@@ -1,20 +1,12 @@
 import React from 'react';
 import PageListItem from './PageListItem';
 import {connect} from 'react-redux';
-import {DIFFICULTY, CATEGORY_FILTER_TYPE} from '../../actions';
-import _ from 'lodash';
+import {CATEGORY_FILTER_TYPE, DIFFICULTY} from '../../actions';
 
 class PageList extends React.Component {
-
     render() {
-        let content = [];
-        const rows = _.chunk(this.props.pages, 3);
-        for (let row of rows.entries()) {
-            content.push(<div key={row[0]} className='tile is-ancestor'>
-                {row[1].map(page => <PageListItem key={page.url} page={page}/>)}
-            </div>);
-        }
-        return content;
+        const content = this.props.pages.map(page => <PageListItem key={page.url} page={page}/>);
+        return (<div className='tile is-ancestor columns is-multiline'>{content}</div>);
     }
 }
 

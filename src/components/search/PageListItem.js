@@ -9,7 +9,7 @@ class PageListItem extends React.Component {
     render() {
         const diffTileClass = `tag is-pulled-right ${getDifficultyColorForTag(this.props.page.difficulty)}`;
         return (
-            <div className='tile is-parent is-4 catLink'
+            <div className='tile is-parent is-4 catLink column'
                  onClick={() => this.handleClickElement(this.props.page.url)}>
                 <div className='tile is-child box'>
                     <Link
