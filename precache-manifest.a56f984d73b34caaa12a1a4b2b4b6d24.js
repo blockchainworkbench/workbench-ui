@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/workbench-ui/static/media/fa-solid-900.59ea9019.woff2"
   },
   {
-    "revision": "c9f28d424e8de9d5ca3f",
-    "url": "/workbench-ui/static/css/main.09167d45.chunk.css"
+    "revision": "3491d0a528ecc3aea872",
+    "url": "/workbench-ui/static/css/main.3f3b2efe.chunk.css"
   },
   {
     "revision": "1eba168c1b8603ab4dd282f5633d4650",
     "url": "/workbench-ui/static/media/fa-solid-900.1eba168c.svg"
   },
   {
-    "revision": "99b56c03b428b4a08bd2",
-    "url": "/workbench-ui/static/js/1.99b56c03.chunk.js"
+    "revision": "0657e58632e5938ec70f",
+    "url": "/workbench-ui/static/js/1.0657e586.chunk.js"
   },
   {
     "revision": "d0a24ff92e5a315f3541",
@@ -28,20 +28,20 @@ self.__precacheManifest = [
     "url": "/workbench-ui/static/media/fa-regular-400.06b3153d.woff"
   },
   {
-    "revision": "ec813c5b36705e64ba121073b315cb52",
-    "url": "/workbench-ui/static/media/fa-regular-400.ec813c5b.eot"
-  },
-  {
     "revision": "323b749d60730fa9ab61ff2d70e1cc32",
     "url": "/workbench-ui/static/media/fa-regular-400.323b749d.ttf"
+  },
+  {
+    "revision": "ec813c5b36705e64ba121073b315cb52",
+    "url": "/workbench-ui/static/media/fa-regular-400.ec813c5b.eot"
   },
   {
     "revision": "f80b8a05dd76fdb40e630f1e90b1303d",
     "url": "/workbench-ui/static/media/fa-brands-400.f80b8a05.woff2"
   },
   {
-    "revision": "c9f28d424e8de9d5ca3f",
-    "url": "/workbench-ui/static/js/main.c9f28d42.chunk.js"
+    "revision": "3491d0a528ecc3aea872",
+    "url": "/workbench-ui/static/js/main.3491d0a5.chunk.js"
   },
   {
     "revision": "5e405c16c959bec402cc00609e9806f9",
@@ -76,11 +76,11 @@ self.__precacheManifest = [
     "url": "/workbench-ui/static/media/fa-brands-400.3e30e90a.svg"
   },
   {
-    "revision": "99b56c03b428b4a08bd2",
-    "url": "/workbench-ui/static/css/1.3102bd76.chunk.css"
+    "revision": "0657e58632e5938ec70f",
+    "url": "/workbench-ui/static/css/1.9757efc9.chunk.css"
   },
   {
-    "revision": "d01e72d5a616ae81575a53a3d4957dcc",
+    "revision": "f870d88f0a996a5b0a7ae4969ef99a66",
     "url": "/workbench-ui/index.html"
   }
 ];
