@@ -8,7 +8,15 @@ const ReactMarkdown = require('react-markdown');
 
 class PageContent extends React.Component {
 
+    componentDidMount() {
+        this.loadPageContent();
+    }
+
     componentDidUpdate(prevProps, prevState, snapshot) {
+        this.loadPageContent();
+    }
+
+    loadPageContent() {
         if (this.props.page && !this.props.page.content) {
             console.log(`Loading content for page ${this.props.page.title}`);
             this.props.loadPage(this.props.page.url);
