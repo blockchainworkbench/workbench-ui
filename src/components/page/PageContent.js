@@ -9,17 +9,21 @@ const ReactMarkdown = require('react-markdown');
 class PageContent extends React.Component {
 
     componentDidMount() {
-        this.loadPageContent();
+        this.loadCurrentPageContent();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.loadPageContent();
+        this.loadCurrentPageContent();
     }
 
-    loadPageContent() {
-        if (this.props.page && !this.props.page.content) {
-            console.log(`Loading content for page ${this.props.page.title}`);
-            this.props.loadPage(this.props.page.url);
+    loadCurrentPageContent() {
+        this.loadPageContent(this.props.page);
+    }
+
+    loadPageContent(page) {
+        if (page && !page.content) {
+            console.log(`Loading content for page ${page.title}`);
+            this.props.loadPage(page.url);
         }
     }
 
@@ -74,7 +78,9 @@ class PageContent extends React.Component {
         if (next_previous_container) {
             const categoryIndex = this.props.page.categories.indexOf(this.props.category);
             if (categoryIndex !== -1) {
-                return this.props.pages.find(page => page.url === next_previous_container[categoryIndex]);
+                const adjacentPage = this.props.pages.find(page => page.url === next_previous_container[categoryIndex]);
+                this.loadPageContent(adjacentPage);
+                return adjacentPage;
             }
         }
     }

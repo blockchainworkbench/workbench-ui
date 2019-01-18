@@ -1,4 +1,4 @@
-import {call, put, takeLatest} from 'redux-saga/effects';
+import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import axios from 'axios';
 import {
     loadPagesFailure,
@@ -12,7 +12,7 @@ const BASE_URL = process.env.REACT_APP_JSONFEED_BASE;
 
 const pageSagas = [
     takeLatest(ACTIONS.LOAD_PAGES, workerFetchPageList),
-    takeLatest(ACTIONS.LOAD_PAGE_CONTENT, workerFetchPageContent)
+    takeEvery(ACTIONS.LOAD_PAGE_CONTENT, workerFetchPageContent)
 ];
 
 export default pageSagas;
