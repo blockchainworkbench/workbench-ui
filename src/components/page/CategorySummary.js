@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {NavHashLink} from "react-router-hash-link";
 
 class CategorySummary extends React.Component {
 
@@ -35,7 +35,7 @@ class CategorySummary extends React.Component {
                     <div className='level'>
                         <div className='level-left'/>
                         <div className='level-right has-text-right'>
-                            <Link to='/#advanced' className='button is-info is-large'>Next Chapter</Link>
+                            <NavHashLink to='/#advanced' className='button is-info is-large'>Choose next Chapter</NavHashLink>
                         </div>
                     </div>
                 </div>

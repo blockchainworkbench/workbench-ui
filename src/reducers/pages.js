@@ -12,7 +12,6 @@ const pages = (state = [], action) => {
                     return page;
                 }
             })];
-            return state;
         default:
             return state;
     }
