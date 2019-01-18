@@ -18,6 +18,10 @@ class PageContent extends React.Component {
 
     loadCurrentPageContent() {
         this.loadPageContent(this.props.page);
+        if (this.props.page) {
+            this.loadPageContent(this.getAdjacentCategoryPage(this.props.page.next));
+            this.loadPageContent(this.getAdjacentCategoryPage(this.props.page.previous));
+        }
     }
 
     loadPageContent(page) {
@@ -78,9 +82,7 @@ class PageContent extends React.Component {
         if (next_previous_container) {
             const categoryIndex = this.props.page.categories.indexOf(this.props.category);
             if (categoryIndex !== -1) {
-                const adjacentPage = this.props.pages.find(page => page.url === next_previous_container[categoryIndex]);
-                this.loadPageContent(adjacentPage);
-                return adjacentPage;
+                return this.props.pages.find(page => page.url === next_previous_container[categoryIndex]);
             }
         }
     }
