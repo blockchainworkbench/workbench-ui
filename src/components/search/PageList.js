@@ -44,7 +44,7 @@ const getVisiblePagesByCategories = (pages, categories, categoryFilterType) => {
 
 const mergePages = (candidates, categoryPages) => {
     for (const page of categoryPages) {
-        if (!candidates.find(candidate => page.id === candidate.id)) {
+        if (!candidates.find(candidate => page.url === candidate.url)) {
             candidates.push(page);
         }
     }
