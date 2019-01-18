@@ -21,7 +21,7 @@ class PageContent extends React.Component {
     }
 
     loadPageContent(page) {
-        if (page && !page.content) {
+        if (page && !page.content && !page.loading) {
             console.log(`Loading content for page ${page.title}`);
             this.props.loadPage(page.url);
         }
