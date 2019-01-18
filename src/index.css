@@ -1,6 +1,7 @@
 @import '~bulma/css/bulma.css';
 @import '~bulma-o-steps/bulma-steps.min.css';
 @import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~@fortawesome/fontawesome-free/css/brands.css';
 
 body {
     margin: 0;
@@ -70,4 +71,8 @@ code {
 
 .float-left {
     float: left;
+}
+
+.footer {
+    padding-bottom: 3rem;
 }

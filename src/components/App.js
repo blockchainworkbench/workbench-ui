@@ -7,7 +7,7 @@ import Pages from './Pages';
 import Page from './Page';
 import {loadPages} from "../actions";
 import {connect} from "react-redux";
-
+import Footer from './layout/Footer';
 
 class App extends React.Component {
 
@@ -28,6 +28,7 @@ class App extends React.Component {
                         <Redirect from='/start' to='/pages/introduction'/>
                         <Route exact path='/pages/:category' component={Pages}/>
                     </Switch>
+                    <Footer/>
                 </div>
             </BrowserRouter>
         )
