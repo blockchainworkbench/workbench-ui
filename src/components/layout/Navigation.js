@@ -15,6 +15,7 @@ export default function Navigation() {
                     Advanced Search
                 </NavHashLink>
                 <NavLink className='navbar-item' activeClassName='is-active' to='/login'>Login</NavLink>
+                <NavLink className='navbar-item' activeClassName='is-active' to='/markdown'>Markdown</NavLink>
             </div>
         </nav>);
 }
