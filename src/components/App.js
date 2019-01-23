@@ -7,7 +7,6 @@ import Pages from './Pages';
 import Page from './Page';
 import {loadPages} from "../actions";
 import {connect} from "react-redux";
-import MarkdownTest from "./page/MarkdownTest";
 
 
 class App extends React.Component {
@@ -24,7 +23,6 @@ class App extends React.Component {
                     <Route exact path='/?advanced' component={Home}/>
                     <Route exact path='/' component={Home}/>
                     <Route path='/login' component={Login}/>
-                    <Route path='/markdown' component={MarkdownTest}/>
                     <Route path='/pages/:category/:page' component={Page}/>
                     <Switch>
                         <Redirect from='/start' to='/pages/introduction'/>

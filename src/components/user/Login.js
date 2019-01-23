@@ -1,7 +1,6 @@
 import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
 import CodeExercise from "../page/CodeExercise";
-import DemoJSX from "../page/DemoJSX";
 
 class Login extends React.Component {
 
@@ -21,11 +20,6 @@ class Login extends React.Component {
                 <TitleHeader/>
                 <div className="hero-body">
                     <div className="container has-text-centered">
-                        <DemoJSX
-                            title='Sample JSX Demo Component'
-                            content='Quisque eget urna aliquet, consequat dolor vel, consectetur leo. Etiam
-                                    consequat, magna ac sollicitudin tristique, metus eros feugiat nisi, at consequat
-                                    orci urna et risus. ' />
                         <h1 className="title">
                             Login
                         </h1>
