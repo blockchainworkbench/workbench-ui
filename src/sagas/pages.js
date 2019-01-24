@@ -25,7 +25,7 @@ function fetchUrl(url) {
 
 function* workerFetchPageList() {
     try {
-        const response = yield call(fetchUrl, BASE_URL + "index.html");
+        const response = yield call(fetchUrl, BASE_URL + "/index.html");
         const pages = response.data.pages;
         for (const page of pages) {
             if (page.difficulty !== DIFFICULTY.EASY

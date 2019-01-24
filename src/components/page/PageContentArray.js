@@ -6,7 +6,7 @@ class PageContentArray extends React.Component {
     render() {
         if (this.props.page && this.props.page.content && typeof (this.props.page.content) !== 'string') {
             return (
-                <div className="content-array">
+                <div className="content-array mb30">
                     {this.props.page.content.map((element, idx) => {
                         const elementComponent = Elements[element.type];
                         if (elementComponent) {
