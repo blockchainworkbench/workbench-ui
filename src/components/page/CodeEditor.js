@@ -22,13 +22,13 @@ class CodeEditor extends React.Component {
         let readOnly = false;
         const setOptions = {};
         if (this.props.displaySimple) {
-            console.log('simple');
             readOnly = true;
             highlightActiveLine = false;
             setOptions['showLineNumbers'] = false;
             setOptions['showFoldWidgets'] = false;
             setOptions['showGutter'] = false;
             setOptions['maxLines'] = 1000;
+            setOptions['showPrintMargin'] = false;
         }
         if (this.props.readOnly) {
             readOnly = true;

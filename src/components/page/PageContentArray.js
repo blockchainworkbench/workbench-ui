@@ -1,5 +1,5 @@
 import React from 'react';
-import PageFactory from './PageElementFactory';
+import Elements from './PageElements';
 
 class PageContentArray extends React.Component {
 
@@ -7,7 +7,19 @@ class PageContentArray extends React.Component {
         if (this.props.page && this.props.page.content && typeof (this.props.page.content) !== 'string') {
             return (
                 <div className="content-array">
-                    {this.props.page.content.map((element, idx) => PageFactory.createElement(element, idx))}
+                    {this.props.page.content.map((element, idx) => {
+                        const elementComponent = Elements[element.type];
+                        if (elementComponent) {
+                            return React.createElement(elementComponent.type, {
+                                'key': idx, 'content': element.content, 'id': idx,
+                                'children': element.content, 'className': elementComponent.className
+                            });
+                        } else {
+                            return React.createElement(Elements['unknown'].type, {
+                                'key': idx, 'type': element.type
+                            });
+                        }
+                    })}
                 </div>
             )
         } else {
