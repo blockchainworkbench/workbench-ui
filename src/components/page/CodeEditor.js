@@ -18,18 +18,35 @@ class CodeEditor extends React.Component {
     }
 
     render() {
+        let highlightActiveLine = true;
+        let readOnly = false;
+        const setOptions = {};
+        if (this.props.displaySimple) {
+            console.log('simple');
+            readOnly = true;
+            highlightActiveLine = false;
+            setOptions['showLineNumbers'] = false;
+            setOptions['showFoldWidgets'] = false;
+            setOptions['showGutter'] = false;
+            setOptions['maxLines'] = 1000;
+        }
+        if (this.props.readOnly) {
+            readOnly = true;
+        }
+
         return (
             <AceEditor
                 className='is-fullwidth'
-                mode="solidity"
+                mode={this.props.language ? this.props.language : "solidity"}
                 theme="tomorrow"
                 onChange={this.handleChange}
-                name="UNIQUE_ID_OF_DIV"
-                readOnly={this.props.readOnly === true}
+                name={`codeeditor-${this.props.id}`}
+                readOnly={readOnly}
                 width='100%'
                 tabSize={2}
                 value={this.props.content}
-                editorProps={{$blockScrolling: true}}/>);
+                highlightActiveLine={highlightActiveLine}
+                setOptions={setOptions}/>);
     }
 }
 

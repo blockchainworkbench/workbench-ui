@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {buildPageUrl, buildCategoryUrl} from '../../lib/helpers';
 import {loadPageContent} from "../../actions";
+import PageContentArray from "./PageContentArray";
 
 const ReactMarkdown = require('react-markdown');
 
@@ -29,14 +30,7 @@ class PageContent extends React.Component {
                 <div>
                     <h1 className="title has-text-centered">{this.props.page.title}</h1>
                     <div className="content">
-                        {this.props.page.content
-                            ? <ReactMarkdown source={this.props.page.content}/>
-                            : <p className='has-text-centered'>
-                                <span className='icon loading has-text-info has-text-centered is-large'>
-                                    <i className='fas fa-spinner fa-spin'/>
-                                </span>
-                                <span>Loading content ...</span>
-                            </p>}
+                        {this.getPageContentJSX()}
                         <div className='level'>
                             <div className='level-left'>{this.getPreviousPageJSX()}</div>
                             <div className='level-left'>{this.getNextPageJSX()}</div>
@@ -52,6 +46,23 @@ class PageContent extends React.Component {
         }
     }
 
+    getPageContentJSX() {
+        if (this.props.page.content) {
+            if (typeof (this.props.page.content) === 'string') {
+                return <ReactMarkdown source={this.props.page.content}/>
+            } else {
+                return <PageContentArray page={this.props.page} />
+            }
+        } else {
+            return (<p className='has-text-centered'>
+                <span className='icon loading has-text-info has-text-centered is-large'>
+                    <i className='fas fa-spinner fa-spin'/>
+                </span>
+                <span>Loading content ...</span>
+            </p>)
+        }
+    }
+
     getNextPageJSX() {
         const nextIcon = <p className='icon has-text-info'><i className='fas fa-chevron-circle-right'/></p>;
         const page = this.props.page ? this.getAdjacentCategoryPage(this.props.page.next) : null;
@@ -64,7 +75,6 @@ class PageContent extends React.Component {
     getPreviousPageJSX() {
         const previousIcon = <p className='icon has-text-info'><i className='fas fa-chevron-circle-left'/></p>;
         const page = this.props.page ? this.getAdjacentCategoryPage(this.props.page.previous) : null;
-
         return page
             ? <Link to={buildPageUrl(this.props.category, page.title)}>{previousIcon} {page.title}</Link>
             : <Link to={buildCategoryUrl(this.props.category)}>{previousIcon} Overview</Link>

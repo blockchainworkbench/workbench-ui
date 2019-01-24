@@ -1,20 +1,20 @@
 import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
-import CodeExercise from "../page/CodeExercise";
+import ExerciseElement from "../page/elements/ExerciseElement";
 
 class Login extends React.Component {
 
-    handleCodeSubmit(code) {
-        console.log('Code submitted');
-    }
-
     render() {
-        const description = 'It looks like `SpaceMuffin` had a secret recipe. Expose it to the world!';
-        const content = `pragma solidity ^0.4.24;\n\ncontract SpacecryptFactory {
+        const content = {
+            title: 'Test Code Editor',
+            description: 'It looks like `SpaceMuffin` had a secret recipe. Expose it to the world!',
+            initial: `pragma solidity ^0.4.24;\n\ncontract SpacecryptFactory {
         \n  uint public timeout = 60;\n  uint public halfway = timeout / 2;
         \n\n  bytes32 public name = 'SuperCryptor 2000';\n\n  // Get some inspiration from what is done here
         \n  function getHalfway() external view returns (uint) {\n    return halfway;\n  }
-        \n\n  // Add getName() here\n\n}`;
+        \n\n  // Add getName() here\n\n}`
+        };
+
         return (
             <section className="hero">
                 <TitleHeader/>
@@ -24,11 +24,7 @@ class Login extends React.Component {
                             Login
                         </h1>
 
-                        <CodeExercise title='Test Code Editor'
-                                      description={description}
-                                      content={content}
-                                      onSubmit={this.handleCodeSubmit}
-                        />
+                        <ExerciseElement content={content}/>
                     </div>
                 </div>
             </section>

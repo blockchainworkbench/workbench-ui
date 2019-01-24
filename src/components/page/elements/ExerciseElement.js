@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import CodeEditor from "./CodeEditor";
+import CodeEditor from "../CodeEditor";
 
-class CodeExercise extends React.Component {
+class ExerciseElement extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            content: props.content,
+            content: props.content.initial,
             submitted: ''
         };
         this.handleChange = this.handleChange.bind(this);
@@ -29,14 +29,13 @@ class CodeExercise extends React.Component {
         return (
             <div className='hero'>
                 <p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold'>
-                    {this.props.title}</p>
+                    {this.props.content.title}</p>
                 <div className='columns'>
                     <div className='column'>
                         <div className='has-text-left has-background-grey-lighter'>
-                            <ReactMarkdown source={this.props.description}/>
+                            <ReactMarkdown source={this.props.content.description}/>
                         </div>
-                        <CodeEditor content={this.state.content}
-                                    onChange={this.handleChange}/>
+                        <CodeEditor id={`exercise-${this.props.id}`} content={this.state.content} onChange={this.handleChange}/>
                         <button onClick={this.handleSubmit}
                                 className='button is-link is-fullwidth'>Submit
                         </button>
@@ -50,4 +49,4 @@ class CodeExercise extends React.Component {
     }
 }
 
-export default CodeExercise;
+export default ExerciseElement;
