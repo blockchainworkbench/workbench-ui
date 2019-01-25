@@ -10,17 +10,25 @@ const ReactMarkdown = require('react-markdown');
 class PageContent extends React.Component {
 
     componentDidMount() {
-        this.loadPageContent();
+        this.loadCurrentPageContent();
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        this.loadPageContent();
+        this.loadCurrentPageContent();
     }
 
-    loadPageContent() {
-        if (this.props.page && !this.props.page.content) {
-            console.log(`Loading content for page ${this.props.page.title}`);
-            this.props.loadPage(this.props.page.url);
+    loadCurrentPageContent() {
+        this.loadPageContent(this.props.page);
+        if (this.props.page) {
+            this.loadPageContent(this.getAdjacentCategoryPage(this.props.page.next));
+            this.loadPageContent(this.getAdjacentCategoryPage(this.props.page.previous));
+        }
+    }
+
+    loadPageContent(page) {
+        if (page && !page.content && !page.loading) {
+            console.log(`Loading content for page ${page.title}`);
+            this.props.loadPage(page.url);
         }
     }
 

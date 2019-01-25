@@ -87,15 +87,21 @@ class CategoryFilter extends React.Component {
     }
 
     handleChange(event) {
+        const newValue = event.target.value;
+        const newValueTrimmed = newValue.trim();
+        const oldValue = this.state[event.target.id];
+
+        if (newValueTrimmed !== oldValue) {
+            this.props.removeCategoryFilter(oldValue);
+        }
+        if (newValue !== "" && this.props.categoryFilter.find(cat => cat === newValueTrimmed) === undefined) {
+            this.props.addCategoryFilter(newValue);
+        }
         this.setState({[event.target.id]: event.target.value});
     }
 
     handleSubmit(event) {
         event.preventDefault();
-        const {catFilterName} = this.state;
-        if (catFilterName !== "") {
-            this.props.addCategoryFilter(catFilterName);
-        }
         this.setState({catFilterName: ""});
     }
 

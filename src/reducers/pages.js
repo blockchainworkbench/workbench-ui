@@ -7,7 +7,23 @@ const pages = (state = [], action) => {
         case ACTIONS.LOAD_PAGE_CONTENT_SUCCESS:
             return [...state.map(page => {
                 if (page.url === action.page.url) {
-                    return Object.assign({}, page, action.page);
+                    return Object.assign({}, page, action.page, {loading: false});
+                } else {
+                    return page;
+                }
+            })];
+        case ACTIONS.LOAD_PAGE_CONTENT:
+            return [...state.map(page => {
+                if (page.url === action.pageUrl) {
+                    return Object.assign({}, page, {loading: true});
+                } else {
+                    return page;
+                }
+            })];
+        case ACTIONS.LOAD_PAGE_CONTENT_FAILURE:
+            return [...state.map(page => {
+                if (page.url === action.page.url) {
+                    return Object.assign({}, {loading: false});
                 } else {
                     return page;
                 }

@@ -82,7 +82,8 @@ export const loadPageContentSuccess = page => ({
     page: page
 });
 
-export const loadPageContentFailure = error => ({
+export const loadPageContentFailure = (error, page) => ({
     type: ACTIONS.LOAD_PAGE_CONTENT_FAILURE,
-    error: error
+    error: error,
+    page: page
 });
