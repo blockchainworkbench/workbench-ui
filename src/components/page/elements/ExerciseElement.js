@@ -18,7 +18,7 @@ class ExerciseElement extends React.Component {
         this.setState({content: event, submitted: this.state.submitted});
     }
 
-    handleSubmit(event) {
+    handleSubmit() {
         this.setState({content: this.state.content, submitted: this.state.content});
         if (this.props.onSubmit) {
             this.props.onSubmit(this.state.content);

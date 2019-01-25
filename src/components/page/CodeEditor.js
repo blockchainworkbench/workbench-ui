@@ -5,6 +5,9 @@ import 'brace/theme/tomorrow';
 import 'react-ace/dist/react-ace';
 import 'brace/mode/javascript';
 import 'ace-mode-solidity/build/legacy/v1.3.3/src-brace/mode-solidity';
+import 'brace/mode/html';
+import 'brace/mode/python';
+import 'brace/mode/text';
 
 class CodeEditor extends React.Component {
 
@@ -46,7 +49,8 @@ class CodeEditor extends React.Component {
                 tabSize={2}
                 value={this.props.content}
                 highlightActiveLine={highlightActiveLine}
-                setOptions={setOptions}/>);
+                setOptions={setOptions}
+                editorProps={{$blockScrolling: true}}/>);
     }
 }
 
