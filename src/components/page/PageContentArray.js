@@ -10,12 +10,11 @@ class PageContentArray extends React.Component {
                     {this.props.page.content.map((element, idx) => {
                         const elementComponent = Elements[element.type];
                         if (elementComponent) {
-                            return React.createElement(elementComponent.type, {
-                                'key': idx, 'content': element.content, 'id': idx,
-                                'children': element.content, 'className': elementComponent.className
+                            return React.createElement(elementComponent, {
+                                'key': idx, 'id': idx, 'content': element.content, 'type': element.type
                             });
                         } else {
-                            return React.createElement(Elements['unknown'].type, {
+                            return React.createElement(Elements['unknown'], {
                                 'key': idx, 'type': element.type
                             });
                         }

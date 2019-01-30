@@ -6,20 +6,23 @@ import ParagraphElement from "./elements/ParagraphElement";
 import LinkElement from "./elements/LinkElement";
 import YoutubeElement from "./elements/YoutubeElement";
 import HTMLElement from "./elements/HTMLElement";
+import HeaderElement from "./elements/HeaderElement";
+import ScriptElement from "./elements/ScriptElement";
 
 export default {
-    "h1": {"type": "h1", "className": "title is-2"},
-    "h2": {"type": "h2", "className": "subtitle is-4"},
-    "h3": {"type": "h3", "className": "subtitle is-5"},
-    "h4": {"type": "h4", "className": "subtitle is-6"},
-    "h5": {"type": "h5", "className": "subtitle is-6"},
-    "h6": {"type": "h6", "className": "subtitle is-6"},
-    "p": {"type": ParagraphElement},
-    "a": {"type": LinkElement},
-    "youtube": {"type": YoutubeElement},
-    "html": {"type": HTMLElement},
-    "code": {"type": CodeElement},
-    "quote": {"type": QuoteElement},
-    "exercise": {"type": ExerciseElement},
-    "unknown": {"type": UnknownElement}
+    "h1": HeaderElement,
+    "h2": HeaderElement,
+    "h3": HeaderElement,
+    "h4": HeaderElement,
+    "h5": HeaderElement,
+    "h6": HeaderElement,
+    "p": ParagraphElement,
+    "a": LinkElement,
+    "youtube": YoutubeElement,
+    "html": HTMLElement,
+    "js": ScriptElement,
+    "code": CodeElement,
+    "quote": QuoteElement,
+    "exercise": ExerciseElement,
+    "unknown": UnknownElement
 };
