@@ -15,6 +15,12 @@ export const ACTIONS = {
     CHECK_WEB3_ACCOUNT_SUCCESS: "CHECK_WEB3_ACCOUNT_SUCCESS",
     CHECK_WEB3_ACCOUNT_FAILURE: "CHECK_WEB3_ACCOUNT_FAILURE",
     WEB3_ACCOUNT_UPDATE: "WEB3_ACCOUNT_UPDATE",
+    LOAD_COMPILER: "LOAD_COMPILER",
+    LOAD_COMPILER_SUCCESS: "LOAD_COMPILER_SUCCESS",
+    LOAD_COMPILER_FAILURE: "LOAD_COMPILER_FAILURE",
+    COMPILE: "COMPILE",
+    COMPILE_SUCCESS: "COMPILE_SUCCESS",
+    COMPILE_FAILURE: "COMPILE_FAILURE"
 };
 
 export const DIFFICULTY = {
@@ -35,6 +41,19 @@ export const WEB3_ACCOUNT_STATE = {
     AUTHORIZED: "auth",
     UNAUTHORIZED: "unauth"
 };
+
+export const COMPILER_STATE = {
+    LOADING: "loading",
+    LOADED: "loaded",
+    ERROR: "error"
+};
+
+export const CODE_STATE = {
+    COMPILING: "compiling",
+    COMPILED: "compiled",
+    ERROR: "error"
+};
+
 // ============================================================
 // Action creators
 // ============================================================
@@ -117,3 +136,42 @@ export const web3AccountUpdate = (update) => ({
     address: update['selectedAddress'],
     networkId: update['networkVersion']
 });
+
+export const loadCompiler = version => ({
+    type: ACTIONS.LOAD_COMPILER,
+    version: version
+});
+
+export const loadCompilerSuccess = (version, compiler) => ({
+    type: ACTIONS.LOAD_COMPILER_SUCCESS,
+    version: version,
+    compiler: compiler
+});
+
+export const loadCompilerFailure = (version, error) => ({
+    type: ACTIONS.LOAD_COMPILER_FAILURE,
+    version: version,
+    error: error
+});
+
+export const compile = (codeId, compiler, userSolution, exerciseSolution, optimize) => ({
+    type: ACTIONS.COMPILE,
+    codeId: codeId,
+    compiler: compiler,
+    userSolution: userSolution,
+    exerciseSolution: exerciseSolution,
+    optimize: optimize
+});
+
+export const compileFailure = (codeId, error) => ({
+    type: ACTIONS.COMPILE_FAILURE,
+    codeId: codeId,
+    error: error
+});
+
+export const compileSuccess = (codeId, compiledCode) => ({
+    type: ACTIONS.COMPILE_SUCCESS,
+    codeId: codeId,
+    code: compiledCode
+});
+
