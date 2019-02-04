@@ -45,15 +45,14 @@ const compiler = (state = [], action) => {
 const code = (state = [], action) => {
     switch (action.type) {
         case ACTIONS.COMPILE :
+            const newCode = {codeId: action.codeId, state: CODE_STATE.COMPILING};
             const codes = [...state.map(code => {
                 if (code.codeId === action.codeId) {
-                    return {codeId: code.codeId, state: CODE_STATE.COMPILING}
+                    return newCode;
                 } else return code;
             })];
             const findCode = codes.find(code => code.codeId === action.codeId);
-            if (findCode === undefined) {
-                codes.push({codeId: action.codeId, state: CODE_STATE.COMPILING});
-            }
+            if (findCode === undefined) codes.push(newCode);
             return codes;
         case ACTIONS.COMPILE_SUCCESS :
             return [...state.map(code => {
@@ -74,7 +73,7 @@ const code = (state = [], action) => {
 
 const solidity = {
     compiler: compiler,
-    code: code
+    code: code,
 };
 
 export default solidity;

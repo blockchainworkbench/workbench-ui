@@ -1,7 +1,16 @@
 import React from 'react';
 
 import {connect} from 'react-redux';
-import {checkWeb3Account, COMPILER_STATE, loadCompiler, WEB3_ACCOUNT_STATE, compile, CODE_STATE} from "../actions";
+import {
+    checkWeb3Account,
+    CODE_STATE,
+    compile,
+    COMPILER_STATE,
+    deploy,
+    DEPLOY_STATE,
+    loadCompiler,
+    WEB3_ACCOUNT_STATE
+} from "../actions";
 import TitleHeader from "./layout/TitleHeader";
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
@@ -17,6 +26,7 @@ class Web3Playground extends React.Component {
         this.getCompilerInfo = this.getCompilerInfo.bind(this);
         this.getCompileInfo = this.getCompileInfo.bind(this);
         this.compile = this.compile.bind(this);
+        this.deploy = this.deploy.bind(this);
     }
 
     componentDidMount() {
@@ -40,15 +50,19 @@ class Web3Playground extends React.Component {
         this.props.compile(CODE_ID, this.props.compiler.compiler, userSolution, exerciseSolution, optimize);
     }
 
+    deploy() {
+        this.props.deploy(CODE_ID, this.props.compiledCode.code.contracts);
+    }
+
     render() {
         return (<section className="hero">
             <TitleHeader/>
             <div className="hero-body">
                 <div className="container has-text-centered">
                     {this.getContent()}
-                    <button onClick={this.loadCompiler}>Load Compiler</button>
                     {this.getCompilerInfo()}
                     {this.getCompileInfo()}
+                    {this.getDeployInfo()}
                 </div>
             </div>
         </section>)
@@ -57,21 +71,40 @@ class Web3Playground extends React.Component {
     getCompileInfo() {
         if (this.isCompilerLoaded()) {
             const button = <button onClick={this.compile}>Compile</button>;
-            if(this.props.compiledCode) {
+            if (this.props.compiledCode) {
                 switch (this.props.compiledCode.state) {
                     case CODE_STATE.COMPILED:
                         return <p>Code Compiled!</p>;
                     case CODE_STATE.COMPILING:
                         return <p>Compiling....</p>;
                     case CODE_STATE.ERROR:
-                        return <p>Compile failed: {this.props.compiledCode.error}<br/>{button}</p>
+                        return <p>Compile failed: {this.props.compiledCode.error}<br/>{button}</p>;
                     default:
                         return button;
                 }
-            }
-            return button;
+            } else return button;
         }
         return null;
+    }
+
+    getDeployInfo() {
+        if (this.props.compiledCode && this.props.compiledCode.state === CODE_STATE.COMPILED) {
+            const button = <button onClick={this.deploy}>Deploy</button>;
+            if (this.props.contracts) {
+                switch (this.props.contracts.state) {
+                    case DEPLOY_STATE.DEPLOYING:
+                        return <p>{this.props.contracts.message}</p>;
+                    case DEPLOY_STATE.ERROR:
+                        return <p>{this.props.contracts.error}</p>;
+                    case DEPLOY_STATE.DEPLOYED:
+                        return <p>{this.props.contracts.message}</p>;
+                    default:
+                        return <p>Unknown state {this.props.contracts.state} {button}</p>;
+                }
+            } else {
+                return button;
+            }
+        }
     }
 
     isCompilerLoaded() {
@@ -79,6 +112,7 @@ class Web3Playground extends React.Component {
     }
 
     getCompilerInfo() {
+        const button = <button onClick={this.loadCompiler}>Load Compiler</button>;
         if (this.props.compiler) {
             switch (this.props.compiler.state) {
                 case COMPILER_STATE.LOADING:
@@ -86,12 +120,12 @@ class Web3Playground extends React.Component {
                 case COMPILER_STATE.LOADED:
                     return <p>Loaded</p>;
                 case COMPILER_STATE.ERROR:
-                    return <p>Error: <strong>{this.props.compiler.error}</strong></p>;
+                    return <p>Error: <strong>{this.props.compiler.error}</strong>{button}</p>;
                 default:
-                    return <p>Unknown state {this.props.compiler.state}</p>;
+                    return <p>Unknown state {this.props.compiler.state} {button}</p>;
             }
         } else {
-            return <p>Compiler not set</p>;
+            return button;
         }
     }
 
@@ -151,7 +185,8 @@ const mapStateToProps = (state) => {
         web3State: state.appState.web3Account.state,
         web3Error: state.appState.web3Account.error,
         compiler: state.appState.solidity.compiler.find(compiler => compiler.version === COMPILER_VERSION),
-        compiledCode: state.appState.solidity.code.find(code => code.codeId === CODE_ID)
+        compiledCode: state.appState.solidity.code.find(code => code.codeId === CODE_ID),
+        contracts: state.appState.web3Account.contract.find(contract => contract.codeId === CODE_ID)
     };
 };
 
@@ -160,7 +195,8 @@ const mapDispatchToProps = dispatch => {
         checkWeb3Account: () => dispatch(checkWeb3Account()),
         loadCompiler: (version) => dispatch(loadCompiler(version)),
         compile: (codeId, compiler, userSolution, exerciseSolution, optimize) =>
-            dispatch(compile(codeId, compiler, userSolution, exerciseSolution, optimize))
+            dispatch(compile(codeId, compiler, userSolution, exerciseSolution, optimize)),
+        deploy: (codeId, contracts) => dispatch(deploy(codeId, contracts))
     };
 };
 

@@ -38,11 +38,10 @@ function loadCompiler(version) {
                 const browserSolc = window.BrowserSolc;
                 browserSolc.loadVersion(version, compiler => {
                     console.log('compiler loaded');
-                    console.log(compiler);
                     resolve(compiler);
                 });
             } else {
-                reject("could not load browser-solc");
+                reject("browser-solc not loaded");
             }
         } else {
             console.log('compiler already loaded. using cached version.');
@@ -66,10 +65,8 @@ function compile(compiler, userSolution, exerciseSolution, optimize) {
     return new Promise(async (resolve, reject) => {
         const rCode = compiler.compile(userSolution, optimize);
         const rCodeSolution = compiler.compile(exerciseSolution, optimize);
-        console.log('compile done. checking now');
         // If code does not compile properly
         if (rCode.errors) {
-            console.log('oooops, errors');
             reject(new Error(rCode.errors[0]));
         } else {
             const notDefined =

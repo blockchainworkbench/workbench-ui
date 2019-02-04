@@ -20,7 +20,11 @@ export const ACTIONS = {
     LOAD_COMPILER_FAILURE: "LOAD_COMPILER_FAILURE",
     COMPILE: "COMPILE",
     COMPILE_SUCCESS: "COMPILE_SUCCESS",
-    COMPILE_FAILURE: "COMPILE_FAILURE"
+    COMPILE_FAILURE: "COMPILE_FAILURE",
+    DEPLOY_CONTRACTS: "DEPLOY_CONTRACTS",
+    DEPLOY_CONTRACTS_FAILURE: "DEPLOY_CONTRACTS_FAILURE",
+    DEPLOY_CONTRACTS_SUCCESS: "DEPLOY_CONTRACTS_SUCCESS",
+    DEPLOY_CONTRACTS_UPDATE: "DEPLOY_CONTRACTS_UPDATE"
 };
 
 export const DIFFICULTY = {
@@ -51,6 +55,12 @@ export const COMPILER_STATE = {
 export const CODE_STATE = {
     COMPILING: "compiling",
     COMPILED: "compiled",
+    ERROR: "error"
+};
+
+export const DEPLOY_STATE = {
+    DEPLOYING: "deploying",
+    DEPLOYED: "deployed",
     ERROR: "error"
 };
 
@@ -175,3 +185,27 @@ export const compileSuccess = (codeId, compiledCode) => ({
     code: compiledCode
 });
 
+export const deploy = (codeId, contracts) => ({
+    type: ACTIONS.DEPLOY_CONTRACTS,
+    codeId: codeId,
+    contracts: contracts
+});
+
+export const deploySuccess = (codeId, addresses, message) => ({
+    type: ACTIONS.DEPLOY_CONTRACTS_SUCCESS,
+    codeId: codeId,
+    addresses: addresses,
+    message: message
+});
+
+export const deployFailure = (codeId, error) => ({
+    type: ACTIONS.DEPLOY_CONTRACTS_FAILURE,
+    codeId: codeId,
+    error: error
+});
+
+export const deployUpdate = (codeId, stateMessage) => ({
+    type: ACTIONS.DEPLOY_CONTRACTS_UPDATE,
+    codeId: codeId,
+    message: stateMessage
+});
