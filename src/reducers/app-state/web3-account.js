@@ -1,4 +1,4 @@
-import {ACTIONS, DEPLOY_STATE, WEB3_ACCOUNT_STATE} from "../../actions";
+import {ACTIONS, DEPLOY_STATE, TEST_STATE, WEB3_ACCOUNT_STATE} from "../../actions";
 
 
 const web3AccountState = (state = WEB3_ACCOUNT_STATE.PENDING, action) => {
@@ -61,7 +61,7 @@ const contract = (state = [], action) => {
                 } else return contract;
             })];
             const findContract = contracts.find(contract => contract.codeId === action.codeId);
-            if (findContract === undefined) contracts.push(newContr)
+            if (findContract === undefined) contracts.push(newContr);
             return contracts;
         case ACTIONS.DEPLOY_CONTRACTS_UPDATE:
             return [...state.map(contract => {
@@ -94,13 +94,52 @@ const contract = (state = [], action) => {
     }
 };
 
+const test = (state = [], action) => {
+    switch (action.type) {
+        case ACTIONS.TEST_CONTRACTS:
+            const newTest = {codeId: action.codeId, state: TEST_STATE.TESTING, message: 'Testing'};
+            const tests = [...state.map(test => {
+                if (test.codeId === action.codeId) {
+                    return newTest;
+                } else return contract;
+            })];
+            const findTest = tests.find(test => test.codeId === action.codeId);
+            if (findTest === undefined) tests.push(newTest);
+            return [...tests];
+        case ACTIONS.TEST_CONTRACTS_UPDATE:
+            return [...state.map(test => {
+                if (test.codeId === action.codeId) {
+                    return Object.assign({}, test, {message: action.message});
+                } else return test;
+            })];
+        case ACTIONS.TEST_CONTRACTS_SUCCESS:
+            return [...state.map(test => {
+                if (test.codeId === action.codeId) {
+                    return Object.assign({}, {codeId: action.codeId, state: TEST_STATE.SUCCESS});
+                } else return test;
+            })];
+        case ACTIONS.TEST_CONTRACT_FAILURE:
+            return [...state.map(test => {
+                if (test.codeId === action.codeId) {
+                    return Object.assign({}, {
+                        codeId: action.codeId, state: TEST_STATE.FAILED,
+                        error: action.error
+                    });
+                } else return test;
+            })];
+        default:
+            return state;
+    }
+};
+
 const web3Account = {
     state: web3AccountState,
     error: web3AccountError,
     address: web3Address,
     networkId: web3NetworkId,
     validNetwork: validNetwork,
-    contract: contract
+    contract: contract,
+    test: test
 };
 
 export default web3Account;

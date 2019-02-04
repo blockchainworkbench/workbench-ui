@@ -30,7 +30,7 @@ const compiler = (state = [], action) => {
                     error: null, compiler: null
                 });
             }
-            return loadList;
+            return [...loadList];
         case ACTIONS.LOAD_COMPILER_FAILURE:
             return [...state.map(compiler => {
                 if (compiler.version === action.version) return Object.assign({}, compiler,

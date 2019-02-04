@@ -9,7 +9,8 @@ import {
     deploy,
     DEPLOY_STATE,
     loadCompiler,
-    WEB3_ACCOUNT_STATE
+    WEB3_ACCOUNT_STATE,
+    testContract, TEST_STATE
 } from "../actions";
 import TitleHeader from "./layout/TitleHeader";
 
@@ -25,8 +26,10 @@ class Web3Playground extends React.Component {
         this.loadCompiler = this.loadCompiler.bind(this);
         this.getCompilerInfo = this.getCompilerInfo.bind(this);
         this.getCompileInfo = this.getCompileInfo.bind(this);
+        this.getTestInfo = this.getTestInfo.bind(this);
         this.compile = this.compile.bind(this);
         this.deploy = this.deploy.bind(this);
+        this.testContracts = this.testContracts.bind(this);
     }
 
     componentDidMount() {
@@ -54,6 +57,11 @@ class Web3Playground extends React.Component {
         this.props.deploy(CODE_ID, this.props.compiledCode.code.contracts);
     }
 
+    testContracts() {
+        const validation = "pragma solidity ^0.4.24;\n\nimport \"Assert.sol\";\nimport \"SpaceMuffin.sol\";\n\ncontract TestSpaceMuffin {\n  SpaceMuffin spaceMuffin = SpaceMuffin(__ADDRESS__);\n\n  function testContactMe() public {\n    string memory result = spaceMuffin.contactMe();\n    string memory expected = \"Ingredients: 1L SpaceMilk, 100g SpaceButter and 100g SpaceChocolate. Instructions: Mix, then bake 45min in your SpaceOven\";\n    Assert.equal(result, expected, \"The recipe you send is not the one expected\");\n  }\n\n  event TestEvent(bool indexed result, string message);\n}";
+        this.props.testContracts(CODE_ID, validation, this.props.contracts.addresses);
+    }
+
     render() {
         return (<section className="hero">
             <TitleHeader/>
@@ -63,6 +71,7 @@ class Web3Playground extends React.Component {
                     {this.getCompilerInfo()}
                     {this.getCompileInfo()}
                     {this.getDeployInfo()}
+                    {this.getTestInfo()}
                 </div>
             </div>
         </section>)
@@ -80,9 +89,10 @@ class Web3Playground extends React.Component {
                     case CODE_STATE.ERROR:
                         return <p>Compile failed: {this.props.compiledCode.error}<br/>{button}</p>;
                     default:
-                        return button;
+                        return <p>Unknown state {this.props.compiledCode.state} {button}</p>;
                 }
-            } else return button;
+            }
+            return button;
         }
         return null;
     }
@@ -101,9 +111,27 @@ class Web3Playground extends React.Component {
                     default:
                         return <p>Unknown state {this.props.contracts.state} {button}</p>;
                 }
-            } else {
-                return button;
             }
+            return button;
+        }
+    }
+
+    getTestInfo() {
+        if (this.props.contracts && this.props.contracts.state === DEPLOY_STATE.DEPLOYED) {
+            const button = <button onClick={this.testContracts}>Test Contracts</button>;
+            if (this.props.tests) {
+                switch (this.props.tests.state) {
+                    case TEST_STATE.TESTING:
+                        return <p>{this.props.tests.message}</p>;
+                    case TEST_STATE.FAILED:
+                        return <p>{this.props.tests.error}</p>;
+                    case TEST_STATE.SUCCESS:
+                        return <p>Tests successfully passed!</p>;
+                    default:
+                        return <p>Unknown state {this.props.tests.state} {button}</p>;
+                }
+            }
+            return button;
         }
     }
 
@@ -186,7 +214,8 @@ const mapStateToProps = (state) => {
         web3Error: state.appState.web3Account.error,
         compiler: state.appState.solidity.compiler.find(compiler => compiler.version === COMPILER_VERSION),
         compiledCode: state.appState.solidity.code.find(code => code.codeId === CODE_ID),
-        contracts: state.appState.web3Account.contract.find(contract => contract.codeId === CODE_ID)
+        contracts: state.appState.web3Account.contract.find(contract => contract.codeId === CODE_ID),
+        tests: state.appState.web3Account.test.find(test => test.codeId === CODE_ID)
     };
 };
 
@@ -196,7 +225,8 @@ const mapDispatchToProps = dispatch => {
         loadCompiler: (version) => dispatch(loadCompiler(version)),
         compile: (codeId, compiler, userSolution, exerciseSolution, optimize) =>
             dispatch(compile(codeId, compiler, userSolution, exerciseSolution, optimize)),
-        deploy: (codeId, contracts) => dispatch(deploy(codeId, contracts))
+        deploy: (codeId, contracts) => dispatch(deploy(codeId, contracts)),
+        testContracts: (codeId, validations, addresses) => dispatch(testContract(codeId, validations, addresses))
     };
 };
 

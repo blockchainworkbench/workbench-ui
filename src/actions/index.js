@@ -24,7 +24,11 @@ export const ACTIONS = {
     DEPLOY_CONTRACTS: "DEPLOY_CONTRACTS",
     DEPLOY_CONTRACTS_FAILURE: "DEPLOY_CONTRACTS_FAILURE",
     DEPLOY_CONTRACTS_SUCCESS: "DEPLOY_CONTRACTS_SUCCESS",
-    DEPLOY_CONTRACTS_UPDATE: "DEPLOY_CONTRACTS_UPDATE"
+    DEPLOY_CONTRACTS_UPDATE: "DEPLOY_CONTRACTS_UPDATE",
+    TEST_CONTRACTS: "TEST_CONTRACTS",
+    TEST_CONTRACTS_UPDATE: "TEST_CONTRACTS_UPDATE",
+    TEST_CONTRACTS_SUCCESS: "TEST_CONTRACTS_UPDATE",
+    TEST_CONTRACT_FAILURE: "TEST_CONTRACTS_FAILURE"
 };
 
 export const DIFFICULTY = {
@@ -62,6 +66,12 @@ export const DEPLOY_STATE = {
     DEPLOYING: "deploying",
     DEPLOYED: "deployed",
     ERROR: "error"
+};
+
+export const TEST_STATE = {
+    TESTING: "testing",
+    SUCCESS: "success",
+    FAILED: "failed"
 };
 
 // ============================================================
@@ -208,4 +218,28 @@ export const deployUpdate = (codeId, stateMessage) => ({
     type: ACTIONS.DEPLOY_CONTRACTS_UPDATE,
     codeId: codeId,
     message: stateMessage
+});
+
+export const testContract = (codeId, validation, addresses) => ({
+    type: ACTIONS.TEST_CONTRACTS,
+    codeId: codeId,
+    validation: validation,
+    addresses: addresses
+});
+
+export const testContractUpdate = (codeId, message) => ({
+    type: ACTIONS.TEST_CONTRACTS_UPDATE,
+    codeId: codeId,
+    message: message
+});
+
+export const testContractSuccess = (codeId) => ({
+    type: ACTIONS.TEST_CONTRACTS_SUCCESS,
+    codeId: codeId
+});
+
+export const testContractFailure = (codeId, error) => ({
+    type: ACTIONS.TEST_CONTRACT_FAILURE,
+    codeId: codeId,
+    error: error
 });
