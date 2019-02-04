@@ -1,5 +1,4 @@
-import {ACTIONS} from '../actions';
-import {combineReducers} from "redux";
+import {ACTIONS} from "../../actions";
 
 const pagesLoading = (state = false, action) => {
     switch (action.type) {
@@ -22,9 +21,9 @@ const pagesError = (state = null, action) => {
     }
 };
 
-const pages = combineReducers({
+const pages = {
     loading: pagesLoading,
     error: pagesError
-});
+};
 
-export default combineReducers({pages});
+export default pages;

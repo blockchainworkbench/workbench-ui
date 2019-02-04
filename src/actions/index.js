@@ -10,7 +10,11 @@ export const ACTIONS = {
     LOAD_PAGES_SUCCESS_SORTED: "LOAD_PAGES_SORTED",
     LOAD_PAGE_CONTENT: "LOAD_PAGE_CONTENT",
     LOAD_PAGE_CONTENT_SUCCESS: "LOAD_PAGE_CONTENT_SUCCESS",
-    LOAD_PAGE_CONTENT_FAILURE: "LOAD_PAGE_CONTENT_FAILURE"
+    LOAD_PAGE_CONTENT_FAILURE: "LOAD_PAGE_CONTENT_FAILURE",
+    CHECK_WEB3_ACCOUNT: "CHECK_WEB3_ACCOUNT",
+    CHECK_WEB3_ACCOUNT_SUCCESS: "CHECK_WEB3_ACCOUNT_SUCCESS",
+    CHECK_WEB3_ACCOUNT_FAILURE: "CHECK_WEB3_ACCOUNT_FAILURE",
+    WEB3_ACCOUNT_UPDATE: "WEB3_ACCOUNT_UPDATE",
 };
 
 export const DIFFICULTY = {
@@ -25,6 +29,12 @@ export const CATEGORY_FILTER_TYPE = {
     OR: "or"
 };
 
+export const WEB3_ACCOUNT_STATE = {
+    PENDING: "pending",
+    UNSUPPORTED: "unsupported",
+    AUTHORIZED: "auth",
+    UNAUTHORIZED: "unauth"
+};
 // ============================================================
 // Action creators
 // ============================================================
@@ -86,4 +96,24 @@ export const loadPageContentFailure = (error, page) => ({
     type: ACTIONS.LOAD_PAGE_CONTENT_FAILURE,
     error: error,
     page: page
+});
+
+export const checkWeb3Account = () => ({
+    type: ACTIONS.CHECK_WEB3_ACCOUNT
+});
+
+export const checkWeb3AccountSuccess = () => ({
+    type: ACTIONS.CHECK_WEB3_ACCOUNT_SUCCESS
+});
+
+export const checkWeb3AccountFailure = (reason, unsupported = false) => ({
+    type: ACTIONS.CHECK_WEB3_ACCOUNT_FAILURE,
+    error: reason,
+    unsupported: unsupported
+});
+
+export const web3AccountUpdate = (update) => ({
+    type: ACTIONS.WEB3_ACCOUNT_UPDATE,
+    address: update['selectedAddress'],
+    networkId: update['networkVersion']
 });

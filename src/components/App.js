@@ -8,6 +8,7 @@ import Page from './Page';
 import {loadPages} from "../actions";
 import {connect} from "react-redux";
 import Footer from './layout/Footer';
+import Web3Playground from "./Web3Playground";
 
 class App extends React.Component {
 
@@ -23,6 +24,7 @@ class App extends React.Component {
                     <Route exact path='/?advanced' component={Home}/>
                     <Route exact path='/' component={Home}/>
                     <Route path='/login' component={Login}/>
+                    <Route path='/web3' component={Web3Playground}/>
                     <Route path='/pages/:category/:page' component={Page}/>
                     <Switch>
                         <Redirect from='/start' to='/pages/introduction'/>
