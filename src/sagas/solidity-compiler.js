@@ -56,8 +56,8 @@ function* workerCompile(action) {
             action.exerciseSolution, action.optimize);
         yield put(compileSuccess(action.codeId, compiledCode));
     } catch (error) {
+        console.log('error in workerCompile', error);
         yield put(compileFailure(action.codeId, error));
-        console.log('error in solidityCompile-Saga', error);
     }
 }
 
@@ -83,7 +83,6 @@ function compile(compiler, userSolution, exerciseSolution, optimize) {
                 reject(new Error(msg));
             }
         }
-        console.log('compile-check ok! hooray!');
         resolve(rCode);
     });
 }

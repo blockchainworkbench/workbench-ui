@@ -146,9 +146,7 @@ function* workerPerformTests(action) {
         let tests = true;
         let errors = '';
         for (let index = 0; index < validation.length; index++) {
-            console.log('test iteration ' + index);
             const test = validation[index];
-            console.log(test);
             const cTest = web3.eth.contract(test.abi).at(test.address);
             const r = yield call(performTests, action.codeId, cTest, action.addresses);
             tests = tests && r.result;
@@ -158,11 +156,11 @@ function* workerPerformTests(action) {
             // this.exerciseSuccess(id);
             yield put(testContractsSuccess(action.codeId));
         } else {
-            yield put(testContractsFailure(action.codeId, new Error(errors)));
+            yield put(testContractsFailure(action.codeId, errors));
         }
     } catch (error) {
-        console.log(error, typeof (error), error.message);
-        yield put(testContractsFailure(action.codeId, new Error(error)));
+        console.log('Error in workerPerformTests', error);
+        yield put(testContractsFailure(action.codeId, error));
     }
 }
 
@@ -187,7 +185,7 @@ function performTests(codeId, contract, addresses) {
                 store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
                 result = result && r.args.result;
                 if (!r.args.result) {
-                    errors.push(r.args.message)
+                    errors.push(r.args.message);
                 }
                 // Resolve only after all test results
                 if (resultReceived === contract.abi.length - 1) {
@@ -221,13 +219,12 @@ function performTests(codeId, contract, addresses) {
                             if (err) {
                                 errors.push(err)
                             }
-                            console.log(r)
                         })
                     } catch (err) {
-                        console.log(err);
                         errors.push(err);
+                        resolve({result: false, errors: errors});
                     }
-                })
+                });
             }
 
             // If contract.abi has only TestEvent or nothing

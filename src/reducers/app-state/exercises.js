@@ -3,20 +3,17 @@ import {ACTIONS, EXERCISE_STATE} from "../../actions";
 export default function (state = [], action) {
     switch (action.type) {
         case ACTIONS.RUN_EXERCISE:
-            console.log('run_ex', action);
             const newExercise = {
                 codeId: action.codeId,
                 state: EXERCISE_STATE.STARTING,
                 message: "Starting",
                 validation: action.validation,
             };
-
             const newState = [...state.map(ex => {
                 if (ex.codeId === action.codeId) {
                     return newExercise;
                 } else return ex;
             })];
-
             if (newState.find(ex => ex.codeId === action.codeId) === undefined) {
                 newState.push(newExercise);
             }

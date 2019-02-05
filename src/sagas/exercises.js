@@ -16,20 +16,15 @@ const exerciseTestSuccess = (actionCodeId, target) =>
     target.codeId === actionCodeId && target.type === ACTIONS.TEST_CONTRACTS_SUCCESS;
 const compilerLoaded = (compilerVersion, target) =>
     target.version === compilerVersion && target.type === ACTIONS.LOAD_COMPILER_SUCCESS;
-const compilerLoadError = (compilerVersion, target) =>
-    target.version === compilerVersion && target.type === ACTIONS.LOAD_COMPILER_FAILURE;
-
 
 function* workerExecuteExercise(action) {
     try {
         yield put(loadCompiler(action.compilerVersion));
         const compilerAction = yield take(target => compilerLoaded(action.compilerVersion, target));
 
-        console.log(compilerAction);
-
-        yield put(compile(action.codeId, compilerAction.compiler.compiler, action.userSolution, action.exerciseSolution, action.optimize));
+        yield put(compile(action.codeId, compilerAction.compiler, action.userSolution, action.exerciseSolution, action.optimize));
         const exercise_compiled = yield take(target => exerciseCompiledSuccess(action.codeId, target));
-        console.log('exercise compiled');
+        console.log('Exercise compiled');
 
         yield put(deploy(action.codeId, exercise_compiled.code.contracts));
         const exercise_deployed = yield take([target => exerciseDeployedAction(action.codeId, target)]);
@@ -40,7 +35,7 @@ function* workerExecuteExercise(action) {
         console.log("Exercise completed");
 
     } catch (error) {
-        console.log('error in workerExecuteExercise', action.codeId, error);
+        console.log('Error in workerExecuteExercise', action.codeId, error);
         yield put(setExerciseError(action.codeId, error));
     }
 }

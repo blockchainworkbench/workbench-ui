@@ -69,24 +69,6 @@ export const COMPILER_STATE = {
     ERROR: "error"
 };
 
-export const CODE_STATE = {
-    COMPILING: "compiling",
-    COMPILED: "compiled",
-    ERROR: "error"
-};
-
-export const DEPLOY_STATE = {
-    DEPLOYING: "deploying",
-    DEPLOYED: "deployed",
-    ERROR: "error"
-};
-
-export const TEST_STATE = {
-    TESTING: "testing",
-    SUCCESS: "success",
-    FAILED: "failed"
-};
-
 // ============================================================
 // Action creators
 // ============================================================

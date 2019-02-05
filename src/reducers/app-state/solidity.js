@@ -1,4 +1,4 @@
-import {ACTIONS, CODE_STATE, COMPILER_STATE} from "../../actions";
+import {ACTIONS, COMPILER_STATE} from "../../actions";
 
 
 const compiler = (state = [], action) => {
@@ -42,38 +42,8 @@ const compiler = (state = [], action) => {
     }
 };
 
-const code = (state = [], action) => {
-    switch (action.type) {
-        case ACTIONS.COMPILE :
-            const newCode = {codeId: action.codeId, state: CODE_STATE.COMPILING};
-            const codes = [...state.map(code => {
-                if (code.codeId === action.codeId) {
-                    return newCode;
-                } else return code;
-            })];
-            const findCode = codes.find(code => code.codeId === action.codeId);
-            if (findCode === undefined) codes.push(newCode);
-            return codes;
-        case ACTIONS.COMPILE_SUCCESS :
-            return [...state.map(code => {
-                if (code.codeId === action.codeId) {
-                    return {codeId: code.codeId, state: CODE_STATE.COMPILED, code: action.code};
-                } else return code;
-            })];
-        case ACTIONS.COMPILE_FAILURE :
-            return [...state.map(code => {
-                if (code.codeId === action.codeId) {
-                    return {codeId: code.codeId, error: action.error};
-                } else return code;
-            })];
-        default:
-            return state;
-    }
-};
-
 const solidity = {
-    compiler: compiler,
-    code: code,
+    compiler: compiler
 };
 
 export default solidity;
