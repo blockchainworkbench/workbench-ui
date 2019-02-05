@@ -142,14 +142,14 @@ function* workerDeployContracts(action) {
 function* workerPerformTests(action) {
     try {
         const web3 = window.web3;
-        console.log(action);
         const validation = JSON.parse(action.validation);
-        console.log('validation', validation);
         let tests = true;
         let errors = '';
         for (let index = 0; index < validation.length; index++) {
+            console.log('test iteration ' + index);
             const test = validation[index];
-            const cTest = web3.eth.contract(JSON.parse(test.abi)).at(test.address);
+            console.log(test);
+            const cTest = web3.eth.contract(test.abi).at(test.address);
             const r = yield call(performTests, action.codeId, cTest, action.addresses);
             tests = tests && r.result;
             errors += r.errors.join('\n')
@@ -161,8 +161,8 @@ function* workerPerformTests(action) {
             yield put(testContractFailure(action.codeId, new Error(errors)));
         }
     } catch (error) {
-        console.log(error);
-        yield put(testContractFailure(action.codeId, error));
+        console.log(error, typeof (error), error.message);
+        yield put(testContractFailure(action.codeId, new Error(error)));
     }
 }
 
@@ -179,54 +179,65 @@ function performTests(codeId, contract, addresses) {
     const errors = [];
     let resultReceived = 0;
 
-    return new Promise(async resolve => {
-        // Listen for transaction results
-        contract.TestEvent((err, r) => {
-            resultReceived++;
-            store.dispatch(testContractUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
-            result = result && r.args.result;
-            if (!r.args.result) {
-                errors.push(r.args.message)
-            }
-            // Resolve only after all test results
-            if (resultReceived === contract.abi.length - 1) {
-                resolve({result: result, errors: errors})
-            }
-        });
-
-        // Perform a transaction for every function to test
-        let fTests = contract.abi
-            .filter(c => {
-                return c.type === 'function'
-            })
-            .sort((a, b) => {
-                return a.name > b.name
+    return new Promise(async (resolve, reject) => {
+        try {
+            // Listen for transaction results
+            contract.TestEvent((err, r) => {
+                resultReceived++;
+                store.dispatch(testContractUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
+                result = result && r.args.result;
+                if (!r.args.result) {
+                    errors.push(r.args.message)
+                }
+                // Resolve only after all test results
+                if (resultReceived === contract.abi.length - 1) {
+                    resolve({result: result, errors: errors})
+                }
             });
-        for (let iTest = 0; iTest < fTests.length; iTest++) {
-            store.dispatch(testContractUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
-            const test = fTests[iTest];
-            const gasPrice = await estimateGasPrice();
-            let txParams = {gasPrice: gasPrice};
-            if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
-                txParams.value = web3.toWei('0.002', 'ether')
-            }
-            web3.eth.estimateGas({
-                from: web3.eth.accounts[0],
-                to: test.address
-            }, (err, gas) => {
-                txParams.gas = gas;
-                contract[test.name](addresses, txParams, (err, r) => {
-                    if (err) {
-                        errors.push(err)
-                    }
-                    console.log(r)
-                })
-            })
-        }
 
-        // If contract.abi has only TestEvent or nothing
-        if (contract.abi.length <= 1) {
-            resolve({result: true, errors: []})
+            // Perform a transaction for every function to test
+            let fTests = contract.abi
+                .filter(c => {
+                    return c.type === 'function'
+                })
+                .sort((a, b) => {
+                    return a.name > b.name
+                });
+            for (let iTest = 0; iTest < fTests.length; iTest++) {
+                store.dispatch(testContractUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
+                const test = fTests[iTest];
+                const gasPrice = await estimateGasPrice();
+                let txParams = {gasPrice: gasPrice};
+                if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
+                    txParams.value = web3.toWei('0.002', 'ether')
+                }
+                web3.eth.estimateGas({
+                    from: web3.eth.accounts[0],
+                    to: test.address
+                }, (err, gas) => {
+                    try {
+                        txParams.gas = gas;
+                        contract[test.name](addresses, txParams, (err, r) => {
+                            if (err) {
+                                errors.push(err)
+                            }
+                            console.log(r)
+                        })
+                    } catch (err) {
+                        console.log(err);
+                        errors.push(err);
+                    }
+                })
+            }
+
+            // If contract.abi has only TestEvent or nothing
+            if (contract.abi.length <= 1) {
+                resolve({result: true, errors: []})
+            }
+
+        } catch (err) {
+            console.log(err);
+            reject(err);
         }
     })
 }

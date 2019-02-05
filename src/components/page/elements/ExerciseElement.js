@@ -8,7 +8,8 @@ class ExerciseElement extends React.Component {
         super(props);
         this.state = {
             content: props.content.initial,
-            submitted: ''
+            submitted: '',
+            progress: ''
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,12 +27,19 @@ class ExerciseElement extends React.Component {
         alert(this.state.content);
     }
 
+    setProgress(progress) {
+        this.setState({progress: progress});
+    }
+
     render() {
         return (
             <div className='hero mb30'>
                 <div className='container'>
                     <p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
                         {this.props.content.title || "Exercise"}</p>
+                    <div className='is-block has-background-danger'>Progress: {this.state.progress}</div>
+                </div>
+                <div className='container'>
                     <div className='has-text-left has-background-grey-lighter'>
                         <ReactMarkdown source={this.props.content.description}/>
                     </div>

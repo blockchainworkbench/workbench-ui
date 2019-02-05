@@ -115,14 +115,18 @@ const test = (state = [], action) => {
         case ACTIONS.TEST_CONTRACTS_SUCCESS:
             return [...state.map(test => {
                 if (test.codeId === action.codeId) {
-                    return Object.assign({}, {codeId: action.codeId, state: TEST_STATE.SUCCESS});
+                    return Object.assign({}, {
+                        codeId: action.codeId,
+                        state: TEST_STATE.SUCCESS
+                    });
                 } else return test;
             })];
         case ACTIONS.TEST_CONTRACT_FAILURE:
             return [...state.map(test => {
                 if (test.codeId === action.codeId) {
                     return Object.assign({}, {
-                        codeId: action.codeId, state: TEST_STATE.FAILED,
+                        codeId: action.codeId,
+                        state: TEST_STATE.FAILED,
                         error: action.error
                     });
                 } else return test;
