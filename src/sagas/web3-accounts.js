@@ -1,11 +1,11 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, take, takeEvery, takeLatest} from 'redux-saga/effects';
 import {
     checkWeb3AccountFailure,
     checkWeb3AccountSuccess,
     ACTIONS,
     web3AccountUpdate,
     deployFailure, deployUpdate, deploySuccess,
-    testContractsUpdate, testContractsSuccess, testContractsFailure
+    testContractsUpdate, testContractsSuccess, testContractsFailure, checkWeb3Account
 } from '../actions';
 import Web3 from 'web3';
 import store from '../store';
@@ -94,6 +94,7 @@ function deploy(contract) {
 
         if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
 
+
         const estimate = await estimateGas(bc);
         const gasPrice = await estimateGasPrice();
         // TODO: ...[constructorParameter1, constructorParameter2]
@@ -113,6 +114,9 @@ function* workerDeployContracts(action) {
     try {
         const addresses = [];
         let index = 0;
+
+        yield put(checkWeb3Account());
+        yield take(ACTIONS.CHECK_WEB3_ACCOUNT_SUCCESS);
 
         // Deploy all contracts
         let errorMessage = false;

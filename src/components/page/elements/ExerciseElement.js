@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import CodeEditor from "../CodeEditor";
+import {EXERCISE_STATE, runExercise} from "../../../actions";
+import {connect} from "react-redux";
+
+const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
 
 class ExerciseElement extends React.Component {
 
@@ -11,6 +15,7 @@ class ExerciseElement extends React.Component {
             submitted: '',
             progress: ''
         };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -24,11 +29,23 @@ class ExerciseElement extends React.Component {
         if (this.props.onSubmit) {
             this.props.onSubmit(this.state.content);
         }
-        alert(this.state.content);
+        const userCode = this.state.content;
+        const solution = this.props.content.solution;
+        const validation = this.props.content.validation;
+        this.props.runExercise(this.props.id, COMPILER_VERSION, userCode, solution, validation, 1);
     }
 
-    setProgress(progress) {
-        this.setState({progress: progress});
+    getProgress() {
+        if (this.props.exercise) {
+            if (this.props.exercise.state === EXERCISE_STATE.ERROR) {
+                return (<div className='is-block has-background-danger has-text-white has-text-left'>
+                    {this.props.exercise.message}: {this.props.exercise.error}
+                </div>)
+            } else {
+                return <div className='is-block has-background-primary has-text-left'>{this.props.exercise.message}</div>
+            }
+        }
+        return null;
     }
 
     render() {
@@ -36,8 +53,9 @@ class ExerciseElement extends React.Component {
             <div className='hero mb30'>
                 <div className='container'>
                     <p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
-                        {this.props.content.title || "Exercise"}</p>
-                    <div className='is-block has-background-danger'>Progress: {this.state.progress}</div>
+                        {this.props.content.title || "Exercise"}
+                    </p>
+                    {this.getProgress()}
                 </div>
                 <div className='container'>
                     <div className='has-text-left has-background-grey-lighter'>
@@ -53,4 +71,17 @@ class ExerciseElement extends React.Component {
     }
 }
 
-export default ExerciseElement;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        exercise: state.appState.exercises.find(ex => ex.codeId === ownProps.id)
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        runExercise: (id, version, user, solution, validation, optimize) =>
+            dispatch(runExercise(id, version, user, solution, validation, optimize))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExerciseElement);

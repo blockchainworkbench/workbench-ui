@@ -3,9 +3,14 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {checkWeb3Account, runExercise, WEB3_ACCOUNT_STATE} from "../actions";
 import TitleHeader from "./layout/TitleHeader";
+import ExerciseElement from "./page/elements/ExerciseElement";
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
 const CODE_ID = 'web3Playground';
+
+const userSolution = "pragma solidity ^0.4.24;\n\ncontract SpaceMuffin {\n  uint public bite = 0;\n\n  function eat(bytes32 _password) public {\n    // Super Super Simple\n    require(_password == \"Super Super Muffin\");\n    // Super Super Tasty\n    bite = bite + 1;\n  }\n}";
+const exerciseSolution = "pragma solidity ^0.4.24;\n\ncontract SpaceMuffin {\n  uint public bite = 0;\n\n  function eat(bytes32 _password) public {\n    // Super Super Simple\n    require(_password == \"Super Super Muffin\");\n    // Super Super Tasty\n    bite = bite + 1;\n  }\n}";
+const validation = "[{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"testEatTrue\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"testEatFalse\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"result\",\"type\":\"bool\"},{\"indexed\":false,\"name\":\"message\",\"type\":\"string\"}],\"name\":\"TestEvent\",\"type\":\"event\"}],\"address\":\"0x0778953B7663cA3eb85b00eEc96f16421B609F1F\"}]";
 
 class Web3Playground extends React.Component {
 
@@ -26,9 +31,7 @@ class Web3Playground extends React.Component {
     }
 
     runEx() {
-        const userSolution = "pragma solidity ^0.4.24;\n\ncontract SpaceMuffin {\n  uint public bite = 0;\n\n  function eat(bytes32 _password) public {\n    // Super Super Simple\n    require(_password == \"Super Super Muffin\");\n    // Super Super Tasty\n    bite = bite + 1;\n  }\n}";
-        const exerciseSolution = "pragma solidity ^0.4.24;\n\ncontract SpaceMuffin {\n  uint public bite = 0;\n\n  function eat(bytes32 _password) public {\n    // Super Super Simple\n    require(_password == \"Super Super Muffin\");\n    // Super Super Tasty\n    bite = bite + 1;\n  }\n}";
-        const validation = "[{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"testEatTrue\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"testEatFalse\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"result\",\"type\":\"bool\"},{\"indexed\":false,\"name\":\"message\",\"type\":\"string\"}],\"name\":\"TestEvent\",\"type\":\"event\"}],\"address\":\"0x0778953B7663cA3eb85b00eEc96f16421B609F1F\"}]";
+
         this.props.runExercise(CODE_ID, COMPILER_VERSION, userSolution, exerciseSolution, validation, 1);
     }
 
@@ -37,9 +40,14 @@ class Web3Playground extends React.Component {
             <TitleHeader/>
             <div className="hero-body">
                 <div className="container has-text-centered">
-                    {this.getContent()}
                     {this.getExerciseInfo()}
                     <button onClick={this.runEx}>Run Exercise</button>
+                    <hr />
+                    <ExerciseElement content={{
+                        initial: userSolution,
+                        solution: exerciseSolution,
+                        validation: validation
+                    }} id='demoExercise12398' />
                 </div>
             </div>
         </section>)
