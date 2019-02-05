@@ -29,7 +29,8 @@ export const ACTIONS = {
     TEST_CONTRACTS_UPDATE: "TEST_CONTRACTS_UPDATE",
     TEST_CONTRACTS_SUCCESS: "TEST_CONTRACTS_SUCCESS",
     TEST_CONTRACT_FAILURE: "TEST_CONTRACTS_FAILURE",
-    RUN_EXERCISE: "RUN_EXERCISE"
+    RUN_EXERCISE: "RUN_EXERCISE",
+    EXERCISE_ERROR: "EXERCISE_ERROR"
 };
 
 export const DIFFICULTY = {
@@ -49,6 +50,17 @@ export const WEB3_ACCOUNT_STATE = {
     UNSUPPORTED: "unsupported",
     AUTHORIZED: "auth",
     UNAUTHORIZED: "unauth"
+};
+
+export const EXERCISE_STATE = {
+    STARTING: "starting",
+    COMPILING: "compiling",
+    COMPILED: "compiled",
+    DEPLOYING: "deploying",
+    DEPLOYED: "deployed",
+    TESTING: "testing",
+    SUCCESS: "success",
+    ERROR: "error"
 };
 
 export const COMPILER_STATE = {
@@ -221,26 +233,42 @@ export const deployUpdate = (codeId, stateMessage) => ({
     message: stateMessage
 });
 
-export const testContract = (codeId, validation, addresses) => ({
+export const testContracts = (codeId, validation, addresses) => ({
     type: ACTIONS.TEST_CONTRACTS,
     codeId: codeId,
     validation: validation,
     addresses: addresses
 });
 
-export const testContractUpdate = (codeId, message) => ({
+export const testContractsUpdate = (codeId, message) => ({
     type: ACTIONS.TEST_CONTRACTS_UPDATE,
     codeId: codeId,
     message: message
 });
 
-export const testContractSuccess = (codeId) => ({
+export const testContractsSuccess = (codeId) => ({
     type: ACTIONS.TEST_CONTRACTS_SUCCESS,
     codeId: codeId
 });
 
-export const testContractFailure = (codeId, error) => ({
+export const testContractsFailure = (codeId, error) => ({
     type: ACTIONS.TEST_CONTRACT_FAILURE,
     codeId: codeId,
     error: error
+});
+
+export const setExerciseError = (codeId, error) => ({
+    type: ACTIONS.EXERCISE_ERROR,
+    codeId: codeId,
+    error: error
+});
+
+export const runExercise = (codeId, compilerVersion, userSolution, exerciseSolution, validation, optimize) => ({
+    type: ACTIONS.RUN_EXERCISE,
+    codeId: codeId,
+    compilerVersion: compilerVersion,
+    userSolution: userSolution,
+    exerciseSolution: exerciseSolution,
+    validation: validation,
+    optimize: optimize
 });

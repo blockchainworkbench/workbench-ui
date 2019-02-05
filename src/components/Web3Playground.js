@@ -10,7 +10,7 @@ import {
     DEPLOY_STATE,
     loadCompiler,
     WEB3_ACCOUNT_STATE,
-    testContract, TEST_STATE
+    testContracts, TEST_STATE, runExercise
 } from "../actions";
 import TitleHeader from "./layout/TitleHeader";
 
@@ -28,6 +28,7 @@ class Web3Playground extends React.Component {
         this.getCompileInfo = this.getCompileInfo.bind(this);
         this.getTestInfo = this.getTestInfo.bind(this);
         this.compile = this.compile.bind(this);
+        this.runEx = this.runEx.bind(this);
         this.deploy = this.deploy.bind(this);
         this.testContracts = this.testContracts.bind(this);
     }
@@ -57,6 +58,13 @@ class Web3Playground extends React.Component {
         this.props.compile(CODE_ID, this.props.compiler.compiler, userSolution, exerciseSolution, optimize);
     }
 
+    runEx() {
+        const userSolution = "pragma solidity ^0.4.24;\n\ncontract SpaceMuffin {\n  uint public bite = 0;\n\n  function eat(bytes32 _password) public {\n    // Super Super Simple\n    require(_password == \"Super Super Muffin\");\n    // Super Super Tasty\n    bite = bite + 1;\n  }\n}";
+        const exerciseSolution = "pragma solidity ^0.4.24;\n\ncontract SpaceMuffin {\n  uint public bite = 0;\n\n  function eat(bytes32 _password) public {\n    // Super Super Simple\n    require(_password == \"Super Super Muffin\");\n    // Super Super Tasty\n    bite = bite + 1;\n  }\n}";
+        const validation = "[{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"testEatTrue\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"constant\":false,\"inputs\":[{\"name\":\"_addresses\",\"type\":\"address[]\"}],\"name\":\"testEatFalse\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"name\":\"result\",\"type\":\"bool\"},{\"indexed\":false,\"name\":\"message\",\"type\":\"string\"}],\"name\":\"TestEvent\",\"type\":\"event\"}],\"address\":\"0x0778953B7663cA3eb85b00eEc96f16421B609F1F\"}]";
+        this.props.runExercise(CODE_ID, COMPILER_VERSION, userSolution, exerciseSolution, validation, 1);
+    }
+
     deploy() {
         this.props.deploy(CODE_ID, this.props.compiledCode.code.contracts);
     }
@@ -75,6 +83,7 @@ class Web3Playground extends React.Component {
             <div className="hero-body">
                 <div className="container has-text-centered">
                     {this.getContent()}
+                    {this.getExerciseInfo()}
                     {this.getCompilerInfo()}
                     {this.getCompileInfo()}
                     {this.getDeployInfo()}
@@ -84,13 +93,28 @@ class Web3Playground extends React.Component {
         </section>)
     }
 
+    getExerciseInfo() {
+        if (this.props.exercise) {
+            return <div>
+                <p>{this.props.exercise.state}</p>
+                <p>{this.props.exercise.message}</p>
+                <p>{this.props.exercise.error}</p>
+            </div>
+        } else {
+            return <div>exercise info is null</div>
+        }
+    }
+
     getCompileInfo() {
         if (this.isCompilerLoaded()) {
-            const button = <button onClick={this.compile}>Compile</button>;
+            const button = <div>
+                <button onClick={this.compile}>Compile</button>
+                <button onClick={this.runEx}>Run Exercise</button>
+            </div>;
             if (this.props.compiledCode) {
                 switch (this.props.compiledCode.state) {
                     case CODE_STATE.COMPILED:
-                        return <p>Code Compiled!</p>;
+                        return null;
                     case CODE_STATE.COMPILING:
                         return <p>Compiling....</p>;
                     case CODE_STATE.ERROR:
@@ -114,7 +138,7 @@ class Web3Playground extends React.Component {
                     case DEPLOY_STATE.ERROR:
                         return <p>{this.props.contracts.error}</p>;
                     case DEPLOY_STATE.DEPLOYED:
-                        return <p>{this.props.contracts.message}</p>;
+                        return null;
                     default:
                         return <p>Unknown state {this.props.contracts.state} {button}</p>;
                 }
@@ -127,7 +151,6 @@ class Web3Playground extends React.Component {
         if (this.props.contracts && this.props.contracts.state === DEPLOY_STATE.DEPLOYED) {
             const button = <button onClick={this.testContracts}>Test Contracts</button>;
             if (this.props.tests) {
-                console.log('test.state', this.props.tests.state);
                 switch (this.props.tests.state) {
                     case TEST_STATE.TESTING:
                         return <p>{this.props.tests.message}</p>;
@@ -154,7 +177,7 @@ class Web3Playground extends React.Component {
                 case COMPILER_STATE.LOADING:
                     return <p>Loading</p>;
                 case COMPILER_STATE.LOADED:
-                    return <p>Loaded</p>;
+                    return null;
                 case COMPILER_STATE.ERROR:
                     return <p>Error: <strong>{this.props.compiler.error}</strong>{button}</p>;
                 default:
@@ -223,7 +246,8 @@ const mapStateToProps = (state) => {
         compiler: state.appState.solidity.compiler.find(compiler => compiler.version === COMPILER_VERSION),
         compiledCode: state.appState.solidity.code.find(code => code.codeId === CODE_ID),
         contracts: state.appState.web3Account.contract.find(contract => contract.codeId === CODE_ID),
-        tests: state.appState.web3Account.test.find(test => test.codeId === CODE_ID)
+        tests: state.appState.web3Account.test.find(test => test.codeId === CODE_ID),
+        exercise: state.appState.exercises.find(ex => ex.codeId === CODE_ID)
     };
 };
 
@@ -233,8 +257,10 @@ const mapDispatchToProps = dispatch => {
         loadCompiler: (version) => dispatch(loadCompiler(version)),
         compile: (codeId, compiler, userSolution, exerciseSolution, optimize) =>
             dispatch(compile(codeId, compiler, userSolution, exerciseSolution, optimize)),
+        runExercise: (codeId, compilerVersion, userSolution, exerciseSolution, validation, optimize) =>
+            dispatch(runExercise(codeId, compilerVersion, userSolution, exerciseSolution, validation, optimize)),
         deploy: (codeId, contracts) => dispatch(deploy(codeId, contracts)),
-        testContracts: (codeId, validations, addresses) => dispatch(testContract(codeId, validations, addresses))
+        testContracts: (codeId, validations, addresses) => dispatch(testContracts(codeId, validations, addresses))
     };
 };
 

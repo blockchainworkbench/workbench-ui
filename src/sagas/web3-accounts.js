@@ -5,7 +5,7 @@ import {
     ACTIONS,
     web3AccountUpdate,
     deployFailure, deployUpdate, deploySuccess,
-    testContractUpdate, testContractSuccess, testContractFailure
+    testContractsUpdate, testContractsSuccess, testContractsFailure
 } from '../actions';
 import Web3 from 'web3';
 import store from '../store';
@@ -156,13 +156,13 @@ function* workerPerformTests(action) {
         }
         if (tests) {
             // this.exerciseSuccess(id);
-            yield put(testContractSuccess(action.codeId));
+            yield put(testContractsSuccess(action.codeId));
         } else {
-            yield put(testContractFailure(action.codeId, new Error(errors)));
+            yield put(testContractsFailure(action.codeId, new Error(errors)));
         }
     } catch (error) {
         console.log(error, typeof (error), error.message);
-        yield put(testContractFailure(action.codeId, new Error(error)));
+        yield put(testContractsFailure(action.codeId, new Error(error)));
     }
 }
 
@@ -184,7 +184,7 @@ function performTests(codeId, contract, addresses) {
             // Listen for transaction results
             contract.TestEvent((err, r) => {
                 resultReceived++;
-                store.dispatch(testContractUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
+                store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
                 result = result && r.args.result;
                 if (!r.args.result) {
                     errors.push(r.args.message)
@@ -204,7 +204,7 @@ function performTests(codeId, contract, addresses) {
                     return a.name > b.name
                 });
             for (let iTest = 0; iTest < fTests.length; iTest++) {
-                store.dispatch(testContractUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
+                store.dispatch(testContractsUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
                 const test = fTests[iTest];
                 const gasPrice = await estimateGasPrice();
                 let txParams = {gasPrice: gasPrice};
