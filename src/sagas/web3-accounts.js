@@ -1,11 +1,15 @@
-import {call, put, take, takeEvery, takeLatest} from 'redux-saga/effects';
+import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
 import {
+    ACTIONS,
     checkWeb3AccountFailure,
     checkWeb3AccountSuccess,
-    ACTIONS,
-    web3AccountUpdate,
-    deployFailure, deployUpdate, deploySuccess,
-    testContractsUpdate, testContractsSuccess, testContractsFailure, checkWeb3Account
+    deployFailure,
+    deploySuccess,
+    deployUpdate,
+    testContractsFailure,
+    testContractsSuccess,
+    testContractsUpdate,
+    web3AccountUpdate
 } from '../actions';
 import Web3 from 'web3';
 import store from '../store';
@@ -109,9 +113,6 @@ function* workerDeployContracts(action) {
         const addresses = [];
         let index = 0;
 
-        yield put(checkWeb3Account());
-        yield take(ACTIONS.CHECK_WEB3_ACCOUNT_SUCCESS);
-
         // Deploy all contracts
         for (let name of Object.keys(action.contracts)) {
             name = name.substring(1);
@@ -199,7 +200,7 @@ function performTests(codeId, contract, addresses) {
                 store.dispatch(testContractsUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
                 const test = fTests[iTest];
                 const gasPrice = await estimateGasPrice();
-                let txParams = {gasPrice: gasPrice};
+                let txParams = {gasPrice: gasPrice, from: web3.eth.accounts[0]};
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }

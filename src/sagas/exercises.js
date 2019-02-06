@@ -38,6 +38,17 @@ function* workerExecuteExercise(action) {
         const compilerAction = yield take(target => compilerLoaded(action.compilerVersion, target));
         console.log('Compiler loaded.');
 
+        yield put(setExerciseUpdate(action.codeId, "Checking wallet access", EXERCISE_STATE.AUTHORIZING));
+        yield put(checkWeb3Account());
+        const web3Account = yield take([
+            ACTIONS.CHECK_WEB3_ACCOUNT_SUCCESS,
+            ACTIONS.CHECK_WEB3_ACCOUNT_FAILURE
+        ]);
+        if (web3Account.type === ACTIONS.CHECK_WEB3_ACCOUNT_FAILURE) {
+            console.log(web3Account.error);
+            return yield put(setExerciseError(action.codeId, web3Account.error));
+        }
+
         yield put(compile(action.codeId, compilerAction.compiler, action.userSolution, action.exerciseSolution, action.optimize));
         const compilationResultAction = yield take([
             target => exerciseCompiledSuccess(action.codeId, target),
@@ -47,16 +58,6 @@ function* workerExecuteExercise(action) {
             return console.log("Compilation failed. Cancel exercise now.");
         }
         console.log('Exercise compiled');
-
-        yield put(setExerciseUpdate(action.codeId, "Checking wallet access", EXERCISE_STATE.AUTHORIZING));
-        yield put(checkWeb3Account());
-        const web3Account = yield take([
-            ACTIONS.CHECK_WEB3_ACCOUNT_SUCCESS,
-            ACTIONS.CHECK_WEB3_ACCOUNT_FAILURE
-        ]);
-        if (web3Account.type === ACTIONS.CHECK_WEB3_ACCOUNT_FAILURE) {
-            return yield put(setExerciseError(action.codeId, web3Account.error));
-        }
 
         yield put(deploy(action.codeId, compilationResultAction.code.contracts));
         const deploymentResultAction = yield take([
