@@ -28,7 +28,6 @@ function* workerCheckAccount() {
         let ethereum = window.ethereum;
 
         if (window.ethereum) {
-            console.log('modern dapp browser');
             window.web3 = new Web3(ethereum);
             try {
                 yield call(ethereum.enable);
@@ -38,7 +37,6 @@ function* workerCheckAccount() {
                 yield put(checkWeb3AccountFailure("Access to Accounts denied by user."));
             }
         } else if (window.web3) {
-            console.log('legacy dapp browser');
             window.web3 = new Web3(web3.currentProvider);
             yield put(checkWeb3AccountSuccess());
         } else {
@@ -92,17 +90,13 @@ function deploy(contract) {
 
     return new Promise(async (resolve, reject) => {
 
-        if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
-
-
+        // if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
         const estimate = await estimateGas(bc);
         const gasPrice = await estimateGasPrice();
         // TODO: ...[constructorParameter1, constructorParameter2]
         mcontract.new({data: bc, from: web3.eth.accounts[0], gas: estimate, gasPrice: gasPrice}, (err, r) => {
             if (err) {
-                console.log(err);
-                reject(new Error(err));
-                return;
+                return reject(err.message || err);
             }
             if (!r.address) return;
             resolve(r);
@@ -119,24 +113,20 @@ function* workerDeployContracts(action) {
         yield take(ACTIONS.CHECK_WEB3_ACCOUNT_SUCCESS);
 
         // Deploy all contracts
-        let errorMessage = false;
         for (let name of Object.keys(action.contracts)) {
             name = name.substring(1);
             const msg = `Deploying ${name}'\t${index++}/${Object.keys(action.contracts).length}`;
             yield put(deployUpdate(action.codeId, msg));
             try {
                 const deployedCode = yield call(deploy, action.contracts[':' + name]);
-                //window.dCode = deployedCode;
                 addresses.push(deployedCode.address)
             } catch (error) {
-                errorMessage = error;
-                yield put(deployFailure(action.codeId, `Deployment error for contract ${name}: ${error}`));
+                return yield put(deployFailure(action.codeId, `Contract ${name}: ${error}`));
             }
         }
-        if (!errorMessage) {
-            const msg = `Successfully deployed ${Object.keys(action.contracts).length} Contracts.`;
-            yield put(deploySuccess(action.codeId, addresses, msg));
-        }
+
+        yield put(deploySuccess(action.codeId, addresses,
+            `Successfully deployed ${Object.keys(action.contracts).length} Contracts.`));
     } catch (error) {
         console.log('error in workerDeployContracts', error);
         yield put(deployFailure(action.codeId, error));
@@ -213,18 +203,24 @@ function performTests(codeId, contract, addresses) {
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }
+                console.log('myacc', web3.eth.accounts[0], 'adresses', addresses);
                 web3.eth.estimateGas({
                     from: web3.eth.accounts[0],
                     to: test.address
                 }, (err, gas) => {
+                    console.log('estimateGas callback', err, gas);
                     try {
                         txParams.gas = gas;
+                        console.log(test.name);
+                        console.log(txParams);
                         contract[test.name](addresses, txParams, (err, r) => {
+                            console.log('contract call callback', err, r);
                             if (err) {
                                 errors.push(err)
                             }
                         })
                     } catch (err) {
+                        console.log('contract call catch', err);
                         errors.push(err);
                         resolve({result: false, errors: errors});
                     }

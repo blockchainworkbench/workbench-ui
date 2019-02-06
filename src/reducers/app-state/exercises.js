@@ -135,6 +135,16 @@ export default function (state = [], action) {
                 } else return ex;
             })];
 
+        case ACTIONS.EXERCISE_UPDATE:
+            return [...state.map(ex => {
+                if (ex.codeId === action.codeId) {
+                    return Object.assign({}, ex, {
+                        message: action.message,
+                        state: action.exerciseType || ex.state
+                    });
+                } else return ex;
+            })];
+
         default:
             return state;
     }

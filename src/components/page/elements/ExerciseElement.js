@@ -38,12 +38,26 @@ class ExerciseElement extends React.Component {
     getProgress() {
         if (this.props.exercise) {
             if (this.props.exercise.state === EXERCISE_STATE.ERROR) {
-                return (<div className='is-block has-background-danger has-text-white has-text-left'>
-                    {this.props.exercise.message}: {this.props.exercise.error}
-                </div>)
+                return (<div className='has-text-danger has-text-weight-bold has-background-light has-text-left'>
+                        <i className="fas fa-exclamation-triangle ml10"/>
+                        <span className='ml10'>{this.props.exercise.message}: {this.props.exercise.error}</span>
+                    </div>)
             } else {
-                return <div className='is-block has-background-primary has-text-left'>{this.props.exercise.message}</div>
+                if (this.props.exercise.state === EXERCISE_STATE.SUCCESS) {
+                    return (<div className='has-background-success has-text-weight-bold has-text-white'>
+                        <i className="far fa-thumbs-up mr10 ml10"/>Correct!
+                    </div>);
+                }
+                let spinner = '';
+                if (this.props.exercise.state.includes('ing')) {
+                    spinner = <i className="fa fa-spinner fa-pulse fa-fw mr10 ml10"/>
+                }
+                return (<div className='has-background-light has-text-left'>
+                    {spinner}{this.props.exercise.message}
+                </div>)
             }
+        } else {
+
         }
         return null;
     }

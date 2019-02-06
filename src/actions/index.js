@@ -30,7 +30,8 @@ export const ACTIONS = {
     TEST_CONTRACTS_SUCCESS: "TEST_CONTRACTS_SUCCESS",
     TEST_CONTRACT_FAILURE: "TEST_CONTRACTS_FAILURE",
     RUN_EXERCISE: "RUN_EXERCISE",
-    EXERCISE_ERROR: "EXERCISE_ERROR"
+    EXERCISE_ERROR: "EXERCISE_ERROR",
+    EXERCISE_UPDATE: "EXERCISE_UPDATE"
 };
 
 export const DIFFICULTY = {
@@ -56,6 +57,7 @@ export const EXERCISE_STATE = {
     STARTING: "starting",
     COMPILING: "compiling",
     COMPILED: "compiled",
+    AUTHORIZING: "authorizing",
     DEPLOYING: "deploying",
     DEPLOYED: "deployed",
     TESTING: "testing",
@@ -243,6 +245,13 @@ export const setExerciseError = (codeId, error) => ({
     type: ACTIONS.EXERCISE_ERROR,
     codeId: codeId,
     error: error
+});
+
+export const setExerciseUpdate = (codeId, message, type = null) => ({
+    type: ACTIONS.EXERCISE_UPDATE,
+    codeId: codeId,
+    message: message,
+    exerciseType: type
 });
 
 export const runExercise = (codeId, compilerVersion, userSolution, exerciseSolution, validation, optimize) => ({
