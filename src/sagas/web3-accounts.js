@@ -174,12 +174,13 @@ function performTests(codeId, contract, addresses) {
     const errors = [];
     let resultReceived = 0;
 
+    const testTransactionIds = [];
     return new Promise(async (resolve, reject) => {
         try {
             // Listen for transaction results
             contract.TestEvent((err, r) => {
                 resultReceived++;
-                if(errors.length === 0) {
+                if (errors.length === 0) {
                     // Only propagate testContractUpdate action, if errors is still empty. Success-callback can
                     // arrive later than error due to race condition and accidentally overwrite status on ui.
                     store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
@@ -218,7 +219,7 @@ function performTests(codeId, contract, addresses) {
                     console.log('debug', err, gas);
                     try {
                         txParams.gas = gas;
-                        contract[test.name](addresses, txParams, (err, r) => {
+                        const txid = contract[test.name](addresses, txParams, (err, r) => {
                             if (err) {
                                 errors.push(err);
                                 console.log(`${test.name}: ${err.message}`);
@@ -226,6 +227,10 @@ function performTests(codeId, contract, addresses) {
                             }
                             console.log(`${test.name}: ${r}`);
                         });
+                        if (txid) {
+                            console.log(`${test.name} txid: ${txid}`);
+                            testTransactionIds.push(txid);
+                        }
                     } catch (err) {
                         console.log('catch2', err);
                         errors.push(err);
@@ -233,6 +238,19 @@ function performTests(codeId, contract, addresses) {
                     }
                 });
             }
+            /*
+            console.log(`we have ${testTransactionIds.length} testTxIds`);
+            const filter = web3.eth.filter("latest");
+            filter.watch(function (err, log) {
+              console.log('watch-event', err, log);
+              console.log(`we have ${testTransactionIds.length} testTxIds`);
+              for (const tx of testTransactionIds) {
+                web3.eth.getTransactionReceipt(tx, rc => {
+                  console.log(`Receipt for tx ${tx}: ${rc}`);
+                });
+              }
+            });
+            */
 
             // If contract.abi has only TestEvent or nothing
             if (contract.abi.length <= 1) {
