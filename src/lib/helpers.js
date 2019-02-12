@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const getDifficultyColorForTag = (difficulty) => {
     switch (difficulty) {
         case "easy":
@@ -22,4 +24,10 @@ export const buildPageUrl = (categoryName, pageTitle) => {
 
 export const buildCategoryUrl = (categoryName) => {
     return `/pages/${urlify(categoryName)}`;
+};
+
+export const fetchUrl = (url) => {
+    return axios({
+        method: "get", url: url
+    });
 };

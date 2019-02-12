@@ -31,7 +31,12 @@ export const ACTIONS = {
     TEST_CONTRACT_FAILURE: "TEST_CONTRACTS_FAILURE",
     RUN_EXERCISE: "RUN_EXERCISE",
     EXERCISE_ERROR: "EXERCISE_ERROR",
-    EXERCISE_UPDATE: "EXERCISE_UPDATE"
+    EXERCISE_UPDATE: "EXERCISE_UPDATE",
+    LOAD_USER_PROFILE: "LOAD_USER_PROFILE",
+    LOAD_USER_PROFILE_SUCCESS: "LOAD_USER_PROFILE_SUCCESS",
+    LOAD_USER_PROFILE_FAILURE: "LOAD_USER_PROFILE_FAILURE",
+    LOGOUT_USER: "LOGOUT",
+    LOGOUT_USER_SUCCESS: "LOGOUT_SUCCESS"
 };
 
 export const DIFFICULTY = {
@@ -262,4 +267,30 @@ export const runExercise = (codeId, compilerVersion, userSolution, exerciseSolut
     exerciseSolution: exerciseSolution,
     validation: validation,
     optimize: optimize
+});
+
+export const loadUserProfile = () => ({
+    type: ACTIONS.LOAD_USER_PROFILE
+});
+
+export const loadUserProfileSuccess = (profile) => ({
+    type: ACTIONS.LOAD_USER_PROFILE_SUCCESS,
+    id: profile.id,
+    created: profile.dateCreated,
+    email: profile.email,
+    publicKey: profile.publicKey,
+    displayName: profile.displayName
+});
+
+export const loadUserProfileFailure = (error) => ({
+    type: ACTIONS.LOAD_USER_PROFILE_FAILURE,
+    error: error
+});
+
+export const logoutUser = () => ({
+    type: ACTIONS.LOGOUT_USER
+});
+
+export const logoutSuccess = () => ({
+   type: ACTIONS.LOGOUT_USER_SUCCESS
 });

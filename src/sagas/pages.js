@@ -1,12 +1,13 @@
 import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
-import axios from 'axios';
 import {
-    loadPagesFailure,
-    loadPagesSuccess,
+    ACTIONS,
+    DIFFICULTY,
     loadPageContentFailure,
     loadPageContentSuccess,
-    DIFFICULTY, ACTIONS
+    loadPagesFailure,
+    loadPagesSuccess
 } from '../actions';
+import {fetchUrl} from "../lib/helpers";
 
 const BASE_URL = process.env.REACT_APP_JSONFEED_BASE;
 
@@ -17,11 +18,7 @@ const pageSagas = [
 
 export default pageSagas;
 
-function fetchUrl(url) {
-    return axios({
-        method: "get", url: url
-    });
-}
+
 
 function* workerFetchPageList() {
     try {
