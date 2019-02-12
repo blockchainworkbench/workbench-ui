@@ -148,11 +148,8 @@ function* workerPerformTests(action) {
             errors += r.errors.join('\n')
         }
         if (tests) {
-            // this.exerciseSuccess(id);
-            console.log('worker1', tests);
             yield put(testContractsSuccess(action.codeId));
         } else {
-            console.log('worker2', tests, errors);
             yield put(testContractsFailure(action.codeId, errors));
         }
     } catch (error) {
@@ -174,7 +171,6 @@ function performTests(codeId, contract, addresses) {
     const errors = [];
     let resultReceived = 0;
 
-    const testTransactionIds = [];
     return new Promise(async (resolve, reject) => {
         try {
             // Listen for transaction results
@@ -186,7 +182,6 @@ function performTests(codeId, contract, addresses) {
                     store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
                 }
                 result = result && r.args.result;
-                console.log('testevent', err, r);
                 if (!r.args.result) {
                     errors.push(r.args.message);
                 }
@@ -216,10 +211,9 @@ function performTests(codeId, contract, addresses) {
                     from: web3.eth.accounts[0],
                     to: test.address
                 }, (err, gas) => {
-                    console.log('debug', err, gas);
                     try {
                         txParams.gas = gas;
-                        const txid = contract[test.name](addresses, txParams, (err, r) => {
+                        contract[test.name](addresses, txParams, (err, r) => {
                             if (err) {
                                 errors.push(err);
                                 console.log(`${test.name}: ${err.message}`);
@@ -227,30 +221,12 @@ function performTests(codeId, contract, addresses) {
                             }
                             console.log(`${test.name}: ${r}`);
                         });
-                        if (txid) {
-                            console.log(`${test.name} txid: ${txid}`);
-                            testTransactionIds.push(txid);
-                        }
                     } catch (err) {
-                        console.log('catch2', err);
                         errors.push(err);
                         resolve({result: false, errors: errors});
                     }
                 });
             }
-            /*
-            console.log(`we have ${testTransactionIds.length} testTxIds`);
-            const filter = web3.eth.filter("latest");
-            filter.watch(function (err, log) {
-              console.log('watch-event', err, log);
-              console.log(`we have ${testTransactionIds.length} testTxIds`);
-              for (const tx of testTransactionIds) {
-                web3.eth.getTransactionReceipt(tx, rc => {
-                  console.log(`Receipt for tx ${tx}: ${rc}`);
-                });
-              }
-            });
-            */
 
             // If contract.abi has only TestEvent or nothing
             if (contract.abi.length <= 1) {
@@ -258,7 +234,6 @@ function performTests(codeId, contract, addresses) {
             }
 
         } catch (err) {
-            console.log('catch', err);
             reject(err);
         }
     })
