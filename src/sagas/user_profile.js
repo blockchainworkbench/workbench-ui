@@ -20,7 +20,7 @@ function* workerLoadProfile() {
 
 function* workerLogout() {
     try {
-        yield call(fetchUrl, '/api/logout');
+        yield call(fetchUrl, '/api/auth/logout');
         yield put(logoutSuccess());
     } catch (error) {
         console.log('error on logout', error);

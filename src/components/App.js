@@ -25,7 +25,7 @@ class App extends React.Component {
                     <Navigation/>
                     <Route exact path='/?advanced' component={Home}/>
                     <Route exact path='/' component={Home}/>
-                    <Route path='/login' component={Login}/>
+                    <Route path='/login/:app?' component={Login}/>
                     <Route path='/logout' component={Logout}/>
                     <Route path='/profile' component={Profile}/>
                     <Route path='/web3' component={Web3Playground}/>
