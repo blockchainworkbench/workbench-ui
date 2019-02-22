@@ -37,11 +37,8 @@ function* workerLogout() {
 
 function* workerSaveProfile(action) {
     try {
-        console.log('profile save start');
         yield call(postUrl, '/api/users', {displayName: action.displayName, publicKey: action.publicKey});
-        console.log('callback');
         yield put(saveProfileSuccess());
-        console.log('loading new profile now');
         yield put(loadUserProfile());
     } catch (error) {
         yield put(saveProfileFailure(error.message));
