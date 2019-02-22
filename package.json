@@ -1,7 +1,7 @@
 {
   "name": "workbench-ui",
   "version": "0.1.0",
-  "homepage": "https://blockchainworkbench.github.io/workbench-ui/",
+  "homepage": "http://blockchainworkbench.com/",
   "dependencies": {
     "ace-mode-solidity": "https://github.com/severus-sn4pe/ace-mode-solidity/tarball/8aad050c642b4e27c16ff40845fd19b76fb5f106",
     "axios": "^0.18.0",

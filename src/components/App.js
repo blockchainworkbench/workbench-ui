@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import Footer from './layout/Footer';
 import Web3Playground from "./Web3Playground";
 import Profile from "./user/Profile";
+import ProfileEdit from "./user/ProfileEdit";
 
 class App extends React.Component {
 
@@ -27,7 +28,8 @@ class App extends React.Component {
                     <Route exact path='/' component={Home}/>
                     <Route path='/login/:app?' component={Login}/>
                     <Route path='/logout' component={Logout}/>
-                    <Route path='/profile' component={Profile}/>
+                    <Route exact path='/profile' component={Profile}/>
+                    <Route exact path='/profile/edit' component={ProfileEdit}/>
                     <Route path='/web3' component={Web3Playground}/>
                     <Route path='/pages/:category/:page' component={Page}/>
                     <Switch>

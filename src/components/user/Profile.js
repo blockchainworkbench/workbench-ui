@@ -2,7 +2,7 @@ import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
 import {connect} from "react-redux";
 import {loadUserProfile} from "../../actions";
-import {Redirect} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 class Profile extends React.Component {
 
@@ -57,6 +57,7 @@ class Profile extends React.Component {
         fields.push(this.getLabelRow(3, 'email', this.props.user.email));
         fields.push(this.getLabelRow(4, 'Public Key', this.props.user.publicKey));
         fields.push(this.getLabelRow(5, 'Created', this.props.user.created));
+        fields.push(this.getLabelRow(6, '', <Link to='/profile/edit' className='button is-info'>Edit Profile</Link>));
         return fields;
     }
 

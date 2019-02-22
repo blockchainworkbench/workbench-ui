@@ -31,3 +31,7 @@ export const fetchUrl = (url) => {
         method: "get", url: url
     });
 };
+
+export const postUrl = (url, data) => {
+  return axios({ method: "post", url: url, data: data});
+};
