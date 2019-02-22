@@ -12,7 +12,7 @@ export default function Footer() {
                 <Link to='/contact'>Contact</Link>
             </div>
             <div className="level-item">
-                <a href='https://forum.achievement.network' target='_blank' rel='noopener noreferrer'>Forum</a>
+                <a href='http://forum.blockchainworkbench.com' target='_blank' rel='noopener noreferrer'>Forum</a>
             </div>
             <div className="level-item">
                 <a href='https://github.com/blockchainworkbench' target='_blank' rel='noopener noreferrer'>

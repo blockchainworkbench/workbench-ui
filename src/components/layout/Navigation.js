@@ -11,14 +11,12 @@ class Navigation extends React.Component {
         this.loadProfile();
     }
 
-
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.loadProfile();
     }
 
     loadProfile() {
         if (!this.props.user.loading && !this.props.user.authenticated && !this.props.user.error) {
-            console.log('navigation: loading profile information');
             this.props.loadProfile();
         }
     }
