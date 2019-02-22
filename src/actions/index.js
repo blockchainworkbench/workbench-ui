@@ -282,9 +282,10 @@ export const loadUserProfileSuccess = (profile) => ({
     displayName: profile.displayName
 });
 
-export const loadUserProfileFailure = (error) => ({
+export const loadUserProfileFailure = (error, code = null) => ({
     type: ACTIONS.LOAD_USER_PROFILE_FAILURE,
-    error: error
+    error: error,
+    code: code
 });
 
 export const logoutUser = () => ({

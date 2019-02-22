@@ -14,7 +14,7 @@ function* workerLoadProfile() {
         const response = yield call(fetchUrl, '/api/users');
         yield put(loadUserProfileSuccess(response.data));
     } catch (error) {
-        yield put(loadUserProfileFailure(error.message));
+        yield put(loadUserProfileFailure(error.response.data, error.response.status));
     }
 }
 

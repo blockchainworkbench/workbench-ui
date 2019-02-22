@@ -14,6 +14,9 @@ const user = (state = {authenticated: false}, action) => {
             profile.loading = false;
             return profile;
         case ACTIONS.LOAD_USER_PROFILE_FAILURE:
+            if (action.code !== 401) {
+                console.log(action.error);
+            }
             return {
                 authenticated: false,
                 loading: false,
