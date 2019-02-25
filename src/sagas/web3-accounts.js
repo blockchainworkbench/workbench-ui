@@ -148,11 +148,8 @@ function* workerPerformTests(action) {
             errors += r.errors.join('\n')
         }
         if (tests) {
-            // this.exerciseSuccess(id);
-            console.log('worker1', tests);
             yield put(testContractsSuccess(action.codeId));
         } else {
-            console.log('worker2', tests, errors);
             yield put(testContractsFailure(action.codeId, errors));
         }
     } catch (error) {
@@ -179,13 +176,12 @@ function performTests(codeId, contract, addresses) {
             // Listen for transaction results
             contract.TestEvent((err, r) => {
                 resultReceived++;
-                if(errors.length === 0) {
+                if (errors.length === 0) {
                     // Only propagate testContractUpdate action, if errors is still empty. Success-callback can
                     // arrive later than error due to race condition and accidentally overwrite status on ui.
                     store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
                 }
                 result = result && r.args.result;
-                console.log('testevent', err, r);
                 if (!r.args.result) {
                     errors.push(r.args.message);
                 }
@@ -215,7 +211,6 @@ function performTests(codeId, contract, addresses) {
                     from: web3.eth.accounts[0],
                     to: test.address
                 }, (err, gas) => {
-                    console.log('debug', err, gas);
                     try {
                         txParams.gas = gas;
                         contract[test.name](addresses, txParams, (err, r) => {
@@ -227,7 +222,6 @@ function performTests(codeId, contract, addresses) {
                             console.log(`${test.name}: ${r}`);
                         });
                     } catch (err) {
-                        console.log('catch2', err);
                         errors.push(err);
                         resolve({result: false, errors: errors});
                     }
@@ -240,7 +234,6 @@ function performTests(codeId, contract, addresses) {
             }
 
         } catch (err) {
-            console.log('catch', err);
             reject(err);
         }
     })
