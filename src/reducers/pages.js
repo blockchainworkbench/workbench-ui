@@ -7,7 +7,7 @@ const pages = (state = [], action) => {
         case ACTIONS.LOAD_PAGE_CONTENT_SUCCESS:
             return [...state.map(page => {
                 if (page.url === action.page.url) {
-                    return Object.assign({}, page, action.page, {loading: false});
+                    return Object.assign({}, page, {loading: false, content: action.page.content});
                 } else {
                     return page;
                 }

@@ -7,39 +7,62 @@ const pagesSorted = [
 
 export default pagesSorted;
 
+function addToContainerIfNotYetExist(categoryName, container, page, containerType) {
+    if(categoryName.toLowerCase() in container) {
+        console.log(`More than one ${containerType} page for category ${categoryName} found`);
+    } else {
+        container[categoryName.toLowerCase()] = page;
+    }
+    return container;
+}
+
 function* workerOrderPages(action) {
     try {
         const pages = action.pages;
-        const categories = [];
-        const pagesByKey = [];
+        // const categories = _.compact(_.uniq(pages.reduce((acc, page) => acc.concat(page.categories), [])));
+        const pagesByKey = pages.reduce((acc, page) => {
+            acc[page.url] = page;
+            return acc;
+        }, {});
 
-        const categoryRoots = [];
+        let categoryRoots = [];
+        let categoryEnds = [];
         for (const page of pages) {
             for (const categoryIndex in page.categories) {
-                if (categories.indexOf(page.categories[categoryIndex]) === -1) {
-                    categories.push(page.categories[categoryIndex]);
+                let nextPage = null;
+                let prevPage = null;
+                let currentyCategory = page.categories[categoryIndex];
+                if (page.next && page.next[categoryIndex]) {
+                    nextPage = pagesByKey[page.next[categoryIndex]];
+                    if (!nextPage.categories || !nextPage.categories.includes(currentyCategory)) {
+                        categoryEnds = addToContainerIfNotYetExist(currentyCategory, categoryEnds, page, "end");
+                    }
+                } else {
+                    categoryEnds = addToContainerIfNotYetExist(currentyCategory, categoryEnds, page, "end");
                 }
-                // finding root page for each category
-                if (page.next && page.next[categoryIndex] && (!page.previous || !page.previous[categoryIndex])) {
-                    if (page.categories[categoryIndex] in categoryRoots) {
-                        console.log(`More than one root page for category '${page.categories[categoryIndex]} found!'`);
-                        // TODO : Handle case of multiple root pages for one category
-                    } else {
-                        categoryRoots[page.categories[categoryIndex]] = page;
+                if (!page.previous || !page.previous[categoryIndex]){
+                    categoryRoots = addToContainerIfNotYetExist(currentyCategory, categoryRoots, page, "root");
+                } else {
+                    prevPage = pagesByKey[page.previous[categoryIndex]];
+                    if (!prevPage.categories || !prevPage.categories.includes(currentyCategory)) {
+                        categoryRoots = addToContainerIfNotYetExist(currentyCategory, categoryRoots, page, "root");
                     }
                 }
             }
-            pagesByKey[page.url] = page;
         }
 
         const categoryMap = [];
         for (const category in categoryRoots) {
             const orderedCategoryPages = [];
             let current = categoryRoots[category];
+            if (!(category in categoryEnds)) {
+                console.log(category, 'not in cat ends');
+            }
+            let endPageUrl = categoryEnds[category].url;
             while (current) {
-                const currentCategoryIndex = current.categories.indexOf(category);
+                const currentCategoryIndex = current.categories.map(c => c.toLowerCase()).indexOf(category);
                 orderedCategoryPages.push(current);
-                if (current.next && current.next[currentCategoryIndex]) {
+                if (current.next && current.next[currentCategoryIndex] && current.url !== endPageUrl) {
                     current = pagesByKey[current.next[currentCategoryIndex]];
                 } else {
                     current = null;

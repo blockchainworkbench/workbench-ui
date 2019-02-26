@@ -1,18 +1,17 @@
 import React from 'react';
-import {withRouter} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 import TitleHeader from "./layout/TitleHeader";
 import CategorySteps from "./layout/CategorySteps";
 import connect from "react-redux/es/connect/connect";
-import {urlify} from "../lib/helpers";
+import {buildCategoryUrl, buildPageUrl, urlify} from "../lib/helpers";
 import PageContent from "./page/PageContent";
-import CategorySummary from "./page/CategorySummary";
 
 class Page extends React.Component {
 
     getSelectedPage() {
         const activePage = this.props.match.params.page;
         for (const page of this.props.pages) {
-            if (urlify(page.title) === activePage) {
+            if (urlify(page.title).toLowerCase() === activePage.toLowerCase()) {
                 return page;
             }
         }
@@ -22,15 +21,16 @@ class Page extends React.Component {
         const page = this.getSelectedPage();
         const pageName = this.props.match.params.page;
         const categoryName = this.props.match.params.category;
+        if(page && page.url && page.url.endsWith('index.html')) {
+            return <Redirect to={buildCategoryUrl(categoryName)} />
+        }
         return (
             <section className="hero">
                 <TitleHeader/>
                 <div className="hero-body">
                     <div className="container">
                         <CategorySteps/>
-                        {pageName !== 'summary'
-                            ? <PageContent page={page} category={categoryName}/>
-                            : <CategorySummary categoryTitle={categoryName}/>}
+                        <PageContent page={page} category={categoryName}/>
                     </div>
                 </div>
             </section>

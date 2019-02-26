@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
-import {buildPageUrl, buildCategoryUrl} from '../../lib/helpers';
+import {buildCategoryUrl, buildPageUrl} from '../../lib/helpers';
 import {loadPageContent} from "../../actions";
 import PageContentArray from "./PageContentArray";
 
@@ -59,7 +59,7 @@ class PageContent extends React.Component {
             if (typeof (this.props.page.content) === 'string') {
                 return <ReactMarkdown source={this.props.page.content}/>
             } else {
-                return <PageContentArray page={this.props.page} />
+                return <PageContentArray page={this.props.page}/>
             }
         } else {
             return (<p className='has-text-centered'>
@@ -73,26 +73,62 @@ class PageContent extends React.Component {
 
     getNextPageJSX() {
         const nextIcon = <p className='icon has-text-info'><i className='fas fa-chevron-circle-right'/></p>;
-        const page = this.props.page ? this.getAdjacentCategoryPage(this.props.page.next) : null;
-
-        return page
-            ? <Link to={buildPageUrl(this.props.category, page.title)}>{page.title} {nextIcon}</Link>
-            : <Link to={buildPageUrl(this.props.category, 'summary')}>Summary {nextIcon}</Link>
+        const nextPage = this.props.page ? this.getAdjacentCategoryPage(this.props.page.next, 'next') : null;
+        if (!nextPage || !nextPage.categories) {
+            return <Link to='/#advanced'>Choose next Page {nextIcon}</Link>
+        } else {
+            const sameCategory = nextPage.categories
+                && nextPage.categories.map(c => c.toLowerCase()).includes(this.props.category.toLowerCase());
+            if (sameCategory) {
+                return <Link to={buildPageUrl(this.props.category, nextPage.title)}>{nextPage.title} {nextIcon}</Link>
+            } else {
+                if (nextPage.url.endsWith('index.html')) {
+                    return <Link to={buildCategoryUrl(nextPage.categories[0])} className='button is-info is-large'>Next
+                        Chapter: {nextPage.title}</Link>
+                } else {
+                    return <Link to={buildPageUrl(nextPage.categories[0], nextPage.title)}
+                                 className='button is-info is-large'>Next
+                        Chapter: {nextPage.title}</Link>
+                }
+            }
+        }
     }
 
     getPreviousPageJSX() {
         const previousIcon = <p className='icon has-text-info'><i className='fas fa-chevron-circle-left'/></p>;
-        const page = this.props.page ? this.getAdjacentCategoryPage(this.props.page.previous) : null;
-        return page
-            ? <Link to={buildPageUrl(this.props.category, page.title)}>{previousIcon} {page.title}</Link>
-            : <Link to={buildCategoryUrl(this.props.category)}>{previousIcon} Overview</Link>
+        const previousPage = this.props.page ? this.getAdjacentCategoryPage(this.props.page.previous, 'prev') : null;
+        const sameCategory = previousPage && previousPage.categories
+            && previousPage.categories.map(c => c.toLowerCase()).includes(this.props.category.toLowerCase());
+        if (previousPage) {
+            if (sameCategory) {
+                if (previousPage.url.endsWith('index.html')) {
+                    return <Link to={buildCategoryUrl(this.props.category)}>{previousIcon} {previousPage.title} (Chapter
+                        Overview)</Link>
+                } else {
+                    return <Link
+                        to={buildPageUrl(this.props.category, previousPage.title)}>{previousIcon} {previousPage.title}</Link>
+                }
+            } else {
+                return <Link
+                    to={buildPageUrl(previousPage.categories[0], previousPage.title)}>{previousIcon} {previousPage.title} (Previous
+                    Chapter)</Link>
+            }
+        }
+        return previousPage
+            ?
+            <Link to={buildPageUrl(this.props.category, previousPage.title)}>{previousIcon} {previousPage.title}</Link>
+            : null
     }
 
-    getAdjacentCategoryPage(next_previous_container) {
+    getAdjacentCategoryPage(next_previous_container, info) {
         if (next_previous_container) {
-            const categoryIndex = this.props.page.categories.indexOf(this.props.category);
+            const categoryIndex = this.props.page.categories.map(cat => cat.toLowerCase()).indexOf(this.props.category.toLowerCase());
             if (categoryIndex !== -1) {
-                return this.props.pages.find(page => page.url === next_previous_container[categoryIndex]);
+                return this.props.pages.find(page => page.url.toLowerCase() === next_previous_container[categoryIndex].toLowerCase());
+            } else {
+                if (info === 'next') {
+                    console.log('-1 next', this.props.page.categories, this.props.category);
+                }
             }
         }
     }

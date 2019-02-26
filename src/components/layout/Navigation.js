@@ -26,7 +26,7 @@ class Navigation extends React.Component {
             <nav className='navbar is-fixed-top'>
                 <div className='navbar-end'>
                     <LoadingIndicator/>
-                    <NavLink className='navbar-item' activeClassName='is-active' to='/pages/introduction'>
+                    <NavLink className='navbar-item' activeClassName='is-active' to='/pages/0introduction'>
                         Introduction
                     </NavLink>
                     <NavHashLink className='navbar-item' activeClassName='is-active' to='/#advanced'>

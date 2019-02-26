@@ -8,6 +8,8 @@ import Web3 from 'web3';
 
 if (!Web3) console.log('Web3 not loaded');
 
+window.store = store;
+
 ReactDOM.render((
     <Provider store={store}>
         <App/>

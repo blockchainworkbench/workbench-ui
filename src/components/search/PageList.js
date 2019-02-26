@@ -55,8 +55,13 @@ const getFilteredCategoryPages = (pages, category) => {
     return pages.filter(page => page.categories.indexOf(category) !== -1);
 };
 
+const getPagesWithoutIndex = (pages) => {
+    return pages.filter(page => !page.url.endsWith('index.html'));
+};
+
 const getVisiblePages = (pages, difficulty, categories, categoryFilterType) => {
-    const filteredDifficulty = getVisiblePagesByDifficulty(pages, difficulty);
+    const pagesWithoutIndex = getPagesWithoutIndex(pages);
+    const filteredDifficulty = getVisiblePagesByDifficulty(pagesWithoutIndex, difficulty);
     return getVisiblePagesByCategories(filteredDifficulty, categories, categoryFilterType);
 };
 

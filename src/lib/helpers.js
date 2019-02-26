@@ -15,7 +15,9 @@ export const getDifficultyColorForTag = (difficulty) => {
 };
 
 export const urlify = (string_value) => {
-    return string_value.split(' ').join('_').toLowerCase();
+    if(string_value) return string_value.split(' ').join('_');
+    console.log('warning: undefined value in urlify');
+    return "undefined"
 };
 
 export const buildPageUrl = (categoryName, pageTitle) => {
