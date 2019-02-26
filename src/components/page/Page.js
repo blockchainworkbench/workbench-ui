@@ -3,7 +3,7 @@ import {Redirect, withRouter} from "react-router-dom";
 import TitleHeader from "../layout/TitleHeader";
 import CategorySteps from "../layout/CategorySteps";
 import connect from "react-redux/es/connect/connect";
-import {buildCategoryUrl, buildPageUrl, urlify} from "../../lib/helpers";
+import {buildCategoryUrl, urlify} from "../../lib/helpers";
 import PageContent from "./PageContent";
 
 class Page extends React.Component {
@@ -19,7 +19,6 @@ class Page extends React.Component {
 
     render() {
         const page = this.getSelectedPage();
-        const pageName = this.props.match.params.page;
         const categoryName = this.props.match.params.category;
         if(page && page.url && page.url.endsWith('index.html')) {
             return <Redirect to={buildCategoryUrl(categoryName)} />

@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {buildCategoryUrl, buildPageUrl} from '../../lib/helpers';
 import {loadPageContent} from "../../actions";
-import PageContentArray from "./PageContentArray";
+import ContentArray from "./ContentArray";
 
 const ReactMarkdown = require('react-markdown');
 
@@ -59,7 +59,7 @@ class PageContent extends React.Component {
             if (typeof (this.props.page.content) === 'string') {
                 return <ReactMarkdown source={this.props.page.content}/>
             } else {
-                return <PageContentArray page={this.props.page}/>
+                return <div className="content-array mb30"><ContentArray content={this.props.page.content}/></div>
             }
         } else {
             return (<p className='has-text-centered'>

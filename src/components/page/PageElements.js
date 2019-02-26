@@ -8,6 +8,7 @@ import YoutubeElement from "./elements/YoutubeElement";
 import HTMLElement from "./elements/HTMLElement";
 import HeaderElement from "./elements/HeaderElement";
 import ScriptElement from "./elements/ScriptElement";
+import ImageElement from "./elements/ImageElement";
 
 export default {
     "h1": HeaderElement,
@@ -24,5 +25,6 @@ export default {
     "code": CodeElement,
     "quote": QuoteElement,
     "exercise": ExerciseElement,
+    "img": ImageElement,
     "unknown": UnknownElement
 };

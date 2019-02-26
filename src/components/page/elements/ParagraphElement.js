@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import ContentArray from "../ContentArray";
 
 export default function ParagraphElement(props) {
-    return <ReactMarkdown source={props.content}/>;
+    return <ContentArray content={props.content}/>;
 }
