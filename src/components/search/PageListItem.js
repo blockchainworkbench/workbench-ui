@@ -1,19 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {urlify, getDifficultyColorForTag} from "../../lib/helpers";
-import {connect} from 'react-redux';
-import {selectPage} from '../../actions';
+import {buildCategoryUrl, buildPageUrl, getDifficultyColorForTag} from "../../lib/helpers";
 import {Link} from 'react-router-dom';
 
 class PageListItem extends React.Component {
     render() {
         const diffTileClass = `tag is-pulled-right ${getDifficultyColorForTag(this.props.page.difficulty)}`;
         return (
-            <div className='tile is-parent is-4 catLink column'
-                 onClick={() => this.handleClickElement(this.props.page.url)}>
+            <div className='tile is-parent is-4 catLink column'>
                 <div className='tile is-child box'>
-                    <Link
-                        to={`/pages/${urlify(this.props.page.categories[0])}/${urlify(this.props.page.title)}`}>
+                    <Link to={this.getPageUrl()}>
                         <p>
                             <span className="title is-4">
                                 {this.props.page ? this.props.page.title : 'Page undefined'}
@@ -33,20 +28,13 @@ class PageListItem extends React.Component {
         )
     }
 
-    handleClickElement(pageId) {
-        this.props.selectPage(pageId);
+    getPageUrl() {
+        if (this.props.page.url.endsWith('index.html')) {
+            return buildCategoryUrl(this.props.page.categories[0])
+        } else {
+            return buildPageUrl(this.props.page.categories[0], this.props.page.title)
+        }
     }
 }
 
-PageListItem.propTypes = {
-    topic: PropTypes.object
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        selectPage: pageId => dispatch(selectPage(pageId))
-    };
-};
-
-const ConnectedPageListItem = connect(null, mapDispatchToProps)(PageListItem);
-export default ConnectedPageListItem;
+export default PageListItem;
