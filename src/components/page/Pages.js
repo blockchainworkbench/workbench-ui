@@ -1,10 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Link, withRouter} from "react-router-dom";
-import TitleHeader from "./layout/TitleHeader";
-import {getDifficultyColorForTag, urlify} from "../lib/helpers";
-import CategorySteps from "./layout/CategorySteps";
-import PageContent from "./page/PageContent";
+import TitleHeader from "../layout/TitleHeader";
+import {getDifficultyColorForTag, urlify} from "../../lib/helpers";
+import CategorySteps from "../layout/CategorySteps";
+import PageContent from "./PageContent";
 
 class Pages extends React.Component {
 

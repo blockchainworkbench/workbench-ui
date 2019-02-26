@@ -1,10 +1,10 @@
 import React from 'react';
 import {Redirect, withRouter} from "react-router-dom";
-import TitleHeader from "./layout/TitleHeader";
-import CategorySteps from "./layout/CategorySteps";
+import TitleHeader from "../layout/TitleHeader";
+import CategorySteps from "../layout/CategorySteps";
 import connect from "react-redux/es/connect/connect";
-import {buildCategoryUrl, buildPageUrl, urlify} from "../lib/helpers";
-import PageContent from "./page/PageContent";
+import {buildCategoryUrl, buildPageUrl, urlify} from "../../lib/helpers";
+import PageContent from "./PageContent";
 
 class Page extends React.Component {
 
