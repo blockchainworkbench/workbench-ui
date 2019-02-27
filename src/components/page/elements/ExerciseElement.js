@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import CodeEditor from "../CodeEditor";
 import {EXERCISE_STATE, runExercise} from "../../../actions";
 import {connect} from "react-redux";
+import ContentArray from "../ContentArray";
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
 
@@ -39,9 +39,9 @@ class ExerciseElement extends React.Component {
         if (this.props.exercise) {
             if (this.props.exercise.state === EXERCISE_STATE.ERROR) {
                 return (<div className='has-text-danger has-text-weight-bold has-background-light has-text-left'>
-                        <i className="fas fa-exclamation-triangle ml10"/>
-                        <span className='ml10'>{this.props.exercise.message}: {this.props.exercise.error}</span>
-                    </div>)
+                    <i className="fas fa-exclamation-triangle ml10"/>
+                    <span className='ml10'>{this.props.exercise.message}: {this.props.exercise.error}</span>
+                </div>)
             } else {
                 if (this.props.exercise.state === EXERCISE_STATE.SUCCESS) {
                     return (<div className='has-background-success has-text-weight-bold has-text-white'>
@@ -63,25 +63,31 @@ class ExerciseElement extends React.Component {
     }
 
     render() {
-        return (
-            <div className='hero mb30'>
-                <div className='container'>
-                    <p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
-                        {this.props.content.title || "Exercise"}
-                    </p>
-                    {this.getProgress()}
-                </div>
-                <div className='container'>
-                    <div className='has-text-left has-background-grey-lighter'>
-                        <ReactMarkdown source={this.props.content.description}/>
+        if (this.props.content && this.props.content.length > 0) {
+            const content = this.props.content[0];
+            console.log('exercise', content);
+            return (
+                <div className='hero mb30'>
+                    <div className='container'>
+                        <p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
+                            {this.props.content.title || "Exercise"}
+                        </p>
+                        {this.getProgress()}
                     </div>
-                    <CodeEditor id={`exercise-${this.props.id}`} content={this.state.content}
-                                onChange={this.handleChange}/>
-                    <button onClick={this.handleSubmit}
-                            className='button is-link is-fullwidth'>Submit
-                    </button>
-                </div>
-            </div>);
+                    <div className='container'>
+                        <div className='has-text-left has-background-grey-lighter'>
+                            <ContentArray content={this.props.content.description}/>
+                        </div>
+                        <CodeEditor id={`exercise-${this.props.id}`} content={this.state.content}
+                                    onChange={this.handleChange}/>
+                        <button onClick={this.handleSubmit}
+                                className='button is-link is-fullwidth'>Submit
+                        </button>
+                    </div>
+                </div>);
+        } else {
+         return <span className='has-background-danger has-text-white'>Invalid Exercise Element</span>
+        }
     }
 }
 

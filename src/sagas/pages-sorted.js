@@ -44,7 +44,7 @@ function* workerOrderPages(action) {
                     categoryRoots = addToContainerIfNotYetExist(currentyCategory, categoryRoots, page, "root");
                 } else {
                     prevPage = pagesByKey[page.previous[categoryIndex]];
-                    if (!prevPage.categories || !prevPage.categories.includes(currentyCategory)) {
+                    if (!prevPage || !prevPage.categories || !prevPage.categories.includes(currentyCategory)) {
                         categoryRoots = addToContainerIfNotYetExist(currentyCategory, categoryRoots, page, "root");
                     }
                 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import ContentArray from "../ContentArray";
 
 export default function QuoteElement(props) {
-    return <div className="notification is-primary mb30"><ReactMarkdown source={props.content}/></div>;
+    return <div className="notification is-primary mb30"><ContentArray content={props.content}/></div>;
 }

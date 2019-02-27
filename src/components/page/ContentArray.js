@@ -1,5 +1,5 @@
 import React from 'react';
-import Elements from './PageElements';
+import Elements from './elements';
 
 class ContentArray extends React.Component {
 
