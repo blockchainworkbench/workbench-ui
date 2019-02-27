@@ -9,6 +9,11 @@ import HTMLElement from "./elements/HTMLElement";
 import HeaderElement from "./elements/HeaderElement";
 import ScriptElement from "./elements/ScriptElement";
 import ImageElement from "./elements/ImageElement";
+import EmphasisElement from "./elements/EmphasisElement";
+import DivElement from "./elements/DivElement";
+import ButtonElement from "./elements/ButtonElement";
+import StyleElement from "./elements/StyleElement";
+import ListElement from "./elements/ListElement";
 
 export default {
     "h1": HeaderElement,
@@ -21,10 +26,15 @@ export default {
     "a": LinkElement,
     "youtube": YoutubeElement,
     "html": HTMLElement,
-    "js": ScriptElement,
+    "script": ScriptElement,
     "code": CodeElement,
     "quote": QuoteElement,
     "exercise": ExerciseElement,
     "img": ImageElement,
+    "em": EmphasisElement,
+    "div": DivElement,
+    "button": ButtonElement,
+    "style": StyleElement,
+    "ul": ListElement,
     "unknown": UnknownElement
 };

@@ -59,7 +59,7 @@ class PageContent extends React.Component {
             if (typeof (this.props.page.content) === 'string') {
                 return <ReactMarkdown source={this.props.page.content}/>
             } else {
-                return <div className="content-array mb30"><ContentArray content={this.props.page.content}/></div>
+                return <div className="content-array mb30 has-text-left"><ContentArray content={this.props.page.content}/></div>
             }
         } else {
             return (<p className='has-text-centered'>

@@ -9,11 +9,11 @@ class ContentArray extends React.Component {
                 const elementComponent = Elements[element.type];
                 if (elementComponent) {
                     return React.createElement(elementComponent, {
-                        'key': idx, 'id': idx, 'content': element.content, 'type': element.type, 'elem': element
+                        'key': idx, 'id': idx, 'content': element.content, 'type': element.type, 'element': element
                     });
                 } else {
                     if (typeof (element) === 'string') {
-                        return <span>{element}</span>
+                        return <span key={idx}>{element}</span>
                     } else {
                         return React.createElement(Elements['unknown'], {
                             'key': idx, 'type': element.type
@@ -22,7 +22,7 @@ class ContentArray extends React.Component {
                 }
             })}</>)
         } else {
-            return (<div>Page is not properly loaded</div>)
+            return <>{this.props.content}</>;
         }
     }
 }

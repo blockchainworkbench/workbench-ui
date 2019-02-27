@@ -8,8 +8,6 @@ class CategoryList extends React.Component {
     }
 
     renderCategories() {
-        const categories = [];
-
         const content = this.props.pages.map(page => <PageListItem key={page.url} page={page}/>);
         if (this.props.pages.length === 0) {
             content.push(<div key='no-data' className="tile is-parent column has-text-grey-light">

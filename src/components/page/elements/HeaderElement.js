@@ -1,5 +1,5 @@
 import React from 'react';
-import LinkElement from "./LinkElement";
+import ContentArray from "../ContentArray";
 
 export default function HeaderElement(props) {
     let classes = '';
@@ -28,12 +28,7 @@ export default function HeaderElement(props) {
     if (typeof (props.content) === 'string') {
         children = props.content;
     } else {
-        if (props.content.type === 'a') {
-            children = <LinkElement content={props.content.content}/>
-        } else {
-            classes = "has-text-danger";
-            children = `Unsupported Child of Heading ${props.content.type}`;
-        }
+        children = <ContentArray content={props.content}/>;
     }
     return React.createElement(props.type, {
         'children': children, 'className': classes
