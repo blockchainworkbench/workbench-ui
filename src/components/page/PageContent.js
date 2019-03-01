@@ -26,7 +26,7 @@ class PageContent extends React.Component {
     }
 
     loadPageContent(page) {
-        if (page && !page.content && !page.loading) {
+        if (page && !page.content && !page.loading && !page.error) {
             console.log(`Loading content for page ${page.title}`);
             this.props.loadPage(page.url);
         }
@@ -59,15 +59,20 @@ class PageContent extends React.Component {
             if (typeof (this.props.page.content) === 'string') {
                 return <ReactMarkdown source={this.props.page.content}/>
             } else {
-                return <div className="content-array mb30 has-text-left"><ContentArray content={this.props.page.content}/></div>
+                return <div className="content-array mb30 has-text-left"><ContentArray
+                    content={this.props.page.content}/></div>
             }
         } else {
-            return (<p className='has-text-centered'>
+            if (this.props.page.error) {
+                return <p className='has-text-danger has-text-weight-bold'>{this.props.page.error}</p>;
+            } else {
+                return (<p className='has-text-centered'>
                 <span className='icon loading has-text-info has-text-centered is-large'>
                     <i className='fas fa-spinner fa-spin'/>
                 </span>
-                <span>Loading content ...</span>
-            </p>)
+                    <span>Loading content ...</span>
+                </p>)
+            }
         }
     }
 

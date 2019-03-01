@@ -23,7 +23,7 @@ const pages = (state = [], action) => {
         case ACTIONS.LOAD_PAGE_CONTENT_FAILURE:
             return [...state.map(page => {
                 if (page.url === action.page.url) {
-                    return Object.assign({}, {loading: false});
+                    return Object.assign({}, page,{loading: false, error: action.error});
                 } else {
                     return page;
                 }

@@ -42,7 +42,11 @@ function* workerFetchPageContent(action) {
     try {
         const pageUrl = BASE_URL + action.pageUrl;
         const response = yield call(fetchUrl, pageUrl);
-        yield put(loadPageContentSuccess(response.data));
+        if(response.data.url !== action.pageUrl) {
+            yield put(loadPageContentFailure("Could not load page content.", {url: action.pageUrl}));
+        } else {
+            yield put(loadPageContentSuccess(response.data));
+        }
     } catch (error) {
         console.log('error loading page content', error);
         yield put(loadPageContentFailure(error));
