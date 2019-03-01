@@ -31,7 +31,7 @@ class ExerciseElement extends React.Component {
         }
         const userCode = this.state.content;
         const solution = this.props.content[0].solution;
-        const validation = this.props.content[0].validation;
+        const validation = this.props.content[0].validation.deployed;
         this.props.runExercise(this.props.content[0].id, COMPILER_VERSION, userCode, solution, validation, 1);
     }
 
@@ -65,7 +65,6 @@ class ExerciseElement extends React.Component {
     render() {
         if (this.props.content && this.props.content.length > 0) {
             const content = this.props.content[0];
-            console.log('exercise', content);
             return (
                 <div className='hero mb30'>
                     <div className='container'>
@@ -93,7 +92,7 @@ class ExerciseElement extends React.Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        exercise: state.appState.exercises.find(ex => ex.codeId === ownProps.id)
+        exercise: state.appState.exercises.find(ex => ex.codeId === ownProps.content[0].id)
     };
 };
 

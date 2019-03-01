@@ -137,7 +137,7 @@ function* workerDeployContracts(action) {
 function* workerPerformTests(action) {
     try {
         const web3 = window.web3;
-        const validation = JSON.parse(action.validation);
+        const validation = action.validation; //JSON.parse(action.validation);
         let tests = true;
         let errors = '';
         for (let index = 0; index < validation.length; index++) {
