@@ -16,6 +16,7 @@ import StyleElement from "./StyleElement";
 import ListElement from "./ListElement";
 import StrongElement from "./StrongElement";
 import CodeElement from "./CodeElement";
+import TableElement from "./TableElement";
 
 export default {
     "h1": HeaderElement,
@@ -40,5 +41,6 @@ export default {
     "style": StyleElement,
     "ul": ListElement,
     "strong": StrongElement,
+    "table": TableElement,
     "unknown": UnknownElement
 };
