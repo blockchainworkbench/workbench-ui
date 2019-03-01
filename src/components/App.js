@@ -30,10 +30,9 @@ class App extends React.Component {
                     <Route path='/logout' component={Logout}/>
                     <Route exact path='/profile' component={Profile}/>
                     <Route exact path='/profile/edit' component={ProfileEdit}/>
-                    <Route path='/web3' component={Web3Playground}/>
                     <Route path='/pages/:category/:page' component={Page}/>
                     <Switch>
-                        <Redirect from='/start' to='/pages/introduction'/>
+                        <Redirect from='/start' to='/pages/0introduction'/>
                         <Route exact path='/pages/:category' component={Pages}/>
                     </Switch>
                     <Footer/>

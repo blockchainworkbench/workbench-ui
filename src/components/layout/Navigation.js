@@ -33,7 +33,6 @@ class Navigation extends React.Component {
                         Advanced Search
                     </NavHashLink>
                     {this.getLoginOrProfileNav()}
-                    <NavLink className='navbar-item' activeClassName='is-active' to='/web3'>Web3 Playground</NavLink>
                 </div>
             </nav>);
     }
