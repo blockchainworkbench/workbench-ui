@@ -11,7 +11,7 @@ class ExerciseElement extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            content: props.content.initial,
+            content: props.content[0].initial,
             submitted: '',
             progress: ''
         };
@@ -30,9 +30,9 @@ class ExerciseElement extends React.Component {
             this.props.onSubmit(this.state.content);
         }
         const userCode = this.state.content;
-        const solution = this.props.content.solution;
-        const validation = this.props.content.validation;
-        this.props.runExercise(this.props.id, COMPILER_VERSION, userCode, solution, validation, 1);
+        const solution = this.props.content[0].solution;
+        const validation = this.props.content[0].validation;
+        this.props.runExercise(this.props.content[0].id, COMPILER_VERSION, userCode, solution, validation, 1);
     }
 
     getProgress() {
@@ -76,7 +76,7 @@ class ExerciseElement extends React.Component {
                     </div>
                     <div className='container'>
                         <div className='has-text-left has-background-grey-lighter'>
-                            <ContentArray content={this.props.content.description}/>
+                            <ContentArray content={this.props.content[0].description}/>
                         </div>
                         <CodeEditor id={`exercise-${this.props.id}`} content={this.state.content}
                                     onChange={this.handleChange}/>
