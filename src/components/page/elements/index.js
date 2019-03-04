@@ -41,6 +41,7 @@ export default {
     "form": FormElement,
     "style": StyleElement,
     "ul": ListElement,
+    "ol": ListElement,
     "strong": StrongElement,
     "table": TableElement,
     "unknown": UnknownElement
