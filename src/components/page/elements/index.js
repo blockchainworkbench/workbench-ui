@@ -11,12 +11,12 @@ import ScriptElement from "./ScriptElement";
 import ImageElement from "./ImageElement";
 import EmphasisElement from "./EmphasisElement";
 import DivElement from "./DivElement";
-import ButtonElement from "./ButtonElement";
 import StyleElement from "./StyleElement";
 import ListElement from "./ListElement";
 import StrongElement from "./StrongElement";
 import CodeElement from "./CodeElement";
 import TableElement from "./TableElement";
+import FormElement from "./FormElement";
 
 export default {
     "h1": HeaderElement,
@@ -37,7 +37,8 @@ export default {
     "img": ImageElement,
     "em": EmphasisElement,
     "div": DivElement,
-    "button": ButtonElement,
+    // "button": ButtonElement,
+    "form": FormElement,
     "style": StyleElement,
     "ul": ListElement,
     "strong": StrongElement,

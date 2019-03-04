@@ -9,9 +9,9 @@ import Page from './page/Page';
 import {loadPages} from "../actions";
 import {connect} from "react-redux";
 import Footer from './layout/Footer';
-import Web3Playground from "./Web3Playground";
 import Profile from "./user/Profile";
 import ProfileEdit from "./user/ProfileEdit";
+import Playground from "./Playground";
 
 class App extends React.Component {
 
@@ -24,6 +24,7 @@ class App extends React.Component {
             <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <div>
                     <Navigation/>
+                    <Route path='/demo' component={Playground} />
                     <Route exact path='/?advanced' component={Home}/>
                     <Route exact path='/' component={Home}/>
                     <Route path='/login/:app?' component={Login}/>
