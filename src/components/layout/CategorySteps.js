@@ -10,7 +10,7 @@ class CategorySteps extends React.Component {
         const steps = [];
         if (pages) {
             for (const page of pages) {
-                if (page.url.endsWith('index.html')) {
+                if (page.url.endsWith('/')) {
                     steps.push(this.getOverviewStep(category));
                 } else {
                 steps.push(<li key={page.url}

@@ -22,7 +22,7 @@ export default pageSagas;
 
 function* workerFetchPageList() {
     try {
-        const response = yield call(fetchUrl, BASE_URL + "index.html");
+        const response = yield call(fetchUrl, BASE_URL);
         const pages = response.data.pages;
         for (const page of pages) {
             if (page.difficulty !== DIFFICULTY.EASY

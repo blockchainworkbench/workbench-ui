@@ -36,7 +36,6 @@ class PageContent extends React.Component {
         if (this.props.page) {
             return (
                 <div>
-                    <h1 className="title has-text-centered">{this.props.page.title}</h1>
                     <div className="content">
                         {this.getPageContentJSX()}
                         <div className='level'>
@@ -87,7 +86,7 @@ class PageContent extends React.Component {
             if (sameCategory) {
                 return <Link to={buildPageUrl(this.props.category, nextPage.title)}>{nextPage.title} {nextIcon}</Link>
             } else {
-                if (nextPage.url.endsWith('index.html')) {
+                if (nextPage.url.endsWith('/')) {
                     return <Link to={buildCategoryUrl(nextPage.categories[0])} className='button is-info is-large'>Next
                         Chapter: {nextPage.title}</Link>
                 } else {
@@ -106,7 +105,7 @@ class PageContent extends React.Component {
             && previousPage.categories.map(c => c.toLowerCase()).includes(this.props.category.toLowerCase());
         if (previousPage) {
             if (sameCategory) {
-                if (previousPage.url.endsWith('index.html')) {
+                if (previousPage.url.endsWith('/')) {
                     return <Link to={buildCategoryUrl(this.props.category)}>{previousIcon} {previousPage.title} (Chapter
                         Overview)</Link>
                 } else {

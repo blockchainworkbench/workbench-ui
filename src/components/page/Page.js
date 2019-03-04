@@ -20,7 +20,7 @@ class Page extends React.Component {
     render() {
         const page = this.getSelectedPage();
         const categoryName = this.props.match.params.category;
-        if(page && page.url && page.url.endsWith('index.html')) {
+        if(page && page.url && page.url.endsWith('/')) {
             return <Redirect to={buildCategoryUrl(categoryName)} />
         }
         return (
