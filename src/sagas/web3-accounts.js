@@ -12,6 +12,7 @@ import {
     web3AccountUpdate
 } from '../actions';
 import Web3 from 'web3';
+import {AbiCoder} from 'web3-eth-abi';
 import store from '../store';
 
 const web3Accounts = [
@@ -97,6 +98,7 @@ function deploy(contract) {
         // if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
         const estimate = await estimateGas(bc);
         const gasPrice = await estimateGasPrice();
+        console.log(`Estimated gas price ${gasPrice} and gas ${estimate}`);
         // TODO: ...[constructorParameter1, constructorParameter2]
         mcontract.new({data: bc, from: web3.eth.accounts[0], gas: estimate, gasPrice: gasPrice}, (err, r) => {
             if (err) {
@@ -171,6 +173,7 @@ function performTests(codeId, contract, addresses) {
     const errors = [];
     let resultReceived = 0;
 
+    const web3Abi = AbiCoder();
     return new Promise(async (resolve, reject) => {
         try {
             // Listen for transaction results
@@ -203,16 +206,24 @@ function performTests(codeId, contract, addresses) {
                 store.dispatch(testContractsUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
                 const test = fTests[iTest];
                 const gasPrice = await estimateGasPrice();
+                console.log(`Estimated Gas Price is ${gasPrice}`);
+                // MyContract.closeBid.estimateGas("Coffee", {from: web3.eth.accounts[0]});
                 let txParams = {gasPrice: gasPrice, from: web3.eth.accounts[0]};
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }
+                const testFunctionSignature = web3Abi.encodeFunctionSignature(`${test.name}(address[])`);
+                const testFunctionParameters = web3Abi.encodeParameter('address[]', addresses);
+                const testFunctionData = testFunctionSignature + testFunctionParameters.substr(2);
                 web3.eth.estimateGas({
                     from: web3.eth.accounts[0],
-                    to: test.address
+                    to: test.address,
+                    data: testFunctionData,
+                    gas: 100000000
                 }, (err, gas) => {
                     try {
                         txParams.gas = gas;
+                        console.log('new test gas estimate is ', gas);
                         contract[test.name](addresses, txParams, (err, r) => {
                             if (err) {
                                 errors.push(err);
