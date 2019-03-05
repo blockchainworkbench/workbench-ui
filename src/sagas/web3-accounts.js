@@ -15,6 +15,8 @@ import Web3 from 'web3';
 import {AbiCoder} from 'web3-eth-abi';
 import store from '../store';
 
+window.abi = AbiCoder;
+
 const web3Accounts = [
     takeLatest(ACTIONS.CHECK_WEB3_ACCOUNT, workerCheckAccount),
     takeEvery(ACTIONS.DEPLOY_CONTRACTS, workerDeployContracts),
@@ -212,18 +214,12 @@ function performTests(codeId, contract, addresses) {
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }
-                const testFunctionSignature = web3Abi.encodeFunctionSignature(`${test.name}(address[])`);
-                const testFunctionParameters = web3Abi.encodeParameter('address[]', addresses);
-                const testFunctionData = testFunctionSignature + testFunctionParameters.substr(2);
-                web3.eth.estimateGas({
-                    from: web3.eth.accounts[0],
-                    to: test.address,
-                    data: testFunctionData,
-                    gas: 100000000
-                }, (err, gas) => {
+                const testFunctionData = web3Abi.encodeFunctionCall(test, [addresses]);
+                web3.eth.estimateGas({from: web3.eth.accounts[0], data: testFunctionData}, (err2, gas2) => {
                     try {
-                        txParams.gas = gas;
-                        console.log('new test gas estimate is ', gas);
+                        const newGas = 53000 + (gas2 || 53000);
+                        txParams.gas = newGas;
+                        console.log('new test gas estimate is ', newGas);
                         contract[test.name](addresses, txParams, (err, r) => {
                             if (err) {
                                 errors.push(err);

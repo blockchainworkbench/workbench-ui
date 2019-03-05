@@ -32,7 +32,9 @@ class ExerciseElement extends React.Component {
         const userCode = this.state.content;
         const solution = this.props.content[0].solution;
         const validation = this.props.content[0].validation.deployed;
-        this.props.runExercise(this.props.content[0].id, COMPILER_VERSION, userCode, solution, validation, 1);
+        const codeId = this.props.content[0].id;
+        console.log(codeId);
+        this.props.runExercise(codeId, COMPILER_VERSION, userCode, solution, validation, 1);
     }
 
     getProgress() {
