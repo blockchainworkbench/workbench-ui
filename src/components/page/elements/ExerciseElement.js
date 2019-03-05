@@ -64,7 +64,6 @@ class ExerciseElement extends React.Component {
 
     render() {
         if (this.props.content && this.props.content.length > 0) {
-            const content = this.props.content[0];
             return (
                 <div className='hero mb30'>
                     <div className='container'>

@@ -8,6 +8,7 @@ import 'ace-mode-solidity/build/legacy/v1.3.3/src-brace/mode-solidity';
 import 'brace/mode/html';
 import 'brace/mode/python';
 import 'brace/mode/text';
+import 'brace/mode/markdown';
 
 class CodeEditor extends React.Component {
 
