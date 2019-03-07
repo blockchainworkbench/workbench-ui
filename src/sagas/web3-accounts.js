@@ -12,10 +12,7 @@ import {
     web3AccountUpdate
 } from '../actions';
 import Web3 from 'web3';
-import {AbiCoder} from 'web3-eth-abi';
 import store from '../store';
-
-window.abi = AbiCoder;
 
 const web3Accounts = [
     takeLatest(ACTIONS.CHECK_WEB3_ACCOUNT, workerCheckAccount),
@@ -174,8 +171,6 @@ function performTests(codeId, contract, addresses) {
     let result = true;
     const errors = [];
     let resultReceived = 0;
-
-    const web3Abi = AbiCoder();
     return new Promise(async (resolve, reject) => {
         try {
             // Listen for transaction results
@@ -214,7 +209,7 @@ function performTests(codeId, contract, addresses) {
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }
-                const testFunctionData = web3Abi.encodeFunctionCall(test, [addresses]);
+                const testFunctionData = contract[test.name].getData([addresses]);
                 web3.eth.estimateGas({from: web3.eth.accounts[0], data: testFunctionData}, (err2, gas2) => {
                     try {
                         const newGas = 53000 + (gas2 || 53000);
