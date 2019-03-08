@@ -1,7 +1,7 @@
 import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
 import {connect} from "react-redux";
-import {saveProfile} from "../../actions";
+import {checkWeb3Account, saveProfile, WEB3_ACCOUNT_STATE} from "../../actions";
 import {Link, Redirect} from "react-router-dom";
 import {Prompt} from "react-router";
 
@@ -9,9 +9,20 @@ class ProfileEdit extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {unsavedChanges: false, submitted: false};
-        this.displayNameChanged = this.displayNameChanged.bind(this);
+        this.state = {
+            pkChanged: false,
+            nameChanged: false,
+            submitted: false,
+            web3Authorizing: false,
+            pkValue: '',
+            nameValue: '',
+            initialized: false
+        };
+        this.onChangeDisplayName = this.onChangeDisplayName.bind(this);
+        this.onChangePublicKey = this.onChangePublicKey.bind(this);
         this.saveProfileChanges = this.saveProfileChanges.bind(this);
+        this.loadFromWallet = this.loadFromWallet.bind(this);
+        this.isWalletAuthorizing = this.isWalletAuthorizing.bind(this);
     }
 
     render() {
@@ -28,6 +39,36 @@ class ProfileEdit extends React.Component {
                 </div>
             </section>
         )
+    }
+
+    componentDidMount() {
+        this.setFormValues();
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.setFormValues();
+    }
+
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (this.state.web3Authorizing) {
+            if (nextProps.web3Account.state === WEB3_ACCOUNT_STATE.AUTHORIZED) {
+                if (nextProps.web3Account.address) {
+                    this.onChangePublicKey(nextProps.web3Account.address);
+                }
+                return;
+            }
+            if (nextProps.web3Account.state !== WEB3_ACCOUNT_STATE.PENDING) {
+                this.setState({web3Authorizing: false});
+            }
+        }
+    }
+
+    setFormValues() {
+        if (this.props.user && !this.props.user.loading && this.props.user.authenticated && !this.state.initialized) {
+            this.setState({
+                pkValue: this.props.user.publicKey, nameValue: this.props.user.displayName, initialized: true
+            });
+        }
     }
 
     getProfileEditContent() {
@@ -47,16 +88,35 @@ class ProfileEdit extends React.Component {
 
     saveProfileChanges(e) {
         e.preventDefault();
-        this.setState({unsavedChanges: false, submitted: true});
-        this.props.saveProfile(e.target.displayName.value, null);
+        this.setState({pkChanged: false, nameChanged: false, submitted: true});
+        this.props.saveProfile(e.target.displayName.value, e.target.publicKey.value);
     }
 
-    displayNameChanged(event) {
-        this.setState({unsavedChanges: event.target.value !== event.target.defaultValue});
+    onChangeDisplayName(event) {
+        this.setState({nameValue: event.target.value});
+    }
+
+    onChangePublicKey(value) {
+        this.setState({pkValue: value, web3Authorizing: false});
+    }
+
+    loadFromWallet(event) {
+        event.preventDefault();
+        this.setState({web3Authorizing: true});
+        this.props.checkWeb3Account();
+    }
+
+    isWalletAuthorizing() {
+        return this.state.web3Authorizing;
+    }
+
+    hasUnsavedChanges() {
+        return this.state.pkValue !== this.props.user.publicKey || this.state.nameValue !== this.props.user.displayName;
     }
 
     getUserProfileEditForm() {
-        const {unsavedChanges} = this.state;
+        const unsavedChanges = this.hasUnsavedChanges();
+        const isAuthorizing = this.isWalletAuthorizing();
         return <>
             <form onSubmit={this.saveProfileChanges}>
                 <Prompt when={unsavedChanges}
@@ -70,22 +130,32 @@ class ProfileEdit extends React.Component {
                             <p className='control has-icons-left'>
                                 <span className='icon is-small is-left'><i className='fas fa-user'/></span>
                                 <input id='displayName' name='displayName' type='text' className='input'
-                                       defaultValue={this.props.user.displayName}
-                                       onChange={this.displayNameChanged}/>
+                                       value={this.state.nameValue} onChange={this.onChangeDisplayName}/>
                             </p>
                         </div>
                     </div>
                 </div>
-                <div className="field is-horizontal">
+                <div className="field is-horizontal has-addons">
                     <div className="field-label">
                         <label className="label">Public Key</label>
                     </div>
                     <div className="field-body">
-                        <div className="field has-text-left">{this.props.user.publicKey}</div>
+                        <p className='control has-icons-left is-expanded'>
+                            <span className='icon is-small is-left'><i className='fas fa-address-book'/></span>
+                            <input id='publicKey' name='publicKey' type='text' className='input'
+                                   readOnly={true} disabled={true} value={this.state.pkValue}/>
+                        </p>
+                        <p className='control'>
+                            <button disabled={isAuthorizing} onClick={this.loadFromWallet}
+                                    className={`button is-info ${isAuthorizing ? 'is-loading' : ''}`}>
+                                {isAuthorizing ? '' : 'Load from Wallet'}
+                            </button>
+                        </p>
                     </div>
                 </div>
                 <div className="field is-horizontal">
-                    <div className="field-label"><label className="label"><Link to='/profile'>Cancel</Link></label></div>
+                    <div className="field-label"><label className="label"><Link to='/profile'>Cancel</Link></label>
+                    </div>
                     <div className="field-body">
                         <div className="field has-text-left">
                             <button type='submit' className={`button is-info `} disabled={!unsavedChanges}>Save</button>
@@ -99,13 +169,15 @@ class ProfileEdit extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.appState.user
+        user: state.appState.user,
+        web3Account: state.appState.web3Account
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        saveProfile: (displayName, publicKey) => dispatch(saveProfile(displayName, publicKey))
+        saveProfile: (displayName, publicKey) => dispatch(saveProfile(displayName, publicKey)),
+        checkWeb3Account: () => dispatch(checkWeb3Account())
     }
 };
 
