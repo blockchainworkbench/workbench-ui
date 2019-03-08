@@ -210,9 +210,9 @@ function performTests(codeId, contract, addresses) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }
                 const testFunctionData = contract[test.name].getData([addresses]);
-                web3.eth.estimateGas({from: web3.eth.accounts[0], data: testFunctionData}, (err2, gas2) => {
+                web3.eth.estimateGas({from: web3.eth.accounts[0], data: testFunctionData}, (err, gas) => {
                     try {
-                        const newGas = 53000 + (gas2 || 53000);
+                        const newGas = 53000 + (gas || 53000);
                         txParams.gas = newGas;
                         console.log('new test gas estimate is ', newGas);
                         contract[test.name](addresses, txParams, (err, r) => {
