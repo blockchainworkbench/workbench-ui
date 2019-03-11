@@ -32,6 +32,7 @@ export const ACTIONS = {
     RUN_EXERCISE: "RUN_EXERCISE",
     EXERCISE_ERROR: "EXERCISE_ERROR",
     EXERCISE_UPDATE: "EXERCISE_UPDATE",
+    EXERCISE_ERRORCOUNT_RESET: "EXERCISE_ERRORCOUNT_RESET",
     LOAD_USER_PROFILE: "LOAD_USER_PROFILE",
     LOAD_USER_PROFILE_SUCCESS: "LOAD_USER_PROFILE_SUCCESS",
     LOAD_USER_PROFILE_FAILURE: "LOAD_USER_PROFILE_FAILURE",
@@ -260,6 +261,11 @@ export const setExerciseUpdate = (codeId, message, type = null) => ({
     codeId: codeId,
     message: message,
     exerciseType: type
+});
+
+export const resetExerciseErrorCount = (codeId) => ({
+    type: ACTIONS.EXERCISE_ERRORCOUNT_RESET,
+    codeId: codeId
 });
 
 export const runExercise = (codeId, compilerVersion, userSolution, exerciseSolution, validation, optimize) => ({

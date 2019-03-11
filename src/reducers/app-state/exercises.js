@@ -8,9 +8,11 @@ export default function (state = [], action) {
                 state: EXERCISE_STATE.STARTING,
                 message: "Starting",
                 validation: action.validation,
+                errorCount: 0,
             };
             const newState = [...state.map(ex => {
                 if (ex.codeId === action.codeId) {
+                    newExercise.errorCount = ex.errorCount;
                     return newExercise;
                 } else return ex;
             })];
@@ -46,6 +48,7 @@ export default function (state = [], action) {
                     return Object.assign({}, ex, {
                         state: EXERCISE_STATE.ERROR,
                         message: "Compile Error",
+                        errorCount: ex.errorCount + 1 || 1,
                         error: action.error
                     });
                 } else return ex;
@@ -77,6 +80,7 @@ export default function (state = [], action) {
                 if (ex.codeId === action.codeId) {
                     return Object.assign({}, ex, {
                             message: "Deployment Error", error: action.error,
+                            errorCount: ex.errorCount + 1 || 1,
                             state: EXERCISE_STATE.ERROR
                         }
                     );
@@ -119,7 +123,8 @@ export default function (state = [], action) {
                 if (ex.codeId === action.codeId) {
                     return Object.assign({}, ex, {
                         message: "Exercise completed.",
-                        state: EXERCISE_STATE.SUCCESS
+                        state: EXERCISE_STATE.SUCCESS,
+                        errorCount: 0
                     });
                 } else return ex;
             })];
@@ -128,6 +133,7 @@ export default function (state = [], action) {
             return [...state.map(ex => {
                 if (ex.codeId === action.codeId) {
                     return Object.assign({}, ex, {
+                        errorCount: ex.errorCount + 1 || 1,
                         message: "Tests failed",
                         error: action.error,
                         state: EXERCISE_STATE.ERROR
@@ -137,14 +143,15 @@ export default function (state = [], action) {
 
         case ACTIONS.EXERCISE_ERROR:
             return [...state.map(ex => {
-            if(ex.codeId === action.codeId) {
-                return Object.assign({}, ex, {
-                   message: "Error",
-                   error: action.error,
-                   state: EXERCISE_STATE.ERROR
-                });
-            } else return ex;
-        })];
+                if (ex.codeId === action.codeId) {
+                    return Object.assign({}, ex, {
+                        message: "Error",
+                        errorCount: ex.errorCount + 1 || 1,
+                        error: action.error,
+                        state: EXERCISE_STATE.ERROR
+                    });
+                } else return ex;
+            })];
 
         case ACTIONS.EXERCISE_UPDATE:
             return [...state.map(ex => {
@@ -153,6 +160,13 @@ export default function (state = [], action) {
                         message: action.message,
                         state: action.exerciseType || ex.state
                     });
+                } else return ex;
+            })];
+
+        case ACTIONS.EXERCISE_ERRORCOUNT_RESET:
+            return [...state.map(ex => {
+                if (ex.codeId === action.codeId) {
+                    return Object.assign({}, ex, {errorCount: 0});
                 } else return ex;
             })];
 

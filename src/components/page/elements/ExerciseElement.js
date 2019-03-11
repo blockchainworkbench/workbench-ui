@@ -1,6 +1,6 @@
 import React from 'react';
 import CodeEditor from "../CodeEditor";
-import {EXERCISE_STATE, runExercise} from "../../../actions";
+import {EXERCISE_STATE, resetExerciseErrorCount, runExercise} from "../../../actions";
 import {connect} from "react-redux";
 import ContentArray from "../ContentArray";
 
@@ -18,10 +18,11 @@ class ExerciseElement extends React.Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showSolutionClicked = this.showSolutionClicked.bind(this);
     }
 
     handleChange(event) {
-        this.setState({content: event, submitted: this.state.submitted});
+        this.setState({content: event});
     }
 
     handleSubmit() {
@@ -33,7 +34,6 @@ class ExerciseElement extends React.Component {
         const solution = this.props.content[0].solution;
         const validation = this.props.content[0].validation.deployed;
         const codeId = this.props.content[0].id;
-        console.log(codeId);
         this.props.runExercise(codeId, COMPILER_VERSION, userCode, solution, validation, 1);
     }
 
@@ -65,6 +65,9 @@ class ExerciseElement extends React.Component {
     }
 
     render() {
+        if (this.props.exercise) {
+            console.log('errorCount', this.props.exercise.errorCount);
+        }
         if (this.props.content && this.props.content.length > 0) {
             return (
                 <div className='hero mb30'>
@@ -75,19 +78,42 @@ class ExerciseElement extends React.Component {
                         {this.getProgress()}
                     </div>
                     <div className='container'>
-                        <div className='has-text-left has-background-grey-lighter'>
-                            <ContentArray content={this.props.content[0].description}/>
-                        </div>
+                        {this.getDescription()}
+                        {this.getShowSolutionButton()}
                         <CodeEditor id={`exercise-${this.props.id}`} content={this.state.content}
                                     onChange={this.handleChange}/>
-                        <button onClick={this.handleSubmit}
-                                className='button is-link is-fullwidth'>Submit
-                        </button>
+                        <button onClick={this.handleSubmit} className='button is-link is-fullwidth'>Submit</button>
                     </div>
                 </div>);
         } else {
-         return <span className='has-background-danger has-text-white'>Invalid Exercise Element</span>
+            return <span className='has-background-danger has-text-white'>Invalid Exercise Element</span>
         }
+    }
+
+    getDescription() {
+        return (<div className='has-text-left has-background-grey-lighter'>
+            <ContentArray content={this.props.content[0].description}/>
+        </div>);
+    }
+
+    getShowSolutionButton() {
+        if (this.props.exercise) {
+            console.log(this.props.exercise.errorCount);
+        }
+        if (this.props.exercise && this.props.exercise.errorCount >= 2) {
+
+            return (<div className="has-text-left has-background-warning">
+                <button className="button is-small is-fullwidth is-warning" onClick={this.showSolutionClicked}>
+                    Show Solution
+                </button>
+            </div>);
+        }
+        return null;
+    }
+
+    showSolutionClicked() {
+        this.setState({content: this.props.content[0].solution});
+        this.props.resetExercise(this.props.content[0].id);
     }
 }
 
@@ -100,7 +126,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
     return {
         runExercise: (id, version, user, solution, validation, optimize) =>
-            dispatch(runExercise(id, version, user, solution, validation, optimize))
+            dispatch(runExercise(id, version, user, solution, validation, optimize)),
+        resetExercise: (id) => dispatch(resetExerciseErrorCount(id))
     };
 };
 
