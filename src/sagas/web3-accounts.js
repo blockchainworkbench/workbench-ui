@@ -204,30 +204,24 @@ function performTests(codeId, contract, addresses) {
                 const test = fTests[iTest];
                 const gasPrice = await estimateGasPrice();
                 console.log(`Estimated Gas Price is ${gasPrice}`);
-                // MyContract.closeBid.estimateGas("Coffee", {from: web3.eth.accounts[0]});
                 let txParams = {gasPrice: gasPrice, from: web3.eth.accounts[0]};
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
                 }
-                const testFunctionData = contract[test.name].getData([addresses]);
-                web3.eth.estimateGas({from: web3.eth.accounts[0], data: testFunctionData}, (err, gas) => {
-                    try {
-                        const newGas = 53000 + (gas || 53000);
-                        txParams.gas = newGas;
-                        console.log('new test gas estimate is ', newGas);
-                        contract[test.name](addresses, txParams, (err, r) => {
-                            if (err) {
-                                errors.push(err);
-                                console.log(`${test.name}: ${err.message}`);
-                                return resolve({result: false, errors: errors});
-                            }
-                            console.log(`${test.name}: ${r}`);
-                        });
-                    } catch (err) {
-                        errors.push(err);
-                        resolve({result: false, errors: errors});
-                    }
-                });
+                try {
+                    txParams.gas = 200000;
+                    contract[test.name](addresses, txParams, (err, r) => {
+                        if (err) {
+                            errors.push(err);
+                            console.log(`${test.name}: ${err.message}`);
+                            return resolve({result: false, errors: errors});
+                        }
+                        console.log(`${test.name}: ${r}`);
+                    });
+                } catch (err) {
+                    errors.push(err);
+                    resolve({result: false, errors: errors});
+                }
             }
 
             // If contract.abi has only TestEvent or nothing
