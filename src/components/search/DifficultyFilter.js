@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {updateDifficultyFilter} from '../../actions';
+import {updateDifficultyFilter} from '../../actions/search';
 import {getDifficultyColorForTag} from "../../lib/helpers";
 
 class DifficultyFilter extends React.Component {

@@ -1,21 +1,19 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
+import {ACTIONS} from '../actions';
+import BrowserSolc from 'browser-solc';
+import store from '../store';
 import {
-    ACTIONS,
     compileFailure,
     COMPILER_STATE,
     compileSuccess,
     loadCompilerFailure,
     loadCompilerSuccess
-} from '../actions';
-import BrowserSolc from 'browser-solc';
-import store from '../store';
+} from '../actions/exercise';
 
-const solidityCompiler = [
+export default [
     takeLatest(ACTIONS.LOAD_COMPILER, workerLoadCompiler),
     takeLatest(ACTIONS.COMPILE, workerCompile)
 ];
-
-export default solidityCompiler;
 
 function* workerLoadCompiler(action) {
     try {

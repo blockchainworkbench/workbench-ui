@@ -1,4 +1,5 @@
-import {ACTIONS, WEB3_ACCOUNT_STATE} from "../../actions";
+import {ACTIONS} from "../../actions";
+import {WEB3_ACCOUNT_STATE} from "../../actions/web3";
 
 
 const web3AccountState = (state = WEB3_ACCOUNT_STATE.PENDING, action) => {

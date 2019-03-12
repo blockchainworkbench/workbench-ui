@@ -1,9 +1,10 @@
 import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
 import {connect} from "react-redux";
-import {checkWeb3Account, saveProfile, WEB3_ACCOUNT_STATE} from "../../actions";
+import {checkWeb3Account, WEB3_ACCOUNT_STATE} from "../../actions/web3";
 import {Link, Redirect} from "react-router-dom";
 import {Prompt} from "react-router";
+import {saveProfile} from "../../actions/user";
 
 class ProfileEdit extends React.Component {
 

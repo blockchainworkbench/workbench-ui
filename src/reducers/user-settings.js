@@ -1,5 +1,6 @@
 import {combineReducers} from 'redux';
-import {ACTIONS, DIFFICULTY, CATEGORY_FILTER_TYPE} from '../actions';
+import {ACTIONS} from '../actions';
+import {CATEGORY_FILTER_TYPE, DIFFICULTY} from "../actions/search";
 
 const difficultyFilter = (state = DIFFICULTY.ALL, action) => {
     switch (action.type) {
@@ -30,18 +31,8 @@ const categoryFilterType = (state = CATEGORY_FILTER_TYPE.AND, action) => {
     }
 };
 
-const activePage = (state = null, action) => {
-    switch (action.type) {
-        case ACTIONS.SELECT_PAGE:
-            return action.pageId;
-        default:
-            return state;
-    }
-};
-
 export default combineReducers({
     difficultyFilter,
     categoryFilter,
-    categoryFilterType,
-    activePage
+    categoryFilterType
 });

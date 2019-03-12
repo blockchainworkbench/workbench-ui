@@ -1,7 +1,7 @@
 import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
 import {connect} from "react-redux";
-import {logoutUser} from "../../actions";
+import {logoutUser} from "../../actions/user";
 import {Redirect} from "react-router-dom";
 import {withRouter} from "react-router";
 

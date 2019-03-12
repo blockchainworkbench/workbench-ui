@@ -1,7 +1,8 @@
 import React from 'react';
 import PageListItem from './PageListItem';
 import {connect} from 'react-redux';
-import {CATEGORY_FILTER_TYPE, DIFFICULTY} from '../../actions';
+import {CATEGORY_FILTER_TYPE} from '../../actions/search';
+import {DIFFICULTY} from "../../actions/search";
 
 class PageList extends React.Component {
     render() {

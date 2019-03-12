@@ -1,4 +1,5 @@
-import {ACTIONS, EXERCISE_STATE} from "../../actions";
+import {ACTIONS} from "../../actions";
+import {EXERCISE_STATE} from "../../actions/exercise";
 
 export default function (state = [], action) {
     switch (action.type) {

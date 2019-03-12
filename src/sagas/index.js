@@ -1,4 +1,4 @@
-import {all} from "redux-saga/effects";
+import {all} from 'redux-saga/effects';
 
 import pages from './pages';
 import pagesSorted from './pages-sorted';

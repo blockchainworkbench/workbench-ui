@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from "react-router-dom";
 import {connect} from "react-redux";
 import {buildCategoryUrl, buildPageUrl} from '../../lib/helpers';
-import {loadPageContent} from "../../actions";
+import {loadPageContent} from "../../actions/pages";
 import ContentArray from "./ContentArray";
 
 const ReactMarkdown = require('react-markdown');

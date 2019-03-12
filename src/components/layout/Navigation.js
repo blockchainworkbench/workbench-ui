@@ -3,7 +3,7 @@ import {NavLink} from 'react-router-dom';
 import {NavHashLink} from 'react-router-hash-link';
 import LoadingIndicator from "./LoadingIndicator";
 import {connect} from "react-redux";
-import {loadUserProfile} from "../../actions";
+import {loadUserProfile} from "../../actions/user";
 
 class Navigation extends React.Component {
 

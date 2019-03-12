@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {logoutUser} from "../../actions";
+import {logoutUser} from "../../actions/user";
 import {Redirect} from "react-router-dom";
 import TitleHeader from "../layout/TitleHeader";
 

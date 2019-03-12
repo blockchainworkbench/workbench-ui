@@ -1,14 +1,10 @@
 import {put, takeLatest} from 'redux-saga/effects';
-import {loadPagesSuccessSorted} from '../actions';
+import {loadPagesSuccessSorted} from '../actions/pages';
 
-const pagesSorted = [
-    takeLatest("LOAD_PAGES_SUCCESS", workerOrderPages)
-];
-
-export default pagesSorted;
+export default [takeLatest('LOAD_PAGES_SUCCESS', workerOrderPages)];
 
 function addToContainerIfNotYetExist(categoryName, container, page, containerType) {
-    if(categoryName.toLowerCase() in container) {
+    if (categoryName.toLowerCase() in container) {
         console.log(`More than one ${containerType} page for category ${categoryName} found`);
     } else {
         container[categoryName.toLowerCase()] = page;
@@ -40,7 +36,7 @@ function* workerOrderPages(action) {
                 } else {
                     categoryEnds = addToContainerIfNotYetExist(currentyCategory, categoryEnds, page, "end");
                 }
-                if (!page.previous || !page.previous[categoryIndex]){
+                if (!page.previous || !page.previous[categoryIndex]) {
                     categoryRoots = addToContainerIfNotYetExist(currentyCategory, categoryRoots, page, "root");
                 } else {
                     prevPage = pagesByKey[page.previous[categoryIndex]];

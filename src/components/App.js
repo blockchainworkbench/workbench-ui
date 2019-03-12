@@ -6,7 +6,7 @@ import Login from './user/Login';
 import Logout from './user/Logout';
 import Pages from './page/Pages';
 import Page from './page/Page';
-import {loadPages} from "../actions";
+import {loadPages} from "../actions/pages";
 import {connect} from "react-redux";
 import Footer from './layout/Footer';
 import Profile from "./user/Profile";

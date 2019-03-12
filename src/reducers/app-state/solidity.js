@@ -1,4 +1,5 @@
-import {ACTIONS, COMPILER_STATE} from "../../actions";
+import {ACTIONS} from "../../actions";
+import {COMPILER_STATE} from "../../actions/exercise";
 
 
 const compiler = (state = [], action) => {

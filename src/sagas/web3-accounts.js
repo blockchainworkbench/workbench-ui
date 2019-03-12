@@ -1,26 +1,26 @@
 import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {ACTIONS} from '../actions';
+import Web3 from 'web3';
+import store from '../store';
 import {
-    ACTIONS,
     checkWeb3AccountFailure,
     checkWeb3AccountSuccess,
+    web3AccountUpdate
+} from '../actions/web3';
+import {
     deployFailure,
     deploySuccess,
     deployUpdate,
     testContractsFailure,
     testContractsSuccess,
-    testContractsUpdate,
-    web3AccountUpdate
-} from '../actions';
-import Web3 from 'web3';
-import store from '../store';
+    testContractsUpdate
+} from '../actions/exercise';
 
-const web3Accounts = [
+export default [
     takeLatest(ACTIONS.CHECK_WEB3_ACCOUNT, workerCheckAccount),
     takeEvery(ACTIONS.DEPLOY_CONTRACTS, workerDeployContracts),
     takeEvery(ACTIONS.TEST_CONTRACTS, workerPerformTests)
 ];
-
-export default web3Accounts;
 
 function onWeb3ConfigStoreUpdate(update) {
     store.dispatch(web3AccountUpdate(update));

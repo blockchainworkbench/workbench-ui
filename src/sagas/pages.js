@@ -1,24 +1,20 @@
 import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
+import {ACTIONS} from '../actions';
+import {fetchUrl} from '../lib/helpers';
 import {
-    ACTIONS,
-    DIFFICULTY,
     loadPageContentFailure,
     loadPageContentSuccess,
     loadPagesFailure,
     loadPagesSuccess
-} from '../actions';
-import {fetchUrl} from "../lib/helpers";
+} from '../actions/pages';
+import {DIFFICULTY} from '../actions/search';
 
 const BASE_URL = process.env.REACT_APP_JSONFEED_BASE;
 
-const pageSagas = [
+export default [
     takeLatest(ACTIONS.LOAD_PAGES, workerFetchPageList),
     takeEvery(ACTIONS.LOAD_PAGE_CONTENT, workerFetchPageContent)
 ];
-
-export default pageSagas;
-
-
 
 function* workerFetchPageList() {
     try {
@@ -42,7 +38,7 @@ function* workerFetchPageContent(action) {
     try {
         const pageUrl = BASE_URL + action.pageUrl;
         const response = yield call(fetchUrl, pageUrl);
-        if(response.data.url !== action.pageUrl) {
+        if (response.data.url !== action.pageUrl) {
             yield put(loadPageContentFailure("Could not load page content.", {url: action.pageUrl}));
         } else {
             yield put(loadPageContentSuccess(response.data));

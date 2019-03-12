@@ -1,21 +1,20 @@
 import {call, put, takeLatest} from 'redux-saga/effects';
+import {ACTIONS} from '../actions';
+import {fetchUrl, postUrl} from '../lib/helpers';
 import {
-    ACTIONS, loadUserProfile,
+    loadUserProfile,
     loadUserProfileFailure,
     loadUserProfileSuccess,
     logoutSuccess,
     saveProfileFailure,
     saveProfileSuccess
-} from '../actions';
-import {fetchUrl, postUrl} from "../lib/helpers";
+} from '../actions/user';
 
-const userProfile = [
+export default [
     takeLatest(ACTIONS.LOAD_USER_PROFILE, workerLoadProfile),
     takeLatest(ACTIONS.LOGOUT_USER, workerLogout),
     takeLatest(ACTIONS.SAVE_PROFILE, workerSaveProfile)
 ];
-
-export default userProfile;
 
 function* workerLoadProfile() {
     try {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {addCategoryFilter, removeCategoryFilter, changeCategoryFilterType, CATEGORY_FILTER_TYPE} from '../../actions';
+import {CATEGORY_FILTER_TYPE} from '../../actions/search';
+import {addCategoryFilter, changeCategoryFilterType, removeCategoryFilter} from "../../actions/search";
 
 class CategoryFilter extends React.Component {
     constructor(props) {

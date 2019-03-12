@@ -1,7 +1,7 @@
 import React from 'react';
 import TitleHeader from "../layout/TitleHeader";
 import {connect} from "react-redux";
-import {loadUserProfile} from "../../actions";
+import {loadUserProfile} from "../../actions/user";
 import {Link, Redirect} from "react-router-dom";
 
 class Profile extends React.Component {

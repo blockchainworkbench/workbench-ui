@@ -1,8 +1,9 @@
 import React from 'react';
 import CodeEditor from "../CodeEditor";
-import {EXERCISE_STATE, resetExerciseErrorCount, runExercise} from "../../../actions";
+import {EXERCISE_STATE} from "../../../actions/exercise";
 import {connect} from "react-redux";
 import ContentArray from "../ContentArray";
+import {resetExerciseErrorCount, runExercise} from "../../../actions/exercise";
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
 
