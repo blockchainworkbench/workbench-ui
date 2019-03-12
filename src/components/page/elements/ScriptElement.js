@@ -1,4 +1,4 @@
-import sha1 from 'sha1';
+import shajs from 'sha.js';
 
 export default function ScriptElement(props) {
     handleScriptContent(props.content);
@@ -7,7 +7,7 @@ export default function ScriptElement(props) {
 }
 
 function getElementByHash(value) {
-    const scriptContentHash = sha1(value);
+    const scriptContentHash = shajs('sha256').update(value).digest('hex');
     const doesAlreadyExist = document.getElementById(scriptContentHash);
     return {hash: scriptContentHash, exists: doesAlreadyExist}
 }
