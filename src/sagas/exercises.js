@@ -1,4 +1,4 @@
-import {put, take, takeEvery} from 'redux-saga/effects';
+import {call, put, take, takeEvery} from 'redux-saga/effects';
 import {ACTIONS} from '../actions';
 import {checkWeb3Account} from '../actions/web3';
 import {
@@ -10,6 +10,7 @@ import {
     setExerciseUpdate,
     testContracts
 } from '../actions/exercise';
+import {postUrl} from "../lib/helpers";
 
 export default [takeEvery(ACTIONS.RUN_EXERCISE, workerExecuteExercise)];
 
@@ -72,8 +73,24 @@ function* workerExecuteExercise(action) {
             return console.log("Tests of exercise failed.");
         }
 
+        yield call(postExerciseResult, action.codeId);
+
     } catch (error) {
         console.log('Error in workerExecuteExercise', action.codeId, error);
-        yield put(setExerciseError(action.codeId, error));
+        yield put(setExerciseError(action.codeId, error.message || error));
+    }
+}
+
+async function postExerciseResult(exerciseId) {
+    try {
+        const url = `/api/exercises/${exerciseId}`;
+        await postUrl(url, {});
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            console.log('You are not logged in. Your exercise success is not stored in your profile.');
+            console.log('If you want to have full history of your progress, log in and submit the exercise again.');
+            return;
+        }
+        throw(new Error(`Failed to save user progress: ${error.response.data}`));
     }
 }

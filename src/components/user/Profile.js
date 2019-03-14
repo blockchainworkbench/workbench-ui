@@ -29,9 +29,8 @@ class Profile extends React.Component {
                 <div className="hero-body">
                     <div className="container has-text-centered">
                         <h1 className="title">User Profile</h1>
-                        <div className='content'>
-                            {this.props.user.authenticated ? this.getUserProfile() : this.getLoadingInfo()}
-                        </div>
+                        {this.props.user.authenticated ? this.getUserProfile() : this.getLoadingInfo()}
+
                     </div>
                 </div>
             </section>
@@ -49,8 +48,7 @@ class Profile extends React.Component {
         }
     }
 
-
-    getUserProfile() {
+    getUserFieldsTable() {
         const fields = [];
         fields.push(this.getLabelRow(1, 'id', this.props.user.id));
         fields.push(this.getLabelRow(2, 'Display Name', this.props.user.displayName));
@@ -58,7 +56,33 @@ class Profile extends React.Component {
         fields.push(this.getLabelRow(4, 'Public Key', this.props.user.publicKey));
         fields.push(this.getLabelRow(5, 'Created', this.props.user.created));
         fields.push(this.getLabelRow(6, '', <Link to='/profile/edit' className='button is-info'>Edit Profile</Link>));
-        return fields;
+        return <div className='content'>{fields}</div>;
+    }
+
+    hasExercises() {
+        return this.props.user.exercises && this.props.user.exercises.length > 0;
+    }
+
+    getUserExercises() {
+        const title = `Completed Exercises ${this.hasExercises() ? '(' + this.props.user.exercises.length + ')' : ''}`;
+        const content = [<h1 key={0} className="title">{title}</h1>];
+        if (this.hasExercises()) {
+            this.props.user.exercises.forEach(ex => {
+                content.push(<div key={ex.id}>
+                    Exercise <strong>{ex.id}</strong> {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleDateString() : null}
+                </div>)
+            });
+        } else {
+            content.push(<i key={1}>No exercises completed yet.</i>)
+        }
+        return <div className='content'>{content}</div>;
+    }
+
+    getUserProfile() {
+        return <>
+            {this.getUserFieldsTable()}
+            {this.getUserExercises()}
+        </>;
     }
 
     getLabelRow(key, label, value) {

@@ -21,7 +21,8 @@ export const loadUserProfileSuccess = (profile) => ({
     created: profile.dateCreated,
     email: profile.email,
     publicKey: profile.publicKey,
-    displayName: profile.displayName
+    displayName: profile.displayName,
+    exercises: profile.exercises
 });
 
 export const loadUserProfileFailure = (error, code = null) => ({

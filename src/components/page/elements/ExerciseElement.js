@@ -66,9 +66,6 @@ class ExerciseElement extends React.Component {
     }
 
     render() {
-        if (this.props.exercise) {
-            console.log('errorCount', this.props.exercise.errorCount);
-        }
         if (this.props.content && this.props.content.length > 0) {
             return (
                 <div className='hero mb30'>
