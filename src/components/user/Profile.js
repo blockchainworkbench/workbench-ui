@@ -67,12 +67,13 @@ class Profile extends React.Component {
         const title = `Completed Exercises ${this.hasExercises() ? '(' + this.props.user.exercises.length + ')' : ''}`;
         const content = [<h1 key={0} className="title">{title}</h1>];
         if (this.hasExercises()) {
-            this.props.user.exercises.forEach(ex => {
-                content.push(<div key={ex.id}>
-                    Exercise <strong>{ex.id}</strong>
-                    {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleDateString() : null}
-                </div>)
-            });
+            content.push(<ul key='ex-list'>
+                {this.props.user.exercises.map(ex => {
+                    return (<li key={ex.id}>
+                        Exercise <strong>{ex.title}</strong> ({ex.id})
+                        {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleDateString() : null}
+                    </li>)
+                })}</ul>);
         } else {
             content.push(<i key={1}>No exercises completed yet.</i>)
         }

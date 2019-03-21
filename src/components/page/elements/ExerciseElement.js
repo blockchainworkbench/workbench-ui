@@ -69,9 +69,7 @@ class ExerciseElement extends React.Component {
             return (
                 <div className='hero mb30'>
                     <div className='container'>
-                        <p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
-                            {this.props.content.title || "Exercise"}
-                        </p>
+                        {this.getTitle()}
                         {this.getProgress()}
                     </div>
                     <div className='container'>
@@ -85,6 +83,13 @@ class ExerciseElement extends React.Component {
         } else {
             return <span className='has-background-danger has-text-white'>Invalid Exercise Element</span>
         }
+    }
+
+    getTitle() {
+        const title = this.props.content[0].title;
+        return (<p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
+            {title === "Exercise" ? '' : "Exercise: "}{title}
+        </p>)
     }
 
     getDescription() {

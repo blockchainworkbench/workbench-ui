@@ -94,11 +94,9 @@ function deploy(contract) {
 
     return new Promise(async (resolve, reject) => {
 
-        // if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
+        if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
         const estimate = await estimateGas(bc);
         const gasPrice = await estimateGasPrice();
-        console.log(`Estimated gas price ${gasPrice} and gas ${estimate}`);
-        // TODO: ...[constructorParameter1, constructorParameter2]
         mcontract.new({data: bc, from: web3.eth.accounts[0], gas: estimate, gasPrice: gasPrice}, (err, r) => {
             if (err) {
                 return reject(err.message || err);
@@ -203,7 +201,6 @@ function performTests(codeId, contract, addresses) {
                 store.dispatch(testContractsUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
                 const test = fTests[iTest];
                 const gasPrice = await estimateGasPrice();
-                console.log(`Estimated Gas Price is ${gasPrice}`);
                 let txParams = {gasPrice: gasPrice, from: web3.eth.accounts[0]};
                 if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
                     txParams.value = web3.toWei('0.002', 'ether')
