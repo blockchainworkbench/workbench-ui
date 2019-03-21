@@ -1,9 +1,8 @@
 import React from 'react';
 import CodeEditor from "../CodeEditor";
-import {EXERCISE_STATE} from "../../../actions/exercise";
+import {EXERCISE_STATE, resetExerciseErrorCount, runExercise} from "../../../actions/exercise";
 import {connect} from "react-redux";
 import ContentArray from "../ContentArray";
-import {resetExerciseErrorCount, runExercise} from "../../../actions/exercise";
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
 
@@ -95,11 +94,7 @@ class ExerciseElement extends React.Component {
     }
 
     getShowSolutionButton() {
-        if (this.props.exercise) {
-            console.log(this.props.exercise.errorCount);
-        }
         if (this.props.exercise && this.props.exercise.errorCount >= 2) {
-
             return (<div className="has-text-left has-background-warning">
                 <button className="button is-small is-fullwidth is-warning" onClick={this.showSolutionClicked}>
                     Show Solution

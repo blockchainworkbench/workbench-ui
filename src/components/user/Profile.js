@@ -8,15 +8,15 @@ class Profile extends React.Component {
 
     componentDidMount() {
         this.loadProfile();
+        this.setState({mounted: true});
     }
-
 
     componentDidUpdate(prevProps, prevState, snapshot) {
         this.loadProfile();
     }
 
     loadProfile() {
-        if (!this.props.user.loading && !this.props.user.authenticated && !this.props.user.error) {
+        if (!this.props.user.loading && !this.state && !this.props.user.error) {
             console.log('loading profile information');
             this.props.loadProfile();
         }
@@ -69,7 +69,8 @@ class Profile extends React.Component {
         if (this.hasExercises()) {
             this.props.user.exercises.forEach(ex => {
                 content.push(<div key={ex.id}>
-                    Exercise <strong>{ex.id}</strong> {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleDateString() : null}
+                    Exercise <strong>{ex.id}</strong>
+                    {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleDateString() : null}
                 </div>)
             });
         } else {
