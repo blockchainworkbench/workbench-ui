@@ -71,7 +71,7 @@ class Profile extends React.Component {
                 {this.props.user.exercises.map(ex => {
                     return (<li key={ex.id}>
                         Exercise <strong>{ex.title}</strong> ({ex.id})
-                        {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleDateString() : null}
+                        {ex.date ? ' on ' + new Date(ex.date * 1000).toLocaleString() : null}
                     </li>)
                 })}</ul>);
         } else {
