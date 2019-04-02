@@ -11,23 +11,17 @@ import {
     testContracts
 } from '../actions/exercise';
 import {postUrl} from "../lib/helpers";
+import {
+    compilerLoaded,
+    exerciseCompiledFailure,
+    exerciseCompiledSuccess,
+    exerciseDeployedAction,
+    exerciseDeployedFailure,
+    exerciseTestFailure,
+    exerciseTestSuccess
+} from "../lib/saga-action-filter";
 
 export default [takeEvery(ACTIONS.RUN_EXERCISE, workerExecuteExercise)];
-
-const exerciseDeployedAction = (actionCodeId, target) =>
-    target.codeId === actionCodeId && target.type === ACTIONS.DEPLOY_CONTRACTS_SUCCESS;
-const exerciseDeployedFailure = (actionCodeId, target) =>
-    target.codeId === actionCodeId && target.type === ACTIONS.DEPLOY_CONTRACTS_FAILURE;
-const exerciseCompiledSuccess = (actionCodeId, target) =>
-    target.codeId === actionCodeId && target.type === ACTIONS.COMPILE_SUCCESS;
-const exerciseCompiledFailure = (actionCodeId, target) =>
-    target.codeId === actionCodeId && target.type === ACTIONS.COMPILE_FAILURE;
-const exerciseTestSuccess = (actionCodeId, target) =>
-    target.codeId === actionCodeId && target.type === ACTIONS.TEST_CONTRACTS_SUCCESS;
-const exerciseTestFailure = (actionCodeId, target) =>
-    target.codeId === actionCodeId && target.type === ACTIONS.TEST_CONTRACT_FAILURE;
-const compilerLoaded = (compilerVersion, target) =>
-    target.version === compilerVersion && target.type === ACTIONS.LOAD_COMPILER_SUCCESS;
 
 function* workerExecuteExercise(action) {
     try {
