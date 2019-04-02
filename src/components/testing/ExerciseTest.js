@@ -1,17 +1,18 @@
 import React from 'react';
-import CodeEditor from "../CodeEditor";
-import {EXERCISE_STATE, resetExerciseErrorCount, runExercise} from "../../../actions/exercise";
+import CodeEditor from "../page/CodeEditor";
 import {connect} from "react-redux";
-import ContentArray from "../ContentArray";
+import {EXERCISE_STATE} from "../../actions/exercise";
+import ReactMarkdown from "react-markdown";
+import {testExercise} from "../../actions/testing";
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js';
 
-class ExerciseElement extends React.Component {
+class ExerciseTest extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            content: props.content[0].initial,
+            content: props.content.initial,
             submitted: '',
             progress: ''
         };
@@ -19,6 +20,7 @@ class ExerciseElement extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.showSolutionClicked = this.showSolutionClicked.bind(this);
+        this.resetClicked = this.resetClicked.bind(this);
     }
 
     handleChange(event) {
@@ -26,19 +28,14 @@ class ExerciseElement extends React.Component {
     }
 
     handleSubmit() {
-        this.setState({content: this.state.content, submitted: this.state.content});
-        if (this.props.onSubmit) {
-            this.props.onSubmit(this.state.content);
-        }
         const userCode = this.state.content;
-        const solution = this.props.content[0].solution;
-        const validation = this.props.content[0].validation.deployed;
-        const codeId = this.props.content[0].id;
-        this.props.runExercise(codeId, COMPILER_VERSION, userCode, solution, validation, 1);
+        const solution = this.props.content.solution;
+        const validation = this.props.content.validation;
+        this.props.testExercise(COMPILER_VERSION, userCode, solution, validation, 1);
     }
 
     getProgress() {
-        if (this.props.exercise) {
+        if (this.props.exercise && this.props.exercise.state) {
             if (this.props.exercise.state === EXERCISE_STATE.ERROR) {
                 return (<div className='has-text-danger has-text-weight-bold has-background-light has-text-left'>
                     <i className="fas fa-exclamation-triangle ml10"/>
@@ -63,7 +60,7 @@ class ExerciseElement extends React.Component {
     }
 
     render() {
-        if (this.props.content && this.props.content.length > 0) {
+        if (this.props.content) {
             return (
                 <div className='hero mb30'>
                     <div className='container'>
@@ -72,11 +69,20 @@ class ExerciseElement extends React.Component {
                     </div>
                     <div className='container'>
                         {this.getDescription()}
-                        {this.getShowSolutionButton()}
+
                         <CodeEditor id={`exercise-${this.props.id}`} content={this.state.content}
                                     onChange={this.handleChange}/>
-                        <button onClick={this.handleSubmit} className='button is-link is-fullwidth'>Submit</button>
+                        <button onClick={this.handleSubmit} className='button is-link is-fullwidth'>Test Exercise
+                            Execution
+                        </button>
                     </div>
+                    <div className='container'>
+                        {this.getActionButtons()}
+                        <br/>
+                        {this.getHints()}
+                        <br/>
+                    </div>
+
                 </div>);
         } else {
             return <span className='has-background-danger has-text-white'>Invalid Exercise Element</span>
@@ -84,7 +90,7 @@ class ExerciseElement extends React.Component {
     }
 
     getTitle() {
-        const title = this.props.content[0].title;
+        const title = this.props.content.title;
         return (<p className='is-5 has-background-link has-text-white has-text-left has-text-weight-bold is-marginless'>
             {title === "Exercise" ? '' : "Exercise: "}{title}
         </p>)
@@ -92,39 +98,52 @@ class ExerciseElement extends React.Component {
 
     getDescription() {
         return (<div className='has-text-left has-background-grey-lighter'>
-            <ContentArray content={this.props.content[0].description}/>
+            <ReactMarkdown source={this.props.content.description}/>
         </div>);
     }
 
-    getShowSolutionButton() {
-        if (this.props.exercise && this.props.exercise.errorCount >= 2) {
-            return (<div className="has-text-left has-background-warning">
-                <button className="button is-small is-fullwidth is-warning" onClick={this.showSolutionClicked}>
+    getHints() {
+        return (<div>
+            <strong>Hints:</strong>
+            {this.props.exercise.hints ? <ReactMarkdown source={this.props.exercise.hints}/> : ' --'}
+        </div>)
+    }
+
+    getActionButtons() {
+        if (this.props.exercise) {
+            return (<div className="has-text-left">
+                <strong className='mr10'>Actions:</strong>
+                <button className="button is-small has-background-warning mr10" onClick={this.showSolutionClicked}>
                     Show Solution
+                </button>
+                <button className="button is-small has-background-info" onClick={this.resetClicked}>
+                    Reset
                 </button>
             </div>);
         }
         return null;
     }
 
+    resetClicked() {
+        this.setState({content: this.props.content.initial});
+    }
+
     showSolutionClicked() {
-        this.setState({content: this.props.content[0].solution});
-        this.props.resetExercise(this.props.content[0].id);
+        this.setState({content: this.props.content.solution});
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
-        exercise: state.appState.exercises.find(ex => ex.codeId === ownProps.content[0].id)
+        exercise: state.testing.exercise
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        runExercise: (id, version, user, solution, validation, optimize) =>
-            dispatch(runExercise(id, version, user, solution, validation, optimize)),
-        resetExercise: (id) => dispatch(resetExerciseErrorCount(id))
+        testExercise: (version, userSolution, exerciseSolution, validation, optimize) =>
+            dispatch(testExercise(version, userSolution, exerciseSolution, validation, optimize))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExerciseElement);
+export default connect(mapStateToProps, mapDispatchToProps)(ExerciseTest);
