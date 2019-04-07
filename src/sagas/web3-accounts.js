@@ -1,55 +1,55 @@
-import {call, put, takeEvery, takeLatest} from 'redux-saga/effects';
-import {ACTIONS} from '../actions';
-import Web3 from 'web3';
-import store from '../store';
-import linker from 'solc/linker';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { ACTIONS } from '../actions'
+import Web3 from 'web3'
+import store from '../store'
+import linker from 'solc/linker'
 
-import {checkWeb3AccountFailure, checkWeb3AccountSuccess, web3AccountUpdate} from '../actions/web3';
+import { checkWeb3AccountFailure, checkWeb3AccountSuccess, web3AccountUpdate } from '../actions/web3'
 import {
-    deployFailure,
-    deploySuccess,
-    deployUpdate,
-    testContractsFailure,
-    testContractsSuccess,
-    testContractsUpdate
-} from '../actions/exercise';
-import {setTestExerciseUpdate, testExerciseDeployFailure, testExerciseDeploySuccess} from "../actions/testing";
+  deployFailure,
+  deploySuccess,
+  deployUpdate,
+  testContractsFailure,
+  testContractsSuccess,
+  testContractsUpdate,
+} from '../actions/exercise'
+import { setTestExerciseUpdate, testExerciseDeployFailure, testExerciseDeploySuccess } from '../actions/testing'
 
 export default [
-    takeLatest(ACTIONS.CHECK_WEB3_ACCOUNT, workerCheckAccount),
-    takeEvery(ACTIONS.DEPLOY_CONTRACTS, workerDeployContracts),
-    takeEvery(ACTIONS.TEST_CONTRACTS, workerPerformTests),
-    takeEvery(ACTIONS.TEST_EXERCISE_DEPLOY, workerTestExerciseDeploy)
-];
+  takeLatest(ACTIONS.CHECK_WEB3_ACCOUNT, workerCheckAccount),
+  takeEvery(ACTIONS.DEPLOY_CONTRACTS, workerDeployContracts),
+  takeEvery(ACTIONS.TEST_CONTRACTS, workerPerformTests),
+  takeEvery(ACTIONS.TEST_EXERCISE_DEPLOY, workerTestExerciseDeploy),
+]
 
 function onWeb3ConfigStoreUpdate(update) {
-    store.dispatch(web3AccountUpdate(update));
+  store.dispatch(web3AccountUpdate(update))
 }
 
 function* workerCheckAccount() {
-    try {
-        let web3 = window.web3;
-        let ethereum = window.ethereum;
+  try {
+    let web3 = window.web3
+    let ethereum = window.ethereum
 
-        if (window.ethereum) {
-            window.web3 = new Web3(ethereum);
-            try {
-                yield call(ethereum.enable);
-                yield put(checkWeb3AccountSuccess());
-                web3.currentProvider.publicConfigStore.on('update', update => onWeb3ConfigStoreUpdate(update));
-            } catch (error) {
-                yield put(checkWeb3AccountFailure("Access to Accounts denied by user."));
-            }
-        } else if (window.web3) {
-            window.web3 = new Web3(web3.currentProvider);
-            yield put(checkWeb3AccountSuccess());
-        } else {
-            yield put(checkWeb3AccountFailure("Non-ethereum browser detected.", true));
-        }
-    } catch (error) {
-        console.log('error in workerCheckAccount', error);
-        yield put(checkWeb3AccountFailure(error));
+    if (window.ethereum) {
+      window.web3 = new Web3(ethereum)
+      try {
+        yield call(ethereum.enable)
+        yield put(checkWeb3AccountSuccess())
+        web3.currentProvider.publicConfigStore.on('update', update => onWeb3ConfigStoreUpdate(update))
+      } catch (error) {
+        yield put(checkWeb3AccountFailure('Access to Accounts denied by user.'))
+      }
+    } else if (window.web3) {
+      window.web3 = new Web3(web3.currentProvider)
+      yield put(checkWeb3AccountSuccess())
+    } else {
+      yield put(checkWeb3AccountFailure('Non-ethereum browser detected.', true))
     }
+  } catch (error) {
+    console.log('error in workerCheckAccount', error)
+    yield put(checkWeb3AccountFailure(error))
+  }
 }
 
 /**
@@ -58,15 +58,15 @@ function* workerCheckAccount() {
  * @returns {Promise<int>} - Estimated gas
  */
 function estimateGas(data) {
-    return new Promise(resolve => {
-        window.web3.eth.estimateGas({data: data}, (err, r) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            resolve(r);
-        })
+  return new Promise(resolve => {
+    window.web3.eth.estimateGas({ data: data }, (err, r) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+      resolve(r)
     })
+  })
 }
 
 /**
@@ -74,87 +74,91 @@ function estimateGas(data) {
  * @returns {Promise<int>} - Estimated gas price
  */
 function estimateGasPrice() {
-    return new Promise(resolve => {
-        window.web3.eth.getGasPrice((err, r) => {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            resolve(r);
-        })
+  return new Promise(resolve => {
+    window.web3.eth.getGasPrice((err, r) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+      resolve(r)
     })
+  })
 }
 
 function deploy(contract) {
-    let web3 = window.web3;
+  let web3 = window.web3
 
-    const abi = contract.interface;
-    const bc = '0x' + contract.bytecode;
-    const mcontract = web3.eth.contract(JSON.parse(abi));
+  const abi = contract.interface
+  const bc = '0x' + contract.bytecode
+  const mcontract = web3.eth.contract(JSON.parse(abi))
 
-    return new Promise(async (resolve, reject) => {
-
-        if (!store.getState().appState.web3Account.validNetwork) return reject("You are in the wrong network");
-        const estimate = await estimateGas(bc);
-        const gasPrice = await estimateGasPrice();
-        mcontract.new({data: bc, from: web3.eth.accounts[0], gas: estimate, gasPrice: gasPrice}, (err, r) => {
-            if (err) {
-                return reject(err.message || err);
-            }
-            if (!r.address) return;
-            resolve(r);
-        })
-    });
+  return new Promise(async (resolve, reject) => {
+    if (!store.getState().appState.web3Account.validNetwork) return reject('You are in the wrong network')
+    const estimate = await estimateGas(bc)
+    const gasPrice = await estimateGasPrice()
+    mcontract.new({ data: bc, from: web3.eth.accounts[0], gas: estimate, gasPrice: gasPrice }, (err, r) => {
+      if (err) {
+        return reject(err.message || err)
+      }
+      if (!r.address) return
+      resolve(r)
+    })
+  })
 }
 
 function* workerDeployContracts(action) {
-    try {
-        const addresses = [];
-        let index = 0;
+  try {
+    const addresses = []
+    let index = 0
 
-        // Deploy all contracts
-        for (let name of Object.keys(action.contracts)) {
-            name = name.substring(1);
-            const msg = `Deploying ${name}'\t${index++}/${Object.keys(action.contracts).length}`;
-            yield put(deployUpdate(action.codeId, msg));
-            try {
-                const deployedCode = yield call(deploy, action.contracts[':' + name]);
-                addresses.push(deployedCode.address)
-            } catch (error) {
-                return yield put(deployFailure(action.codeId, `Contract ${name}: ${error}`));
-            }
-        }
-
-        yield put(deploySuccess(action.codeId, addresses,
-            `Successfully deployed ${Object.keys(action.contracts).length} Contracts.`));
-    } catch (error) {
-        console.log('error in workerDeployContracts', error);
-        yield put(deployFailure(action.codeId, error));
+    // Deploy all contracts
+    for (let name of Object.keys(action.contracts)) {
+      name = name.substring(1)
+      const msg = `Deploying ${name}'\t${index++}/${Object.keys(action.contracts).length}`
+      yield put(deployUpdate(action.codeId, msg))
+      try {
+        const deployedCode = yield call(deploy, action.contracts[':' + name])
+        addresses.push(deployedCode.address)
+      } catch (error) {
+        return yield put(deployFailure(action.codeId, `Contract ${name}: ${error}`))
+      }
     }
+
+    yield put(
+      deploySuccess(
+        action.codeId,
+        addresses,
+        `Successfully deployed ${Object.keys(action.contracts).length} Contracts.`,
+      ),
+    )
+  } catch (error) {
+    console.log('error in workerDeployContracts', error)
+    yield put(deployFailure(action.codeId, error))
+  }
 }
 
 function* workerPerformTests(action) {
-    try {
-        const web3 = window.web3;
-        const validation = action.validation; //JSON.parse(action.validation);
-        let tests = true;
-        let errors = '';
-        for (let index = 0; index < validation.length; index++) {
-            const test = validation[index];
-            const cTest = web3.eth.contract(test.abi).at(test.address);
-            const r = yield call(performTests, action.codeId, cTest, action.addresses);
-            tests = tests && r.result;
-            errors += r.errors.join('\n')
-        }
-        if (tests) {
-            yield put(testContractsSuccess(action.codeId));
-        } else {
-            yield put(testContractsFailure(action.codeId, errors));
-        }
-    } catch (error) {
-        console.log('Error in workerPerformTests', error);
-        yield put(testContractsFailure(action.codeId, error));
+  try {
+    const web3 = window.web3
+    const validation = action.validation // JSON.parse(action.validation);
+    let tests = true
+    let errors = ''
+    for (let index = 0; index < validation.length; index++) {
+      const test = validation[index]
+      const cTest = web3.eth.contract(test.abi).at(test.address)
+      const r = yield call(performTests, action.codeId, cTest, action.addresses)
+      tests = tests && r.result
+      errors += r.errors.join('\n')
     }
+    if (tests) {
+      yield put(testContractsSuccess(action.codeId))
+    } else {
+      yield put(testContractsFailure(action.codeId, errors))
+    }
+  } catch (error) {
+    console.log('Error in workerPerformTests', error)
+    yield put(testContractsFailure(action.codeId, error))
+  }
 }
 
 /**
@@ -165,126 +169,121 @@ function* workerPerformTests(action) {
  * @returns {Promise<{result: boolean, errors: Array<string>}>} - True if the tests have passed
  */
 function performTests(codeId, contract, addresses) {
-    const web3 = window.web3;
-    let result = true;
-    const errors = [];
-    let resultReceived = 0;
-    return new Promise(async (resolve, reject) => {
-        try {
-            // Listen for transaction results
-            contract.TestEvent((err, r) => {
-                resultReceived++;
-                if (errors.length === 0) {
-                    // Only propagate testContractUpdate action, if errors is still empty. Success-callback can
-                    // arrive later than error due to race condition and accidentally overwrite status on ui.
-                    store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`));
-                }
-                result = result && r.args.result;
-                if (!r.args.result) {
-                    errors.push(r.args.message);
-                }
-                // Resolve only after all test results
-                if (resultReceived === contract.abi.length - 1) {
-                    resolve({result: result, errors: errors})
-                }
-            });
-
-            // Perform a transaction for every function to test
-            let fTests = contract.abi
-                .filter(c => {
-                    return c.type === 'function'
-                })
-                .sort((a, b) => {
-                    return a.name > b.name
-                });
-            for (let iTest = 0; iTest < fTests.length; iTest++) {
-                store.dispatch(testContractsUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`));
-                const test = fTests[iTest];
-                const gasPrice = await estimateGasPrice();
-                let txParams = {gasPrice: gasPrice, from: web3.eth.accounts[0]};
-                if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
-                    txParams.value = web3.toWei('0.002', 'ether')
-                }
-                try {
-                    txParams.gas = 200000;
-                    contract[test.name](addresses, txParams, (err, r) => {
-                        if (err) {
-                            errors.push(err);
-                            console.log(`${test.name}: ${err.message}`);
-                            return resolve({result: false, errors: errors});
-                        }
-                        console.log(`${test.name}: ${r}`);
-                    });
-                } catch (err) {
-                    errors.push(err);
-                    resolve({result: false, errors: errors});
-                }
-            }
-
-            // If contract.abi has only TestEvent or nothing
-            if (contract.abi.length <= 1) {
-                resolve({result: true, errors: []})
-            }
-
-        } catch (err) {
-            reject(err);
+  const web3 = window.web3
+  let result = true
+  const errors = []
+  let resultReceived = 0
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Listen for transaction results
+      contract.TestEvent((err, r) => {
+        resultReceived++
+        if (errors.length === 0) {
+          // Only propagate testContractUpdate action, if errors is still empty. Success-callback can
+          // arrive later than error due to race condition and accidentally overwrite status on ui.
+          store.dispatch(testContractsUpdate(codeId, `Test ${resultReceived}/${contract.abi.length - 1}`))
         }
-    })
+        result = result && r.args.result
+        if (!r.args.result) {
+          errors.push(r.args.message)
+        }
+        // Resolve only after all test results
+        if (resultReceived === contract.abi.length - 1) {
+          resolve({ result: result, errors: errors })
+        }
+      })
+
+      // Perform a transaction for every function to test
+      let fTests = contract.abi
+        .filter(c => {
+          return c.type === 'function'
+        })
+        .sort((a, b) => {
+          return a.name > b.name
+        })
+      for (let iTest = 0; iTest < fTests.length; iTest++) {
+        store.dispatch(testContractsUpdate(codeId, `Test ${0}/${contract.abi.length - 1}`))
+        const test = fTests[iTest]
+        const gasPrice = await estimateGasPrice()
+        let txParams = { gasPrice: gasPrice, from: web3.eth.accounts[0] }
+        if (contract.abi.filter(t => t.name === test.name)[0].payable === true) {
+          txParams.value = web3.toWei('0.002', 'ether')
+        }
+        try {
+          txParams.gas = 200000
+          contract[test.name](addresses, txParams, (err, r) => {
+            if (err) {
+              errors.push(err)
+              console.log(`${test.name}: ${err.message}`)
+              return resolve({ result: false, errors: errors })
+            }
+            console.log(`${test.name}: ${r}`)
+          })
+        } catch (err) {
+          errors.push(err)
+          resolve({ result: false, errors: errors })
+        }
+      }
+
+      // If contract.abi has only TestEvent or nothing
+      if (contract.abi.length <= 1) {
+        resolve({ result: true, errors: [] })
+      }
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 async function deployTests(compiledTests, assertLibraryAddress) {
+  return new Promise(async resolve => {
+    const toDeploy = Object.keys(compiledTests).filter(key => key.startsWith('test.sol'))
+    const tests = []
 
-    return new Promise(async (resolve) => {
-        const toDeploy = Object.keys(compiledTests).filter(key => key.startsWith('test.sol'));
-        const tests = [];
-
-        for (const key of toDeploy) {
-            // Link test with the already deployed assert library
-            compiledTests[key].bytecode = linker.linkBytecode(
-                compiledTests[key].bytecode, {'Assert.sol:Assert': assertLibraryAddress}
-            );
-            // Deploy the test
-            const address = await deploy(compiledTests[key]);
-            tests.push({address: address, abi: JSON.parse(compiledTests[key].interface)});
-        }
-        resolve(tests);
-    });
+    for (const key of toDeploy) {
+      // Link test with the already deployed assert library
+      compiledTests[key].bytecode = linker.linkBytecode(compiledTests[key].bytecode, {
+        'Assert.sol:Assert': assertLibraryAddress,
+      })
+      // Deploy the test
+      const address = await deploy(compiledTests[key])
+      tests.push({ address: address, abi: JSON.parse(compiledTests[key].interface) })
+    }
+    resolve(tests)
+  })
 }
 
-
 function* workerTestExerciseDeploy(action) {
-    try {
-        yield put(setTestExerciseUpdate("Deploying Assert Library"));
-        const deployedAssertLib = yield call(deploy, action.assert['Assert.sol:Assert']);
-        const assertLibraryAddress = deployedAssertLib.address;
-        console.log('Assert Library sucessfully deployed.');
+  try {
+    yield put(setTestExerciseUpdate('Deploying Assert Library'))
+    const deployedAssertLib = yield call(deploy, action.assert['Assert.sol:Assert'])
+    const assertLibraryAddress = deployedAssertLib.address
+    console.log('Assert Library sucessfully deployed.')
 
-        yield put(setTestExerciseUpdate("Deploying Test Contracts"));
-        const deployedTests = yield call(deployTests, action.validation, assertLibraryAddress);
-        console.log('Test Contracts sucessfully deployed.');
+    yield put(setTestExerciseUpdate('Deploying Test Contracts'))
+    const deployedTests = yield call(deployTests, action.validation, assertLibraryAddress)
+    console.log('Test Contracts sucessfully deployed.')
 
-        const deployedTestsObject = deployedTests.map(test => {
-            return {address: test.address.address, abi: test.abi}
-        });
+    const deployedTestsObject = deployedTests.map(test => {
+      return { address: test.address.address, abi: test.abi }
+    })
 
-        const exerciseAddresses = [];
-        let index = 0;
+    const exerciseAddresses = []
+    let index = 0
 
-        yield put(setTestExerciseUpdate("Deploying Exercise"));
-        // Deploy all contracts
-        for (let name of Object.keys(action.exercise)) {
-            name = name.substring(1);
-            const msg = `Deploying ${name}'\t${index++}/${Object.keys(action.exercise).length}`;
-            yield put(setTestExerciseUpdate(msg));
-            const deployedCode = yield call(deploy, action.exercise[':' + name]);
-            exerciseAddresses.push(deployedCode.address)
-        }
-
-        console.log('Successfully deployed exercise contracts');
-        yield put(testExerciseDeploySuccess(exerciseAddresses, deployedTestsObject));
-
-
-    } catch (e) {
-        yield put(testExerciseDeployFailure(e.message || e));
+    yield put(setTestExerciseUpdate('Deploying Exercise'))
+    // Deploy all contracts
+    for (let name of Object.keys(action.exercise)) {
+      name = name.substring(1)
+      const msg = `Deploying ${name}'\t${index++}/${Object.keys(action.exercise).length}`
+      yield put(setTestExerciseUpdate(msg))
+      const deployedCode = yield call(deploy, action.exercise[':' + name])
+      exerciseAddresses.push(deployedCode.address)
     }
+
+    console.log('Successfully deployed exercise contracts')
+    yield put(testExerciseDeploySuccess(exerciseAddresses, deployedTestsObject))
+  } catch (e) {
+    yield put(testExerciseDeployFailure(e.message || e))
+  }
 }

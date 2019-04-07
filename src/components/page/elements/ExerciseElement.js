@@ -106,9 +106,6 @@ class ExerciseElement extends React.Component {
   }
 
   getShowSolutionButton() {
-    if (this.props.exercise) {
-      console.log(this.props.exercise.errorCount)
-    }
     if (this.props.exercise && this.props.exercise.errorCount >= 2) {
       return (
         <div className="has-text-left has-background-warning">

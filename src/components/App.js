@@ -13,7 +13,7 @@ import Profile from './user/Profile'
 import ProfileEdit from './user/ProfileEdit'
 import Playground from './Playground'
 import SearchPage from './search/SearchPage'
-import Testing from "./testing/Testing";
+import Testing from './testing/Testing'
 
 class App extends React.Component {
   componentDidMount() {
@@ -31,6 +31,7 @@ class App extends React.Component {
           <Route path={'/login/:app?'} component={Login} />
           <Route path={'/logout'} component={Logout} />
           <Route exact path={'/profile'} component={Profile} />
+          <Route exact path={'/testing'} component={Testing} />
           <Route exact path={'/profile/edit'} component={ProfileEdit} />
           <Route path={'/pages/:category/:page'} component={Page} />
           <Switch>
