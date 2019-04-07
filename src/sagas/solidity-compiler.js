@@ -100,42 +100,6 @@ function replaceMsgSender(str) {
     return str.replace(/msg\.sender/g, web3.toChecksumAddress(web3.eth.accounts[0]))
 }
 
-function compile(compiler, userSolution, exerciseSolution, optimize) {
-    return new Promise(async (resolve, reject) => {
-        try {
-            userSolution = replaceMsgSender(userSolution);
-            const rCode = compiler.compile(userSolution, optimize);
-            const rCodeSolution = compiler.compile(exerciseSolution, optimize);
-
-            // If code does not compile properly
-            if (rCode.errors) {
-                reject(new Error(rCode.errors[0]));
-            } else {
-                const notDefined =
-                    Object.keys(rCodeSolution.contracts)
-                        .filter(name => {
-                            return rCode.contracts[name] === undefined
-                        }).map(name => {
-                        return name.substring(1)
-                    });
-
-                if (notDefined.length > 0) {
-                    let msg = '';
-                    if (notDefined.length === 1) {
-                        msg = `Contract ${notDefined[0]} is not defined`;
-                    } else {
-                        msg = `Contracts [${notDefined.join(', ')}] are not defined`;
-                    }
-                    reject(msg);
-                }
-            }
-            resolve(rCode);
-        } catch (err) {
-            reject(err.message || err);
-        }
-    });
-}
-
 function compileExerciseBlock(compiler, code, optimize, codeName) {
     return new Promise(async (resolve, reject) => {
         try {
