@@ -2,6 +2,8 @@ import {call, put, takeLatest} from 'redux-saga/effects';
 import {ACTIONS} from '../actions';
 import BrowserSolc from 'browser-solc';
 import store from '../store';
+import _ from 'lodash';
+
 import {
     compileFailure,
     COMPILER_STATE,
@@ -9,10 +11,14 @@ import {
     loadCompilerFailure,
     loadCompilerSuccess
 } from '../actions/exercise';
+import {testExerciseCompileFailure, testExerciseCompileSuccess} from "../actions/testing";
+import {fetchUrl} from "../lib/helpers";
+import {createInterfaces, transformSolidityTest} from "../lib/builder";
 
 export default [
     takeLatest(ACTIONS.LOAD_COMPILER, workerLoadCompiler),
-    takeLatest(ACTIONS.COMPILE, workerCompile)
+    takeLatest(ACTIONS.COMPILE, workerCompile),
+    takeLatest(ACTIONS.TEST_EXERCISE_COMPILE, workerCompileTestExercise)
 ];
 
 function* workerLoadCompiler(action) {
@@ -50,6 +56,17 @@ function* workerCompile(action) {
     } catch (error) {
         console.log('Compile Error', error.message || error);
         yield put(compileFailure(action.codeId, error.message || error));
+    }
+}
+
+function* workerCompileTestExercise(action) {
+    try {
+        const compiled = yield call(compileTestExercise, action.compiler, action.userSolution,
+            action.exerciseSolution, action.validation, action.optimize);
+        yield put(testExerciseCompileSuccess(compiled.code, compiled.validation, compiled.assert));
+    } catch (error) {
+        console.log('testEx compile error', error.message || error);
+        yield put(testExerciseCompileFailure(error.message || error));
     }
 }
 
@@ -94,6 +111,78 @@ function compile(compiler, userSolution, exerciseSolution, optimize) {
                 }
             }
             resolve(rCode);
+        } catch (err) {
+            reject(err.message || err);
+        }
+    });
+}
+
+function compileTestExercise(compiler, userSolution, exerciseSolution, validation, optimize) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            userSolution = replaceMsgSender(userSolution);
+            const compiledUserSolution = compiler.compile(userSolution, optimize);
+            const compiledExerciseSolution = compiler.compile(exerciseSolution, optimize);
+            const assertLibraryUrl = require('../lib/Assert.sol');
+            const assertLibraryResponse = await fetchUrl(assertLibraryUrl);
+            const assertLibrary = assertLibraryResponse.data;
+            // const assertLibraryInput = {'Assert.sol': assertLibrary};
+            // const codes = compiler.compile(assertLibraryInput, 1);
+            // Create an interface for every contract the user will code
+
+            if (compiledUserSolution.errors) {
+                return reject(new Error("User Solution: " + compiledUserSolution.errors[0]));
+            }
+
+            if (compiledExerciseSolution.errors) {
+                return reject(new Error("Exercise Solution: " + compiledExerciseSolution.errors[0]));
+            }
+
+            const notDefined =
+                Object.keys(compiledExerciseSolution.contracts)
+                    .filter(name => {
+                        return compiledUserSolution.contracts[name] === undefined
+                    }).map(name => {
+                    return name.substring(1)
+                });
+            if (notDefined.length > 0) {
+                let msg = '';
+                if (notDefined.length === 1) {
+                    msg = `Contract ${notDefined[0]} is not defined`;
+                } else {
+                    msg = `Contracts [${notDefined.join(', ')}] are not defined`;
+                }
+                return reject(msg);
+            }
+
+            // compile assert library
+            const compiledAssertLib = compiler.compile({sources: {'Assert.sol': assertLibrary}}, optimize);
+            if (compiledAssertLib.errors) {
+                return reject(new Error("AssertLib: " + compiledAssertLib.errors[0]));
+            }
+
+            const interfaces = createInterfaces(compiledExerciseSolution);
+            const names = interfaces.map(snip => snip.name);
+            // Make test available for any user-specified contract
+            const validationTransformed = transformSolidityTest(validation, names);
+
+            // Compile interfaces, assert library and test code
+            const input = interfaces.reduce(function (acc, inter) {
+                const m = {};
+                m[inter.name + '.sol'] = inter.code;
+                return _.extend(acc, m)
+            }, {});
+
+            input['Assert.sol'] = assertLibrary;
+            input['test.sol'] = validationTransformed;
+            const compiledValidation = compiler.compile({sources: input}, optimize);
+
+            if (compiledValidation.errors) {
+                return reject(new Error("Validation: " + compiledValidation.errors[0]));
+            }
+
+            console.log('temp: Compilation of Test Exercise ok');
+            resolve({code: compiledUserSolution, validation: compiledValidation, assert: compiledAssertLib});
         } catch (err) {
             reject(err.message || err);
         }

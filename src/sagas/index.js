@@ -6,6 +6,7 @@ import web3Accounts from './web3-accounts';
 import solidityCompiler from './solidity-compiler';
 import exercises from './exercises';
 import userProfile from './user_profile';
+import testing from './testing';
 
 export default function* rootSaga() {
     yield all([
@@ -14,6 +15,7 @@ export default function* rootSaga() {
         ...web3Accounts,
         ...solidityCompiler,
         ...exercises,
-        ...userProfile
+        ...userProfile,
+        ...testing
     ]);
 };
