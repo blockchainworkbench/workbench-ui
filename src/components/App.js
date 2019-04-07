@@ -12,6 +12,7 @@ import Footer from './layout/Footer';
 import Profile from "./user/Profile";
 import ProfileEdit from "./user/ProfileEdit";
 import Playground from "./Playground";
+import Testing from "./testing/Testing";
 
 class App extends React.Component {
 
@@ -30,6 +31,7 @@ class App extends React.Component {
                     <Route path='/login/:app?' component={Login}/>
                     <Route path='/logout' component={Logout}/>
                     <Route exact path='/profile' component={Profile}/>
+                    <Route extact path='/testing' component={Testing}/>
                     <Route exact path='/profile/edit' component={ProfileEdit}/>
                     <Route path='/pages/:category/:page' component={Page}/>
                     <Switch>
