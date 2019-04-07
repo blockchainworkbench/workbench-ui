@@ -1,8 +1,8 @@
 import React from 'react';
-import DifficultyFilter from "./search/DifficultyFilter";
-import CategoryFilter from "./search/CategoryFilter";
-import PageList from "./search/PageList";
-import CategoryList from "./search/CategoryList";
+import DifficultyFilter from "./DifficultyFilter";
+import CategoryFilter from "./CategoryFilter";
+import PageList from "./PageList";
+import CategoryList from "./CategoryList";
 
 export default function Search() {
     return (

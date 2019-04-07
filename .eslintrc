@@ -1,0 +1,25 @@
+{
+  "extends": ["standard", "standard-react", "prettier"],
+  "plugins": ["prettier"],
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "comma-dangle": 0,
+    "react/prop-types": 0,
+    "no-unused-vars": "warn",
+    "no-use-before-define": 0,
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "semi": false
+      }
+    ]
+  },
+  "globals": {
+    "__DEV__": true
+  }
+}

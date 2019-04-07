@@ -1,0 +1,21 @@
+import React from 'react'
+import { withRouter } from 'react-router-dom'
+import TitleHeader from '../layout/TitleHeader'
+import Search from './SearchComponent'
+
+class SearchPage extends React.Component {
+  render() {
+    return (
+      <section className="hero">
+        <TitleHeader />
+        <div className="hero-body">
+          <div className="container">
+            <Search />
+          </div>
+        </div>
+      </section>
+    )
+  }
+}
+
+export default withRouter(SearchPage)

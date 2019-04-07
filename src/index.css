@@ -2,13 +2,12 @@
 @import '~bulma-o-steps/bulma-steps.min.css';
 @import '~@fortawesome/fontawesome-free/css/all.css';
 @import '~@fortawesome/fontawesome-free/css/brands.css';
+@import url('https://fonts.googleapis.com/css?family=Sniglet:400,800');
 
 body {
     margin: 0;
     padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+    font-family: "Roboto", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -59,6 +58,10 @@ code {
     margin-left: 10px;
 }
 
+.ml2 {
+    margin-left: 2rem;
+}
+
 .is-parent .tile:hover {
     background-color: azure;
 }
@@ -81,5 +84,149 @@ code {
 }
 
 .footer {
-    padding-bottom: 3rem;
+    padding: 2rem 1.5rem;
+    margin-top: 3rem;
+}
+
+.hero-header-component {
+    background: radial-gradient(ellipse at center, #70bdf4 0%, #63b6f2 42%, #209cee 100%);
+}
+
+.is-cursive {
+    font-family: 'Sniglet', cursive;
+}
+
+.is-extra-bold {
+    font-weight: 800;
+}
+
+.is-regular {
+    font-weight: 400;
+}
+
+@media (min-width: 991px) and (max-height: 620px) {
+    .landing-page-image {
+        width: 200px !important;
+        margin-bottom: 50px;
+    }
+}
+@media (min-width: 991px) and (max-height: 750px) {
+    .landing-page-image {
+        width: 300px !important;
+        margin-bottom: 50px;
+    }
+}
+
+@media (min-width: 991px) and (max-height: 800px) {
+    .landing-page-image {
+        width: 400px !important;
+        margin-bottom: 50px;
+    }
+}
+
+@media (min-width: 544px) and (max-height: 680px) {
+.landing-page-image {
+        width: 220px !important;
+        margin-bottom: 50px;
+    }
+}
+
+@media (min-width: 544px) and (max-height: 800px) {
+    .landing-page-image {
+        width: 350px !important;
+        margin-bottom: 50px;
+    }
+}
+
+@media (max-height: 750px) {
+    .landing-page-image {
+        width: 350px !important;
+    }
+}
+
+.landing-page-image {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.is-transparent {
+    background-color: transparent;
+}
+
+.navbar-brand {
+    display: block;
+    padding: 0.7rem 0.75rem;
+}
+
+.button.is-big {
+    padding: 1.5rem 1.7rem;
+}
+
+.button.is-big > .icon {
+    font-size: 1.5rem;
+}
+
+.buttons .button:not(:last-child):not(.is-fullwidth) {
+    margin-right: 1rem;
+}
+
+.is-1 {
+    font-size: 3.5rem;
+}
+
+.is-2 {
+    font-size: 1.4rem;
+}
+
+.image-box {
+    border: none;
+    padding: 4rem;
+    text-align: center;
+    margin: auto;
+}
+
+.border-shadow {
+    box-shadow: 0 8px 33px 0 rgba(0,0,0,.07);
+    border-radius: 8px;
+    background: #fff;
+}
+
+.feature-box {
+    margin: 4rem;
+    align-self: center;
+    color: #A9ABAC;
+}
+
+.has-background-color-darker {
+    background-color: #EFF4F7;
+}
+
+.exercise-box {
+    border-radius: 8px;
+    box-shadow: 0 8px 33px 0 rgba(0,0,0,.07);
+}
+
+.exercise-box > .exercise-header > .subtitle {
+    font-size: 1.5rem;
+    padding: .75rem 1.5rem .6rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.exercise-box > .exercise-header {
+    padding: 0;
+}
+
+.exercise-box > .exercise-body > .has-background-grey-lighter {
+    font-size: 1rem;
+    padding: .6rem 1rem .5rem;
+}
+
+.ace_editor {
+    border-radius: 0 0 8px 8px;
+}
+
+.content {
+    padding: 0 5rem;
 }
