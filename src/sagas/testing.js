@@ -16,8 +16,6 @@ export default [takeLatest(ACTIONS.TEST_EXERCISE, workerTestExercise)];
 
 function* workerTestExercise(action) {
     try {
-        console.log('test exercise started');
-
         yield put(setTestExerciseUpdate("Loading compiler"));
         yield put(loadCompiler(action.compilerVersion));
         const compilerAction = yield take(target => compilerLoaded(action.compilerVersion, target));
@@ -65,9 +63,6 @@ function* workerTestExercise(action) {
         if (testResultAction.type === ACTIONS.TEST_CONTRACT_FAILURE) {
             return console.log("Tests of exercise failed.");
         }
-
-        console.log('hurray! Test-Exercise sucessfull!');
-
     } catch (e) {
         console.log('workerTestExercise', e);
     }

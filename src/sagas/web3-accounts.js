@@ -4,11 +4,7 @@ import Web3 from 'web3';
 import store from '../store';
 import linker from 'solc/linker';
 
-import {
-    checkWeb3AccountFailure,
-    checkWeb3AccountSuccess,
-    web3AccountUpdate
-} from '../actions/web3';
+import {checkWeb3AccountFailure, checkWeb3AccountSuccess, web3AccountUpdate} from '../actions/web3';
 import {
     deployFailure,
     deploySuccess,
@@ -17,7 +13,7 @@ import {
     testContractsSuccess,
     testContractsUpdate
 } from '../actions/exercise';
-import {testExerciseDeploySuccess} from "../actions/testing";
+import {setTestExerciseUpdate, testExerciseDeployFailure, testExerciseDeploySuccess} from "../actions/testing";
 
 export default [
     takeLatest(ACTIONS.CHECK_WEB3_ACCOUNT, workerCheckAccount),
@@ -238,61 +234,57 @@ function performTests(codeId, contract, addresses) {
 
 async function deployTests(compiledTests, assertLibraryAddress) {
 
-    const toDeploy = Object.keys(compiledTests).filter(key => key.startsWith('test.sol'));
-    const tests = [];
+    return new Promise(async (resolve) => {
+        const toDeploy = Object.keys(compiledTests).filter(key => key.startsWith('test.sol'));
+        const tests = [];
 
-    for (const key of toDeploy) {
-        // Link test with the already deployed assert library
-        compiledTests[key].bytecode = linker.linkBytecode(
-            compiledTests[key].bytecode, {'Assert.sol:Assert': assertLibraryAddress}
-        );
-        // Deploy the test
-        const address = await deploy(compiledTests[key]);
-        tests.push({address: address, abi: JSON.parse(compiledTests[key].interface)});
-        console.log('Successfully deployed ' + key);
-    }
-    return tests;
+        for (const key of toDeploy) {
+            // Link test with the already deployed assert library
+            compiledTests[key].bytecode = linker.linkBytecode(
+                compiledTests[key].bytecode, {'Assert.sol:Assert': assertLibraryAddress}
+            );
+            // Deploy the test
+            const address = await deploy(compiledTests[key]);
+            tests.push({address: address, abi: JSON.parse(compiledTests[key].interface)});
+        }
+        resolve(tests);
+    });
 }
 
 
 function* workerTestExerciseDeploy(action) {
     try {
+        yield put(setTestExerciseUpdate("Deploying Assert Library"));
         const deployedAssertLib = yield call(deploy, action.assert['Assert.sol:Assert']);
         const assertLibraryAddress = deployedAssertLib.address;
-        console.log('assert lib sucessfully deployed.');
+        console.log('Assert Library sucessfully deployed.');
 
+        yield put(setTestExerciseUpdate("Deploying Test Contracts"));
         const deployedTests = yield call(deployTests, action.validation, assertLibraryAddress);
-        console.log('Tests sucessfully deployed.');
+        console.log('Test Contracts sucessfully deployed.');
 
         const deployedTestsObject = deployedTests.map(test => {
             return {address: test.address.address, abi: test.abi}
         });
 
-
-
         const exerciseAddresses = [];
         let index = 0;
 
+        yield put(setTestExerciseUpdate("Deploying Exercise"));
         // Deploy all contracts
         for (let name of Object.keys(action.exercise)) {
             name = name.substring(1);
             const msg = `Deploying ${name}'\t${index++}/${Object.keys(action.exercise).length}`;
-            console.log(msg);
-            // yield put(deployUpdate(action.codeId, msg));
-            try {
-                const deployedCode = yield call(deploy, action.exercise[':' + name]);
-                exerciseAddresses.push(deployedCode.address)
-            } catch (error) {
-                console.log('ee', error);
-                // return yield put(deployFailure(action.codeId, `Contract ${name}: ${error}`));
-            }
+            yield put(setTestExerciseUpdate(msg));
+            const deployedCode = yield call(deploy, action.exercise[':' + name]);
+            exerciseAddresses.push(deployedCode.address)
         }
 
-        console.log('successfully deployed exercise contracts');
+        console.log('Successfully deployed exercise contracts');
         yield put(testExerciseDeploySuccess(exerciseAddresses, deployedTestsObject));
 
 
     } catch (e) {
-        console.log('workerTestExerciseDeploy', e);
+        yield put(testExerciseDeployFailure(e.message || e));
     }
 }

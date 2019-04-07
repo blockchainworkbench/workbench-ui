@@ -38,15 +38,16 @@ const exercise = (state = null, action) => {
         case ACTIONS.TEST_EXERCISE_DEPLOY_FAILURE:
             return Object.assign({}, state,
                 {message: "Deploy Error", state: EXERCISE_STATE.ERROR, error: action.error});
-        case ACTIONS.TEST_EXERCISE_TEST:
-            return Object.assign({}, state,
-                {state: EXERCISE_STATE.TESTING, error: null, message: "Testing contracts"});
-        case ACTIONS.TEST_EXERCISE_TEST_FAILURE:
-            return Object.assign({}, state,
-                {message: "Testing Error", state: EXERCISE_STATE.ERROR, error: action.error});
-        case ACTIONS.TEST_EXERCISE_TEST_SUCCESS:
-            return Object.assign({}, state,
-                {message: "Exercise completed.", state: EXERCISE_STATE.SUCCESS, error: null});
+        case ACTIONS.TEST_CONTRACTS:
+            if (action.codeId === TEST_EXERCISE_CODE_ID) {
+                return Object.assign({}, state,
+                    {message: "Testing contracts", state: EXERCISE_STATE.TESTING, error: null});
+            } else return state;
+        case ACTIONS.TEST_CONTRACTS_UPDATE:
+            if (action.codeId === TEST_EXERCISE_CODE_ID) {
+                return Object.assign({}, state,
+                    {message: action.message, error: null});
+            } else return state;
         case ACTIONS.TEST_CONTRACTS_SUCCESS:
             if (action.codeId === TEST_EXERCISE_CODE_ID) {
                 return Object.assign({}, state,
