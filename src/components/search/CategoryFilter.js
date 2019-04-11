@@ -55,7 +55,7 @@ class CategoryFilter extends React.Component {
         <div className="clearBoth">
           <form onSubmit={this.handleSubmit}>
             <div className="field has-addons">
-              <p className="control  is-expanded">
+              <div className="control  is-expanded">
                 <input
                   className="input is-large has-text-centered"
                   type="text"
@@ -69,7 +69,7 @@ class CategoryFilter extends React.Component {
                     Add
                   </button>
                 </p>
-              </p>
+              </div>
             </div>
           </form>
         </div>
