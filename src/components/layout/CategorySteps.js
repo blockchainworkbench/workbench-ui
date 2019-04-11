@@ -72,7 +72,7 @@ class CategorySteps extends React.Component {
 
   render() {
     let activeCategoryName = this.props.match.params.category
-    const activeCategoryPages = this.props.categories[activeCategoryName.toLowerCase()]
+    const activeCategoryPages = this.props.categories[urlify(activeCategoryName.toLowerCase())]
     return (
       <ul className="steps my-step-style has-content-centered is-hidden-mobile is-small">
         {this.getStepsForPages(activeCategoryName, activeCategoryPages)}

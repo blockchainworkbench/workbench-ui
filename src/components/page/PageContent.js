@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { buildCategoryUrl, buildPageUrl, firstCategoryNameOrUnknown } from '../../lib/helpers'
+import { buildCategoryUrl, buildPageUrl, firstCategoryNameOrUnknown, urlify } from '../../lib/helpers'
 import { loadPageContent } from '../../actions/pages'
 import ContentArray from './ContentArray'
 
@@ -94,7 +94,8 @@ class PageContent extends React.Component {
       return <Link to="/#advanced">Choose next Page {nextIcon}</Link>
     } else {
       const sameCategory =
-        nextPage.categories && nextPage.categories.map(c => c.toLowerCase()).includes(this.props.category.toLowerCase())
+        nextPage.categories &&
+        nextPage.categories.map(c => urlify(c.toLowerCase())).includes(this.props.category.toLowerCase())
       if (sameCategory) {
         return (
           <Link to={buildPageUrl(this.props.category, nextPage.title)}>
@@ -135,7 +136,7 @@ class PageContent extends React.Component {
     const sameCategory =
       previousPage &&
       previousPage.categories &&
-      previousPage.categories.map(c => c.toLowerCase()).includes(this.props.category.toLowerCase())
+      previousPage.categories.map(c => urlify(c.toLowerCase())).includes(this.props.category.toLowerCase())
     if (previousPage) {
       if (sameCategory) {
         if (previousPage.url.endsWith('/')) {
@@ -169,7 +170,7 @@ class PageContent extends React.Component {
   getAdjacentCategoryPage(nextPreviousContainer, info) {
     if (nextPreviousContainer) {
       const categoryIndex = this.props.page.categories
-        .map(cat => cat.toLowerCase())
+        .map(cat => urlify(cat.toLowerCase()))
         .indexOf(this.props.category.toLowerCase())
       if (categoryIndex !== -1) {
         return this.props.pages.find(

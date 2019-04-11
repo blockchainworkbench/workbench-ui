@@ -1,5 +1,6 @@
 import { put, takeLatest } from 'redux-saga/effects'
 import { loadPagesSuccessSorted } from '../actions/pages'
+import { urlify } from '../lib/helpers'
 
 export default [takeLatest('LOAD_PAGES_SUCCESS', workerOrderPages)]
 
@@ -8,7 +9,7 @@ function addToContainerIfNotYetExist(categoryName, container, page, containerTyp
     console.log(`More than one ${containerType} page for category ${categoryName} found`)
   } else {
     const targetPage = Object.assign({}, page, { rootOfCategory: categoryName })
-    container[categoryName.toLowerCase()] = targetPage
+    container[urlify(categoryName.toLowerCase())] = targetPage
   }
   return container
 }
@@ -59,7 +60,7 @@ function* workerOrderPages(action) {
       }
       let endPageUrl = categoryEnds[category].url
       while (current) {
-        const currentCategoryIndex = current.categories.map(c => c.toLowerCase()).indexOf(category)
+        const currentCategoryIndex = current.categories.map(c => urlify(c.toLowerCase())).indexOf(category)
         orderedCategoryPages.push(current)
         if (current.next && current.next[currentCategoryIndex] && current.url !== endPageUrl) {
           current = pagesByKey[current.next[currentCategoryIndex]]
