@@ -325,3 +325,21 @@ code {
 .ace-dracula {
     border-radius: 8px;
 }
+
+.mcq-answers {
+    margin-left: 1em !important;
+    margin-bottom: 1em;
+}
+.mcq-answers > li {
+    padding: 0.1rem 0.5rem;
+    margin-bottom: 0 !important;
+    list-style-type: none;
+}
+
+.mcq-answers > li > a > label {
+    width: 100%;
+}
+
+.mcq-answers > li > a {
+    padding: 0 !important;
+}
