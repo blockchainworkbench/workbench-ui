@@ -31,11 +31,12 @@ class MultipleChoiceQuestionElement extends React.Component {
   }
 
   getHint() {
-    if (this.props.content.hint !== '') {
+    if (this.props.content.hints !== '') {
+      console.log(this.props.content.hints)
       return (
         <div>
           <span>Hint: </span>
-          <ContentArray content={this.props.content.hint} />
+          <ContentArray content={this.props.content.hints} />
         </div>
       )
     }
