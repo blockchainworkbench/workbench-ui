@@ -14,7 +14,7 @@ class CategorySteps extends React.Component {
     for (const page of pages) {
       const isOverview = page.url.endsWith('/')
       const title = isOverview ? 'Overview' : page.title
-      const url = `/pages/${category}` + !isOverview ? `/${urlify(title)}` : ''
+      const url = `/pages/${category}` + (!isOverview ? `/${urlify(title)}` : '')
 
       steps.push(
         <li key={page.url} className={`steps-segment ${this.isActivePage(page, isOverview) ? 'is-active' : ''}`}>

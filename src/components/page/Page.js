@@ -2,6 +2,7 @@ import React from 'react'
 import { Redirect, withRouter } from 'react-router-dom'
 import TitleHeader from '../layout/TitleHeader'
 import CategorySteps from '../layout/CategorySteps'
+import CategorySidebar from '../layout/CategorySidebar'
 import connect from 'react-redux/es/connect/connect'
 import { buildCategoryUrl, urlify } from '../../lib/helpers'
 import PageContent from './PageContent'
@@ -32,21 +33,7 @@ class Page extends React.Component {
               <PageContent page={page} category={categoryName} />
             </div>
             <div className={'column is-one-quarter'}>
-              <h1 className={'title'}>Smart contracts</h1>
-              <aside className="menu">
-                <p className={'menu-label'}>General</p>
-                <ul className="menu-list">
-                  <li>
-                    <a className="text">Functions</a>
-                  </li>
-                  <li>
-                    <a className="text">Payments</a>
-                  </li>
-                  <li>
-                    <a className="text is-active">Start Learning</a>
-                  </li>
-                </ul>
-              </aside>
+              <CategorySidebar />
             </div>
           </div>
         </div>

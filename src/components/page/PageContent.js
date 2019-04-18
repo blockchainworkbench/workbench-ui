@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { buildCategoryUrl, buildPageUrl, firstCategoryNameOrUnknown, urlify } from '../../lib/helpers'
+import { getAdjacentCategoryPage, getNextPageData, getPreviousPageData } from '../../lib/helpers'
 import { loadPageContent } from '../../actions/pages'
 import ContentArray from './ContentArray'
 
@@ -19,8 +19,12 @@ class PageContent extends React.Component {
   loadCurrentPageContent() {
     this.loadPageContent(this.props.page)
     if (this.props.page) {
-      this.loadPageContent(this.getAdjacentCategoryPage(this.props.page.next))
-      this.loadPageContent(this.getAdjacentCategoryPage(this.props.page.previous))
+      this.loadPageContent(
+        getAdjacentCategoryPage(this.props.page, this.props.category, this.props.pages, this.props.page.next),
+      )
+      this.loadPageContent(
+        getAdjacentCategoryPage(this.props.page, this.props.category, this.props.pages, this.props.page.previous),
+      )
     }
   }
 
@@ -78,30 +82,7 @@ class PageContent extends React.Component {
   }
 
   getNextPageJSX() {
-    const nextPage = this.props.page ? this.getAdjacentCategoryPage(this.props.page.next, 'next') : null
-
-    let url
-    let text
-    if (!nextPage || !nextPage.categories) {
-      // Search page
-      url = '/search'
-      text = 'Choose next page'
-    } else if (
-      nextPage.categories &&
-      nextPage.categories.map(c => c.toLowerCase()).includes(this.props.category.toLowerCase())
-    ) {
-      // Next Page
-      url = buildPageUrl(this.props.category, nextPage.title)
-      text = nextPage.title
-    } else if (nextPage.url.endsWith('/')) {
-      // Next Chapter
-      url = buildCategoryUrl(nextPage.categories[0])
-      text = nextPage.title
-    } else {
-      // Next Chapter
-      url = buildPageUrl(nextPage.categories[0], nextPage.title)
-      text = nextPage.title
-    }
+    let { url, text } = getNextPageData(this.props.page, this.props.category, this.props.pages)
 
     return (
       <Link to={url} className={'button is-info is-outlined is-uppercase'}>
@@ -114,54 +95,16 @@ class PageContent extends React.Component {
   }
 
   getPreviousPageJSX() {
-    const previousPage = this.props.page ? this.getAdjacentCategoryPage(this.props.page.previous, 'prev') : null
-
-    if (!previousPage) {
-      return null
-    }
-
-    const sameCategory =
-      previousPage &&
-      previousPage.categories &&
-      previousPage.categories.map(c => urlify(c.toLowerCase())).includes(this.props.category.toLowerCase())
-
-    let url
-    if (sameCategory) {
-      if (previousPage.url.endsWith('/')) {
-        // Chapter overview
-        url = buildCategoryUrl(this.props.category)
-      } else {
-        // Regular page
-        url = buildPageUrl(this.props.category, previousPage.title)
-      }
-    } else {
-      // Previous Chapter
-      url = buildPageUrl(firstCategoryNameOrUnknown(previousPage.categories), previousPage.title)
-    }
+    const { url, text } = getPreviousPageData(this.props.page, this.props.category, this.props.pages)
 
     return (
       <Link to={url} className={'button is-info is-outlined is-uppercase'}>
         <div className={'icon'}>
           <i className={'fas fa-chevron-left'} />
         </div>
-        <span>{previousPage.title}</span>
+        <span>{text}</span>
       </Link>
     )
-  }
-
-  getAdjacentCategoryPage(nextPreviousContainer, info) {
-    if (nextPreviousContainer) {
-      const categoryIndex = this.props.page.categories
-        .map(cat => urlify(cat.toLowerCase()))
-        .indexOf(this.props.category.toLowerCase())
-      if (categoryIndex !== -1) {
-        return this.props.pages.find(
-          page => page.url.toLowerCase() === nextPreviousContainer[categoryIndex].toLowerCase(),
-        )
-      } else if (info === 'next') {
-        console.log('-1 next', this.props.page.categories, this.props.category)
-      }
-    }
   }
 }
 

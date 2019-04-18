@@ -44,3 +44,77 @@ export const fetchUrl = url => {
 export const postUrl = (url, data) => {
   return axios({ method: 'post', url: url, data: data })
 }
+
+export const getAdjacentCategoryPage = (page, category, pages, nextPreviousContainer) => {
+  if (nextPreviousContainer && category) {
+    const categoryIndex = page.categories.map(cat => urlify(cat.toLowerCase())).indexOf(category.toLowerCase())
+    if (categoryIndex !== -1) {
+      return pages.find(
+        page =>
+          nextPreviousContainer[categoryIndex] &&
+          page.url.toLowerCase() === nextPreviousContainer[categoryIndex].toLowerCase(),
+      )
+    }
+  }
+  return null
+}
+
+export const getPreviousPageData = (page, category, pages) => {
+  const previousPage = page ? getAdjacentCategoryPage(page, category, pages, page.previous) : null
+
+  let url
+  let text
+  if (!previousPage) {
+    return {
+      url: '/',
+      text: 'Homepage',
+    }
+  }
+  text = previousPage.title
+
+  const sameCategory =
+    previousPage &&
+    previousPage.categories &&
+    previousPage.categories.map(c => urlify(c.toLowerCase())).includes(category.toLowerCase())
+
+  if (sameCategory) {
+    if (previousPage.url.endsWith('/')) {
+      // Chapter overview
+      url = buildCategoryUrl(category)
+    } else {
+      // Regular page
+      url = buildPageUrl(category, previousPage.title)
+    }
+  } else {
+    // Previous Chapter
+    url = buildPageUrl(firstCategoryNameOrUnknown(previousPage.categories), previousPage.title)
+  }
+
+  return { url, text }
+}
+
+export const getNextPageData = (page, category, pages) => {
+  const nextPage = page ? getAdjacentCategoryPage(page, category, pages, page.next) : null
+
+  let url
+  let text
+  if (!nextPage || !nextPage.categories) {
+    // Search page
+    url = '/search'
+    text = 'Choose next page'
+  } else if (nextPage.categories && nextPage.categories.map(c => c.toLowerCase()).includes(category.toLowerCase())) {
+    // Next Page
+    url = buildPageUrl(category, nextPage.title)
+    text = nextPage.title
+  } else if (nextPage.url.endsWith('/')) {
+    // Next Chapter
+    url = buildCategoryUrl(nextPage.categories[0])
+    text = nextPage.title
+  } else {
+    // Next Chapter
+    url = buildPageUrl(nextPage.categories[0], nextPage.title)
+    text = nextPage.title
+  }
+
+  return { url, text }
+}

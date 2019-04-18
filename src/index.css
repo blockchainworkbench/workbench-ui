@@ -66,6 +66,26 @@ code {
     padding: 5px;
 }
 
+.pbt5 {
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.pbt05 {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+}
+
+.plr075 {
+    padding-left: 0.75em;
+    padding-right: 0.75em;
+}
+
+.plr1 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
 .is-parent .tile:hover {
     background-color: azure;
 }
@@ -324,6 +344,45 @@ code {
 
 .ace-dracula {
     border-radius: 8px;
+}
+
+.menu .menu-list {
+    list-style: none;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.steps.my-step-style {
+    list-style: none;
+    margin-left: 0;
+}
+
+.has-flex-grow {
+    flex-grow: 1;
+}
+
+.sidebar-header > :first-child {
+    border-top-left-radius: 8px;
+    margin-right: 2px;
+    height: auto;
+}
+
+.sidebar-header > :last-child {
+    border-top-right-radius: 8px;
+    margin-left: 2px;
+    height: auto;
+}
+
+.is-stretch {
+    align-items: stretch;
+}
+
+.menu-list a.is-active {
+    background-color: #209cee;
+}
+
+.category-sidebar .menu-list a.is-active {
+    background-color: #70bdf4;
 }
 
 .mcq-answers {

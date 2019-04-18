@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, Redirect, withRouter } from 'react-router-dom'
 import TitleHeader from '../layout/TitleHeader'
 import { getDifficultyColorForTag, urlify } from '../../lib/helpers'
+import CategorySidebar from '../layout/CategorySidebar'
 import CategorySteps from '../layout/CategorySteps'
 import PageContent from './PageContent'
 
@@ -54,10 +55,10 @@ class Pages extends React.Component {
       content = this.getCategoryInfo(activeCategoryPages, activeCategoryName)
     }
     return (
-      <section className="hero">
+      <section className={'hero'}>
         <TitleHeader />
-        <div className="hero-body">
-          <div className="container has-text-centered">{content}</div>
+        <div className={'hero-body content'}>
+          <div>{content}</div>
         </div>
       </section>
     )
@@ -68,17 +69,24 @@ class Pages extends React.Component {
     return (
       <>
         <CategorySteps />
-        <div className="tile is-ancestor columns is-multiline">
-          {this.getTilesForPages(categoryName, categoryPages)}
+        <div className="columns">
+          <div className={'column'}>
+            <div className="tile is-ancestor columns is-multiline">
+              {this.getTilesForPages(categoryName, categoryPages)}
+            </div>
+            <PageContent page={categoryRootPage} category={categoryName} categoryPage />
+          </div>
+          <div className={'column is-one-quarter'}>
+            <CategorySidebar />
+          </div>
         </div>
-        <PageContent page={categoryRootPage} category={categoryName} categoryPage />
       </>
     )
   }
 
   getLoadingInfo() {
     if (this.categoriesLoaded()) {
-      return <h1 className="title has-text-centered">Category not found</h1>
+      return <Redirect to={'/404'} />
     } else {
       return (
         <div>
