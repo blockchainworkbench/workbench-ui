@@ -264,9 +264,10 @@ code {
     padding: 0;
 }
 
+.exercise-box > .exercise-body > .has-background-warning,
 .exercise-box > .exercise-body > .has-background-grey-lighter {
     font-size: 1rem;
-    padding: .6rem 1rem .5rem;
+    padding: .6rem 1.5rem .5rem;
 }
 
 .ace_editor {
@@ -337,10 +338,6 @@ code {
     padding: 0;
 }
 
-.exercise-box > .exercise-body > .has-background-grey-lighter {
-    font-size: 1rem;
-    padding: .6rem 1rem .5rem;
-}
 
 .ace_editor {
     border-radius: 0 0 8px 8px;
@@ -407,7 +404,7 @@ code {
     list-style-type: none;
 }
 
-.mcq-answers > li > a > label {
+.mcq-answers > li > label {
     width: 100%;
 }
 

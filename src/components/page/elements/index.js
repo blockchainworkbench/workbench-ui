@@ -18,6 +18,7 @@ import CodeElement from './CodeElement'
 import TableElement from './TableElement'
 import FormElement from './FormElement'
 import MultipleChoiceQuestionElement from './MultipleChoiceQuestionElement'
+import QuizElement from './QuizElement'
 
 export default {
   h1: HeaderElement,
@@ -46,5 +47,6 @@ export default {
   strong: StrongElement,
   table: TableElement,
   mcq: MultipleChoiceQuestionElement,
+  quiz: QuizElement,
   unknown: UnknownElement,
 }
