@@ -1,4 +1,5 @@
 import axios from 'axios'
+import shajs from 'sha.js'
 
 export const getDifficultyColorForTag = difficulty => {
   switch (difficulty) {
@@ -117,4 +118,10 @@ export const getNextPageData = (page, category, pages) => {
   }
 
   return { url, text }
+}
+
+export const getSHA256 = payload => {
+  return shajs('sha256')
+    .update(JSON.stringify(payload))
+    .digest('hex')
 }

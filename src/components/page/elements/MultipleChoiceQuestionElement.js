@@ -1,6 +1,6 @@
 import React from 'react'
 import ContentArray from '../ContentArray'
-import shajs from 'sha.js'
+import { getSHA256 } from '../../../lib/helpers'
 
 class MultipleChoiceQuestionElement extends React.Component {
   constructor(props) {
@@ -13,42 +13,10 @@ class MultipleChoiceQuestionElement extends React.Component {
   }
 
   render() {
-    return this.props.quiz ? this.renderQuizQuestion() : this.renderSingleQuestion()
-  }
-
-  renderQuizQuestion() {
     return (
-      <div className={'hero has-background-info exercise-box'}>
-        <div className={'exercise-body has-background-white'}>
-          <div className={'has-background-grey-lighter'}>
-            <ContentArray content={this.props.content.question} />
-          </div>
-          {this.getHint()}
-          <div>
-            <ul className={'mcq-answers'}>{this.getAnswers()}</ul>
-          </div>
-          <div>
-            <div
-              onSubmit={this.handleQuestionSubmit}
-              className={'button has-text-left has-background-info has-text-white is-fullwidth'}
-            >
-              Submit
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  renderSingleQuestion() {
-    return (
-      <div className={'mb30'}>
+      <div className={this.props.quiz ? '' : 'mb30'}>
         <div className={'hero has-background-info exercise-box'}>
-          <div className={'exercise-header'}>
-            <p className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
-              Question {this.props.content.multiplechoice ? '(multi)' : '(single)'}
-            </p>
-          </div>
+          {this.getQuestionHeader()}
           <div className={'exercise-body has-background-white'}>
             <div className={'has-background-grey-lighter'}>
               <ContentArray content={this.props.content.question} />
@@ -57,6 +25,17 @@ class MultipleChoiceQuestionElement extends React.Component {
             {this.state.submitted ? this.getResult() : this.getForm()}
           </div>
         </div>
+      </div>
+    )
+  }
+
+  getQuestionHeader() {
+    if (this.props.quiz) return null
+    return (
+      <div className={'exercise-header'}>
+        <p className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
+          Question {this.props.content.multiplechoice ? '(multi)' : '(single)'}
+        </p>
       </div>
     )
   }
@@ -72,7 +51,7 @@ class MultipleChoiceQuestionElement extends React.Component {
         <div>
           <div
             onClick={this.handleQuestionSubmit}
-            className={'button has-text-left has-background-info has-text-white is-fullwidth'}
+            className={'quiz-button-box button has-text-left has-background-info has-text-white'}
           >
             Submit
           </div>
@@ -86,24 +65,32 @@ class MultipleChoiceQuestionElement extends React.Component {
     let buttonContent = ''
     if (this.state.answeredCorrectly) {
       textContent = 'Correct.'
-      if (this.props.quiz) {
-        buttonContent = (
-          <div onClick={this.handleNextClicked} className={'button has-text-left has-background-light is-fullwidth'}>
-            Next Question
+      buttonContent = (
+        <>
+          {this.props.quiz ? (
+            <div
+              onClick={this.handleNextClicked}
+              className={'button has-text-left has-background-success quiz-button-box'}
+            >
+              Next Question
+            </div>
+          ) : null}
+          <div onClick={this.handleBackClicked} className={'button has-text-left quiz-button-box'}>
+            back
           </div>
-        )
-      }
+        </>
+      )
     } else {
       textContent = 'Wrong.'
       buttonContent = (
-        <div onClick={this.handleBackClicked} className={'button has-text-left has-background-light is-fullwidth'}>
+        <div onClick={this.handleBackClicked} className={'button has-text-left has-background-danger quiz-button-box'}>
           Try again.
         </div>
       )
     }
     return (
       <>
-        <div style={{ padding: '1rem 1.5rem', paddingBottom: '50px' }}>{textContent}</div>
+        <div className={'result-box'}>{textContent}</div>
         <div>{buttonContent}</div>
       </>
     )
@@ -156,14 +143,15 @@ class MultipleChoiceQuestionElement extends React.Component {
   checkAnswers() {
     let answeredCorrectly = false
     const correctAnswers = this.getCorrectAnswers()
-    if (!this.props.content.multiplechoice) {
-      answeredCorrectly = correctAnswers.length === 1 && correctAnswers[0] === this.state.selected[0]
-    } else {
+    if (this.props.content.multiplechoice) {
       if (correctAnswers.length === this.state.selected.length) {
         answeredCorrectly = correctAnswers.reduce((acc, value) => {
-          return acc || this.state.selected.filter(itm => itm === value).length >= 1
-        }, false)
+          const t = this.state.selected.filter(itm => itm === value).length >= 1
+          return acc && t
+        }, true)
       }
+    } else {
+      answeredCorrectly = correctAnswers.length === 1 && correctAnswers[0] === this.state.selected[0]
     }
     return answeredCorrectly
   }
@@ -171,21 +159,8 @@ class MultipleChoiceQuestionElement extends React.Component {
   getCorrectAnswers() {
     const correctAnswers = []
     this.props.content.answers.forEach(answer => {
-      if (answer.content[0].value) {
-        if (this.props.content.multiplechoice) {
-          correctAnswers.push(
-            shajs('sha256')
-              .update(JSON.stringify(answer.content[0].answer))
-              .digest('hex'),
-          )
-        } else {
-          if (correctAnswers.length === 0) {
-            const answerHash = shajs('sha256')
-              .update(JSON.stringify(answer.content[0].answer))
-              .digest('hex')
-            correctAnswers.push(answerHash)
-          }
-        }
+      if (answer.content[0].value && (this.props.content.multiplechoice || correctAnswers.length === 0)) {
+        correctAnswers.push(getSHA256(JSON.stringify(answer.content[0].answer)))
       }
     })
     return correctAnswers
@@ -200,9 +175,7 @@ class MultipleChoiceQuestionElement extends React.Component {
 
   getCheckboxAnswers() {
     return this.props.content.answers.map(answer => {
-      const answerHash = shajs('sha256')
-        .update(JSON.stringify(answer.content[0].answer))
-        .digest('hex')
+      const answerHash = getSHA256(JSON.stringify(answer.content[0].answer))
       return (
         <li>
           <label className={'checkbox'}>
@@ -222,13 +195,11 @@ class MultipleChoiceQuestionElement extends React.Component {
   }
 
   getRadioAnswers() {
-    const questionHash = shajs('sha256')
-      .update(JSON.stringify(this.props.content.question) + JSON.stringify(this.props.content.answers))
-      .digest('hex')
+    const questionHash = getSHA256(
+      JSON.stringify(this.props.content.question) + JSON.stringify(this.props.content.answers),
+    )
     return this.props.content.answers.map(answer => {
-      const answerHash = shajs('sha256')
-        .update(JSON.stringify(answer.content[0].answer))
-        .digest('hex')
+      const answerHash = getSHA256(JSON.stringify(answer.content[0].answer))
       return (
         <li>
           <label className={'radio'}>
