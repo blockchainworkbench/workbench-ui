@@ -177,7 +177,7 @@ class MultipleChoiceQuestionElement extends React.Component {
     return this.props.content.answers.map(answer => {
       const answerHash = getSHA256(JSON.stringify(answer.content[0].answer))
       return (
-        <li>
+        <li key={answerHash}>
           <label className={'checkbox'}>
             <input
               type={'checkbox'}
@@ -201,7 +201,7 @@ class MultipleChoiceQuestionElement extends React.Component {
     return this.props.content.answers.map(answer => {
       const answerHash = getSHA256(JSON.stringify(answer.content[0].answer))
       return (
-        <li>
+        <li key={answerHash}>
           <label className={'radio'}>
             <input
               type={'radio'}

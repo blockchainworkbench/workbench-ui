@@ -8,7 +8,9 @@ class QuizElement extends React.Component {
         <div className={'exercise-header'}>
           <p className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
             Quiz
-            <div className={'is-pulled-right is-right has-text-left'}>{`Question 1/${this.props.content.length}`}</div>
+            <span className={'is-pulled-right is-right has-text-left'}>{`Question 1/${
+              this.props.content.length
+            }`}</span>
           </p>
         </div>
         <div className={'exercise-body'}>
