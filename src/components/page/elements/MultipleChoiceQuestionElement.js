@@ -72,7 +72,7 @@ class MultipleChoiceQuestionElement extends React.Component {
               onClick={this.handleNextClicked}
               className={'button has-text-left has-background-success quiz-button-box'}
             >
-              Next Question
+              {this.props.lastQuestion ? 'Finish Quiz' : 'Next Question'}
             </div>
           ) : null}
           <div onClick={this.handleBackClicked} className={'button has-text-left quiz-button-box'}>
@@ -113,7 +113,9 @@ class MultipleChoiceQuestionElement extends React.Component {
   }
 
   handleNextClicked() {
-    console.log('next clicked')
+    if (this.props.nextQuestion) {
+      this.props.nextQuestion()
+    }
   }
 
   handleQuestionSubmit() {
