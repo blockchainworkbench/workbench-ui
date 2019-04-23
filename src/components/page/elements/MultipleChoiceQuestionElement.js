@@ -196,10 +196,12 @@ class MultipleChoiceQuestionElement extends React.Component {
     })
   }
 
+  getRadioAnswerNameHash() {
+    return getSHA256(`${JSON.stringify(this.props.content.question)}${JSON.stringify(this.props.content.answers)}`)
+  }
+
   getRadioAnswers() {
-    const questionHash = getSHA256(
-      JSON.stringify(this.props.content.question) + JSON.stringify(this.props.content.answers),
-    )
+    const questionHash = this.getRadioAnswerNameHash()
     return this.props.content.answers.map(answer => {
       const answerHash = getSHA256(JSON.stringify(answer.content[0].answer))
       return (
