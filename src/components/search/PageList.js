@@ -54,16 +54,15 @@ const mergePages = (candidates, categoryPages) => {
 }
 
 const getFilteredCategoryPages = (pages, category) => {
-  return pages.filter(page => page.categories && page.categories.indexOf(category) !== -1)
-}
-
-const getPagesWithoutIndex = pages => {
-  return pages.filter(page => !page.url.endsWith('/'))
+  return pages.filter(
+    page =>
+      page.categories &&
+      page.categories.reduce((acc, c) => acc || c.toLowerCase().includes(category.toLowerCase()), false),
+  )
 }
 
 const getVisiblePages = (pages, difficulty, categories, categoryFilterType) => {
-  const pagesWithoutIndex = getPagesWithoutIndex(pages)
-  const filteredDifficulty = getVisiblePagesByDifficulty(pagesWithoutIndex, difficulty)
+  const filteredDifficulty = getVisiblePagesByDifficulty(pages, difficulty)
   return getVisiblePagesByCategories(filteredDifficulty, categories, categoryFilterType)
 }
 

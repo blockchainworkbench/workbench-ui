@@ -4,47 +4,91 @@ import { Link } from 'react-router-dom'
 
 class PageListItem extends React.Component {
   render() {
-    const diffTileClass = `tag is-pulled-right ${getDifficultyColorForTag(this.props.page.difficulty)}`
     if (this.props.page && this.props.page.rootOfCategory) {
       return this.getCategoryItem()
     }
+
+    const title = this.props.page ? this.props.page.title : 'Page undefined'
+    const difficulty = this.props.page.difficulty
+    const time = '5 min'
+    const categories = this.props.page.categories
     return (
-      <div className="tile is-parent is-4 catLink column">
-        <div className="tile is-child box">
-          <Link to={this.getPageUrl()}>
-            <p>
-              <span className="title is-4">{this.props.page ? this.props.page.title : 'Page undefined'}</span>
-              {this.props.page.difficulty ? <span className={diffTileClass}>{this.props.page.difficulty}</span> : null}
-            </p>
-            <p className="content">{this.props.page.description}</p>
-            <p className="content tags">
-              {this.props.page.categories
-                ? this.props.page.categories.map((t, idx) => {
+      <Link to={this.getPageUrl()} className={'is-6 column'}>
+        <div className="card">
+          <header className="card-header">
+            <p className="card-header-title">{title}</p>
+          </header>
+          <div className="card-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+          </div>
+          <footer className="card-footer has-background-light-info">
+            <div className={'is-left'}>
+              {categories
+                ? categories.map((t, idx) => {
                     return (
-                      <span key={idx} className="tag catItem is-info">
+                      <span key={idx} className="tag has-background-transparent has-text-white">
                         {t}
                       </span>
                     )
                   })
                 : null}
-            </p>
-          </Link>
+            </div>
+            <div className={'is-right'}>
+              <div className={'difficulty tag has-background-transparent has-text-white'}>
+                <span className={'icon'}>
+                  <i className={'fas fa-signal'} />
+                </span>
+                <span>{difficulty}</span>
+              </div>
+              <div className={'time tag has-background-transparent has-text-white'}>
+                <span className={'icon'}>
+                  <i className={'fas fa-clock'} />
+                </span>
+                <span>{time}</span>
+              </div>
+            </div>
+          </footer>
         </div>
-      </div>
+      </Link>
     )
   }
 
   getCategoryItem() {
+    const title = this.props.page.rootOfCategory
+    const difficulty = 'medium' // TODO: This should be the minimum course level
+    const time = '1 h' // TODO: This should be the sum of time in this category
     return (
-      <div className="tile is-parent is-4 catLink column">
-        <div className="tile is-child box">
-          <Link to={this.getPageUrl()}>
-            <p>
-              <span className="title is-4">{this.props.page.rootOfCategory}</span>
-            </p>
-          </Link>
+      <Link to={this.getPageUrl()} className={'is-6 column'}>
+        <div className="card">
+          <header className="card-header">
+            <p className="card-header-title is-capitalized">{title}</p>
+          </header>
+          <div className="card-content">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris.
+          </div>
+          <footer className="card-footer has-background-light-info">
+            <div className={'is-left'}>
+              <span className="tag has-background-transparent has-text-white">
+                Category (could be paths included in)
+              </span>
+            </div>
+            <div className={'is-right'}>
+              <div className={'difficulty tag has-background-transparent has-text-white'}>
+                <span className={'icon'}>
+                  <i className={'fas fa-signal'} />
+                </span>
+                <span>{difficulty}</span>
+              </div>
+              <div className={'time tag has-background-transparent has-text-white'}>
+                <span className={'icon'}>
+                  <i className={'fas fa-clock'} />
+                </span>
+                <span>{time}</span>
+              </div>
+            </div>
+          </footer>
         </div>
-      </div>
+      </Link>
     )
   }
 

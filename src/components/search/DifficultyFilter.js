@@ -1,56 +1,59 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {updateDifficultyFilter} from '../../actions/search';
-import {getDifficultyColorForTag} from "../../lib/helpers";
+import React from 'react'
+import { connect } from 'react-redux'
+import { updateDifficultyFilter } from '../../actions/search'
+import { getDifficultyColorForTag } from '../../lib/helpers'
+
+const DIFFICULTIES = ['all', 'easy', 'medium', 'hard']
 
 class DifficultyFilter extends React.Component {
+  getClassesForDifficultyButton(difficulty) {
+    let difficultyClass =
+      this.props.difficultyFilter === difficulty ? `${getDifficultyColorForTag(difficulty)} is-active is-focused` : ''
+    return `button is-small ${difficultyClass}`
+  }
 
-    getClassesForDifficultyButton(difficulty) {
-        return `button is-small
-        ${this.props.difficultyFilter === difficulty
-            ? `${getDifficultyColorForTag(difficulty)} is-active is-focused`
-            : ''}`;
-    }
+  render() {
+    return (
+      <div className="dropdown is-right is-hoverable">
+        <div className="dropdown-trigger">
+          <button className="button" aria-haspopup="true" aria-controls="dropdown-menu">
+            <span>
+              Difficulty
+              {this.props.difficultyFilter !== DIFFICULTIES[0] ? ` (${this.props.difficultyFilter})` : ''}
+            </span>
+            <span className="icon is-small">
+              <i className="fas fa-angle-down" aria-hidden="true" />
+            </span>
+          </button>
+        </div>
+        <div className="dropdown-menu" id="dropdown-menu" role="menu">
+          <div className="dropdown-content">
+            {DIFFICULTIES.map(difficulty => (
+              <a href="#" className="dropdown-item is-capitalized" onClick={() => this.handleSubmit(difficulty)}>
+                {difficulty}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
-    render() {
-        return (<div className='is-pulled-right mb10'>
-                <span className='has-text-grey-light float-left mr10'>Difficulty</span>
-
-                <div className='buttons has-addons'>
-                    <button className={this.getClassesForDifficultyButton('all')}
-                            onClick={() => this.handleSubmit('all')}>
-                        <span>All</span></button>
-                    <button className={this.getClassesForDifficultyButton('easy')}
-                            onClick={() => this.handleSubmit('easy')}>Easy
-                    </button>
-                    <button className={this.getClassesForDifficultyButton('medium')}
-                            onClick={() => this.handleSubmit('medium')}>Medium
-                    </button>
-                    <button className={this.getClassesForDifficultyButton('hard')}
-                            onClick={() => this.handleSubmit('hard')}>Hard
-                    </button>
-                </div>
-
-            </div>
-        );
-    }
-
-    handleSubmit(difficulty) {
-        this.props.updateDifficultyFilter(difficulty);
-    }
+  handleSubmit(difficulty) {
+    this.props.updateDifficultyFilter(difficulty)
+  }
 }
 
-const mapStateToProps = state => {
-    return {
-        difficultyFilter: state.userSettings.difficultyFilter
-    };
-};
+const mapStateToProps = state => ({
+  difficultyFilter: state.userSettings.difficultyFilter,
+})
 
-const mapDispatchToProps = dispatch => {
-    return {
-        updateDifficultyFilter: filter => dispatch(updateDifficultyFilter(filter))
-    };
-};
+const mapDispatchToProps = dispatch => ({
+  updateDifficultyFilter: filter => dispatch(updateDifficultyFilter(filter)),
+})
 
-const ConnectedDifficultyFilter = connect(mapStateToProps, mapDispatchToProps)(DifficultyFilter);
-export default ConnectedDifficultyFilter;
+const ConnectedDifficultyFilter = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DifficultyFilter)
+export default ConnectedDifficultyFilter

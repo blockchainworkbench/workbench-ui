@@ -1,11 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import {
-  CATEGORY_FILTER_TYPE,
-  addCategoryFilter,
-  changeCategoryFilterType,
-  removeCategoryFilter,
-} from '../../actions/search'
+import { addCategoryFilter, changeCategoryFilterType, removeCategoryFilter } from '../../actions/search'
 
 class CategoryFilter extends React.Component {
   constructor(props) {
@@ -41,68 +36,26 @@ class CategoryFilter extends React.Component {
   }
 
   render() {
-    const categoryFilter = this.props.categoryFilter.map((cat, idx) => {
-      return (
-        <span key={idx} className="tag catItem is-link">
-          {cat}
-          <button className="delete is-small" onClick={() => this.props.removeCategoryFilter(cat)} />
-        </span>
-      )
-    })
     return (
-      <div>
-        <div className="is-pulled-left">{this.getAvailableCategoryList()}</div>
-        <div className="clearBoth">
-          <form onSubmit={this.handleSubmit}>
-            <div className="field has-addons">
-              <div className="control  is-expanded">
-                <input
-                  className="input is-large has-text-centered"
-                  type="text"
-                  id="catFilterName"
-                  value={this.state.catFilterName}
-                  onChange={this.handleChange}
-                  placeholder="search terms"
-                />
-                <p className="control">
-                  <button type="submit" className="button is-large">
-                    Add
-                  </button>
-                </p>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div className="level mb30 mt10">
-          <div className="level-left">
-            <div className="tags">{categoryFilter}</div>
+      <div className={'is-full-width'}>
+        <form onSubmit={this.handleSubmit}>
+          <div className={'control has-icons-left has-icons-right'}>
+            <input
+              className={'input'}
+              type={'text'}
+              placeholder={'Search'}
+              id="catFilterName"
+              value={this.state.catFilterName}
+              onChange={this.handleChange}
+            />
+            <span className={'icon is-small is-left'}>
+              <i className={'fas fa-search'} />
+            </span>
           </div>
-          {this.getCategoryFilterTypeJSX()}
-        </div>
+          <button type={'submit'} className={'is-hidden'} />
+        </form>
       </div>
     )
-  }
-
-  getCategoryFilterTypeJSX() {
-    return this.props.categoryFilter.length >= 2 ? (
-      <div className="is-flex level-right">
-        <span className="has-text-grey-light mr10">combine category filters with </span>
-        <span className="buttons has-addons">
-          <button
-            className={this.getClassesForCategoryFilterTypeButton(CATEGORY_FILTER_TYPE.AND)}
-            onClick={() => this.handleTypeButtonClick(CATEGORY_FILTER_TYPE.AND)}
-          >
-            <span>AND</span>
-          </button>
-          <button
-            className={this.getClassesForCategoryFilterTypeButton(CATEGORY_FILTER_TYPE.OR)}
-            onClick={() => this.handleTypeButtonClick(CATEGORY_FILTER_TYPE.OR)}
-          >
-            <span>OR</span>
-          </button>
-        </span>
-      </div>
-    ) : null
   }
 
   handleChange(event) {

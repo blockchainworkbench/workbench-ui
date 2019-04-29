@@ -21,6 +21,7 @@ code {
 .catItem {
     margin-left: 0;
     margin-right: 5px;
+    margin-bottom: 0;
 }
 
 .catLink {
@@ -34,12 +35,17 @@ code {
 .mb70 {
     margin-bottom: 70px;
 }
+
 .mb30 {
     margin-bottom: 30px;
 }
 
 .mb10 {
     margin-bottom: 10px;
+}
+
+.mb2 {
+    margin-bottom: 2rem;
 }
 
 .mt3 {
@@ -398,6 +404,71 @@ code {
     background-color: #70bdf4;
 }
 
+.tag.has-background-transparent {
+    background-color: transparent;
+}
+
+.difficulty.tag {
+    text-transform: capitalize;
+}
+
+.card-footer {
+    justify-content: space-between;
+    border-radius: 0 0 8px 8px;
+}
+
+.card {
+    border-radius: 8px;
+}
+
+.card:hover {
+    box-shadow: 0 0 8px 1px rgba(0,0,0,.2);
+}
+
+.has-background-light-info {
+    background-color: #70bdf4;
+}
+
+.is-capitalized {
+    text-transform: capitalize;
+}
+
+.is-hidden {
+    display: none;
+}
+
+.is-full-width {
+    width: 100%;
+}
+
+.navbar-end {
+    width: 100%;
+    margin-left: 0;
+}
+
+.navbar-item.is-1 {
+    flex-grow: 1;
+}
+
+.is-flex.is-justified {
+    justify-content: space-between;
+}
+
+.dropdown-menu {
+    min-width: 0;
+}
+
+.is-flex.is-vcentered {
+    align-items: center;
+}
+
+.tags:not(:last-child) {
+    margin-bottom: 0;
+}
+
+.tags .tag {
+    margin-bottom: 0;
+}
 .partners .container {
     justify-content: space-evenly;
     align-items: center;
@@ -407,6 +478,7 @@ code {
     max-height: 4rem;
     width: auto
 }
+
 
 .mcq-answers {
     margin-bottom: 1em;

@@ -1,6 +1,6 @@
 import React from 'react'
-import { NavLink, Link } from 'react-router-dom'
-// import { NavHashLink } from 'react-router-hash-link'
+import { NavLink, Link, withRouter } from 'react-router-dom'
+import CategoryFilter from '../search/CategoryFilter'
 import LoadingIndicator from './LoadingIndicator'
 import { connect } from 'react-redux'
 import { loadUserProfile } from '../../actions/user'
@@ -11,7 +11,6 @@ class Navigation extends React.Component {
   constructor() {
     super()
     this.state = {
-      isSearchActive: false,
       isTop: true,
     }
 
@@ -40,7 +39,9 @@ class Navigation extends React.Component {
   render() {
     return (
       <nav
-        className={`navbar is-fixed-top short-background-color-transition ${this.state.isTop ? 'is-transparent' : 'has-shadow-bottom'}`}
+        className={`navbar is-fixed-top short-background-color-transition ${
+          this.state.isTop && !this.isSearchActive() ? 'is-transparent' : 'has-shadow-bottom'
+        }`}
         ref={el => {
           this.element = el
         }}
@@ -60,25 +61,19 @@ class Navigation extends React.Component {
   }
 
   getSearchComponent() {
-    if (!this.state.isSearchActive) {
+    if (!this.isSearchActive()) {
       return (
-        <div
-          onClick={() => this.setSearchActive()}
-          className={`navbar-item ${this.state.isTop ? 'has-text-white' : ''}`}
-          // activeClassName={'is-active'}
+        <NavLink
+          className={`navbar-item ${this.state.isTop && !this.isSearchActive() ? 'has-text-white' : ''}`}
+          to={'/search'}
         >
           <i className={'fas fa-search'} />
-        </div>
+        </NavLink>
       )
     } else {
       return (
-        <div className={`navbar-item ${this.state.isTop ? 'has-text-white' : ''}`}>
-          <div className={'control is-loading has-icons-left'}>
-            <input className={'input'} type={'text'} placeholder={'Search'} />
-            <span className={'icon is-small is-left'}>
-              <i className={'fas fa-search'} />
-            </span>
-          </div>
+        <div className={`navbar-item is-1 ${this.state.isTop ? 'has-text-white' : ''}`}>
+          <CategoryFilter />
         </div>
       )
     }
@@ -89,14 +84,14 @@ class Navigation extends React.Component {
       return (
         <div>
           <NavLink
-            className={`navbar-item ${this.state.isTop ? 'has-text-white' : ''}`}
+            className={`navbar-item ${this.state.isTop && !this.isSearchActive() ? 'has-text-white' : ''}`}
             activeClassName={'is-active'}
             to={'/profile'}
           >
             {this.props.user.displayName}
           </NavLink>
           <NavLink
-            className={`navbar-item ${this.state.isTop ? 'has-text-white' : ''}`}
+            className={`navbar-item ${this.state.isTop && !this.isSearchActive() ? 'has-text-white' : ''}`}
             // activeClassName={'is-active'}
             to={'/logout'}
           >
@@ -107,7 +102,7 @@ class Navigation extends React.Component {
     } else {
       return (
         <NavLink
-          className={`navbar-item ${this.state.isTop ? 'has-text-white' : ''}`}
+          className={`navbar-item ${this.state.isTop && !this.isSearchActive() ? 'has-text-white' : ''}`}
           // activeClassName={'is-active'}
           to={'/login'}
         >
@@ -118,14 +113,7 @@ class Navigation extends React.Component {
   }
 
   getHeaderLogo() {
-    return this.state.isTop ? brandLogoWhite : brandLogoBlue
-  }
-
-  setSearchActive() {
-    this.setState({
-      ...this.state,
-      isSearchActive: true,
-    })
+    return this.state.isTop && !this.isSearchActive() ? brandLogoWhite : brandLogoBlue
   }
 
   handleScroll(e) {
@@ -133,6 +121,10 @@ class Navigation extends React.Component {
       ...this.state,
       isTop: document.scrollingElement.scrollTop < this.element.clientHeight,
     })
+  }
+
+  isSearchActive() {
+    return this.props.location.pathname.endsWith('/search')
   }
 }
 
@@ -144,7 +136,9 @@ const mapDispatchToProps = dispatch => ({
   loadProfile: () => dispatch(loadUserProfile()),
 })
 
-export default connect(
+const ConnectedNavigation = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(Navigation)
+
+export default withRouter(ConnectedNavigation)

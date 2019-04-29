@@ -7,7 +7,6 @@ class SearchPage extends React.Component {
   render() {
     return (
       <section className="hero">
-        <TitleHeader />
         <div className="hero-body">
           <div className="container">
             <Search />

@@ -1,26 +1,31 @@
-import React from 'react';
-import DifficultyFilter from "./DifficultyFilter";
-import CategoryFilter from "./CategoryFilter";
-import PageList from "./PageList";
-import CategoryList from "./CategoryList";
+import React from 'react'
+import { withRouter } from 'react-router-dom'
+import DifficultyFilter from './DifficultyFilter'
+import SearchFilter from './SearchFilter'
+import PageList from './PageList'
 
-export default function Search() {
+class Search extends React.Component {
+  render() {
     return (
-        <section className="hero is-fullheight-with-navbar" id='advanced'>
-            <div className="hero-body align-items-normal">
-                <div className="container">
-                    <div className='mb70'>
-                        <CategoryList/>
-                    </div>
-                    <div>
-                        <h1 className="title has-text-centered">Advanced Search</h1>
-                        <DifficultyFilter/>
-                        <CategoryFilter/>
-                        <h3 className='title'>Pages</h3>
-                        <PageList/>
-                    </div>
-                </div>
-            </div>
-        </section>
+      <section className="section" id={'advanced'}>
+        <div className={'search-top-bar columns is-flex is-vcentered is-justified'}>
+          <a onClick={this.props.history.goBack}>
+            <h3 className="is-3">
+              <span className={'icon'}>
+                <i className={'fas fa-chevron-left'} />
+              </span>
+              <span>Back</span>
+            </h3>
+          </a>
+          <div className={'filters is-flex'}>
+            <SearchFilter />
+            <DifficultyFilter />
+          </div>
+        </div>
+        <PageList />
+      </section>
     )
+  }
 }
+
+export default withRouter(Search)
