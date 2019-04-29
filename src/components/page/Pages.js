@@ -71,9 +71,6 @@ class Pages extends React.Component {
         <CategorySteps />
         <div className="columns">
           <div className={'column'}>
-            <div className="tile is-ancestor columns is-multiline">
-              {this.getTilesForPages(categoryName, categoryPages)}
-            </div>
             <PageContent page={categoryRootPage} category={categoryName} categoryPage />
           </div>
           <div className={'column is-one-quarter'}>

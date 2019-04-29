@@ -4,6 +4,12 @@ import workerImg from '../assets/img/worker.svg'
 import blockchainBasicsImg from '../assets/img/undraw_deliveries_131a.svg'
 import smartContractImg from '../assets/img/undraw_operating_system_4lr6.svg'
 
+import hslu from '../assets/img/partners/hslu_logo.svg'
+import imperial from '../assets/img/partners/imperial_logo.svg'
+import io from '../assets/img/partners/iO_Red.png'
+
+const partners = [io, hslu, imperial]
+
 export default function Home() {
   return (
     <div>
@@ -33,42 +39,40 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <div className={'container'}>
-        <section className="section">
-          <div className="container">
-            <div className="columns is-vcentered">
-              <div className="column" style={{ padding: '1rem' }}>
-                <img className={'image image-box border-shadow'} src={blockchainBasicsImg} height={200} alt={''} />
-              </div>
-              <div className="column feature-box">
-                <h1 className={'title'}>Blockchain basics</h1>
-                <aside className="menu">
-                  <ul className="menu-list">
-                    <li>
-                      <a href={'http://'} className="text is-2">
-                        Cryptography
-                      </a>
-                    </li>
-                    <li>
-                      <a href={'http://'} className="text is-2">
-                        Bitcoin
-                      </a>
-                    </li>
-                    <li>
-                      <a href={'http://'} className="text is-2 is-active">
-                        Start Learning
-                      </a>
-                    </li>
-                  </ul>
-                </aside>
-              </div>
+      <section className="section">
+        <div className="container">
+          <div className="columns is-vcentered">
+            <div className="column" style={{ padding: '1rem' }}>
+              <img className={'image image-box border-shadow'} src={blockchainBasicsImg} height={200} alt={''} />
+            </div>
+            <div className="column feature-box">
+              <h1 className={'title'}>Blockchain basics</h1>
+              <aside className="menu">
+                <ul className="menu-list">
+                  <li>
+                    <a href={''} className="text is-2">
+                      Cryptography
+                    </a>
+                  </li>
+                  <li>
+                    <a href={''} className="text is-2">
+                      Bitcoin
+                    </a>
+                  </li>
+                  <li>
+                    <a href={''} className="text is-2 is-active">
+                      Start Learning
+                    </a>
+                  </li>
+                </ul>
+              </aside>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
-      <div className={'container has-background-color-darker'}>
-        <section className="section">
+      <div className={'container'}>
+        <section className="section has-background-color-darker">
           <div className="container">
             <div className="columns is-vcentered">
               <div className="column feature-box">
@@ -100,6 +104,17 @@ export default function Home() {
           </div>
         </section>
       </div>
+
+      <section className={'mt3 section partners'}>
+        <h1 className={'title has-text-centered'}>Partners</h1>
+        <div className={'container is-flex'}>
+          {partners.map((partner, index) => (
+            <figure key={index} className={'image'}>
+              <img src={partner} />
+            </figure>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }
