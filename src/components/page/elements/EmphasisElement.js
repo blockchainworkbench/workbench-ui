@@ -1,5 +1,10 @@
-import React from 'react';
+import React from 'react'
+import ContentArray from '../ContentArray'
 
 export default function EmphasisElement(props) {
-    return <em>{props.content}</em>;
+  return (
+    <em>
+      <ContentArray content={props.content} />
+    </em>
+  )
 }
