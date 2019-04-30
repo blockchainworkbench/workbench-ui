@@ -19,6 +19,7 @@ import TableElement from './TableElement'
 import FormElement from './FormElement'
 import MultipleChoiceQuestionElement from './MultipleChoiceQuestionElement'
 import QuizElement from './QuizElement'
+import StrikethroughElement from './StrikethroughElement'
 
 export default {
   h1: HeaderElement,
@@ -38,6 +39,7 @@ export default {
   exercise: ExerciseElement,
   img: ImageElement,
   em: EmphasisElement,
+  del: StrikethroughElement,
   div: DivElement,
   // "button": ButtonElement,
   form: FormElement,
