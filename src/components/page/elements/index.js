@@ -20,6 +20,7 @@ import FormElement from './FormElement'
 import MultipleChoiceQuestionElement from './MultipleChoiceQuestionElement'
 import QuizElement from './QuizElement'
 import StrikethroughElement from './StrikethroughElement'
+import HorizontalLineElement from './HorizontalLineElement'
 
 export default {
   h1: HeaderElement,
@@ -41,7 +42,7 @@ export default {
   em: EmphasisElement,
   del: StrikethroughElement,
   div: DivElement,
-  // "button": ButtonElement,
+  hr: HorizontalLineElement,
   form: FormElement,
   style: StyleElement,
   ul: ListElement,
