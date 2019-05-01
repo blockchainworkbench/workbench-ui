@@ -1,10 +1,10 @@
 import React from 'react'
 import ContentArray from '../ContentArray'
 
-export default function EmphasisElement(props) {
+export default function StrikethroughElement(props) {
   return (
-    <em>
+    <del>
       <ContentArray content={props.content} />
-    </em>
+    </del>
   )
 }

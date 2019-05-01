@@ -1,5 +1,10 @@
-import React from 'react';
+import React from 'react'
+import ContentArray from '../ContentArray'
 
 export default function StrongElement(props) {
-    return <strong>{props.content}</strong>;
+  return (
+    <strong>
+      <ContentArray content={props.content} />
+    </strong>
+  )
 }
