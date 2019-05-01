@@ -77,12 +77,12 @@ class ExerciseElement extends React.Component {
       return (
         <div className={'hero mb30 has-background-info exercise-box'}>
           <div className={'exercise-header'}>
-            <p className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
+            <div className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
               {this.props.content.title || 'Exercise'}
               <div onClick={this.handleSubmit} className={'button is-pulled-right is-right has-text-left'}>
                 Submit
               </div>
-            </p>
+            </div>
             {this.getProgress()}
           </div>
           <div className={'exercise-body'}>

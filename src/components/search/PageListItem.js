@@ -1,5 +1,5 @@
 import React from 'react'
-import { buildCategoryUrl, buildPageUrl, firstCategoryNameOrUnknown, getDifficultyColorForTag } from '../../lib/helpers'
+import { buildCategoryUrl, buildPageUrl, firstCategoryNameOrUnknown } from '../../lib/helpers'
 import { Link } from 'react-router-dom'
 
 class PageListItem extends React.Component {

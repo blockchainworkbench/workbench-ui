@@ -29,7 +29,12 @@ class DifficultyFilter extends React.Component {
         <div className="dropdown-menu" id="dropdown-menu" role="menu">
           <div className="dropdown-content">
             {DIFFICULTIES.map(difficulty => (
-              <a href="#" className="dropdown-item is-capitalized" onClick={() => this.handleSubmit(difficulty)}>
+              <a
+                key={difficulty}
+                href={'http://'}
+                className="dropdown-item is-capitalized"
+                onClick={() => this.handleSubmit(difficulty)}
+              >
                 {difficulty}
               </a>
             ))}

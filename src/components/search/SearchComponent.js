@@ -9,7 +9,7 @@ class Search extends React.Component {
     return (
       <section className="section" id={'advanced'}>
         <div className={'search-top-bar columns is-flex is-vcentered is-justified'}>
-          <a onClick={this.props.history.goBack}>
+          <a href={'http://'} onClick={this.props.history.goBack}>
             <h3 className="is-3">
               <span className={'icon'}>
                 <i className={'fas fa-chevron-left'} />

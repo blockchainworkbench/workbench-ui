@@ -50,17 +50,17 @@ export default function Home() {
               <aside className="menu">
                 <ul className="menu-list">
                   <li>
-                    <a href={''} className="text is-2">
+                    <a href={'http://'} className="text is-2">
                       Cryptography
                     </a>
                   </li>
                   <li>
-                    <a href={''} className="text is-2">
+                    <a href={'http://'} className="text is-2">
                       Bitcoin
                     </a>
                   </li>
                   <li>
-                    <a href={''} className="text is-2 is-active">
+                    <a href={'http://'} className="text is-2 is-active">
                       Start Learning
                     </a>
                   </li>
@@ -110,7 +110,7 @@ export default function Home() {
         <div className={'container is-flex'}>
           {partners.map((partner, index) => (
             <figure key={index} className={'image'}>
-              <img src={partner} />
+              <img src={partner} alt={''} />
             </figure>
           ))}
         </div>

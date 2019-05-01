@@ -1,6 +1,5 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import TitleHeader from '../layout/TitleHeader'
 import Search from './SearchComponent'
 
 class SearchPage extends React.Component {
