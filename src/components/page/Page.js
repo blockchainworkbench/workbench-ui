@@ -25,7 +25,7 @@ class Page extends React.Component {
     }
     return (
       <section className="hero">
-        <TitleHeader />
+        <TitleHeader page={page} category={categoryName} />
         <div className="hero-body content">
           <CategorySteps />
           <div className="columns">

@@ -49,14 +49,16 @@ class Pages extends React.Component {
     const activeCategoryName = this.props.match.params.category
     const activeCategoryPages = this.props.categories[activeCategoryName.toLowerCase()]
     let content = null
+    let categoryRootPage = null
     if (!this.props.categories || !activeCategoryPages || activeCategoryPages.length === 0) {
       content = this.getLoadingInfo()
     } else {
-      content = this.getCategoryInfo(activeCategoryPages, activeCategoryName)
+      categoryRootPage = this.props.pages.find(page => page.url === activeCategoryPages[0].url)
+      content = this.getCategoryInfo(categoryRootPage, activeCategoryName)
     }
     return (
       <section className={'hero'}>
-        <TitleHeader />
+        <TitleHeader page={categoryRootPage} category={activeCategoryName} />
         <div className={'hero-body content'}>
           <div>{content}</div>
         </div>
@@ -64,8 +66,7 @@ class Pages extends React.Component {
     )
   }
 
-  getCategoryInfo(categoryPages, categoryName) {
-    const categoryRootPage = this.props.pages.find(page => page.url === categoryPages[0].url)
+  getCategoryInfo(categoryRootPage, categoryName) {
     return (
       <>
         <CategorySteps />

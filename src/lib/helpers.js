@@ -21,6 +21,17 @@ export const urlify = stringValue => {
   return 'undefined'
 }
 
+export const deurlify = stringValue => {
+  if (stringValue) return stringValue.split('_').join(' ')
+  return 'undefined'
+}
+
+export const makePascalCase = stringValue => {
+  if (!stringValue) return 'undefined'
+  if (stringValue.length > 1) return stringValue[0].toUpperCase() + stringValue.substr(1)
+  if (stringValue.length === 1) return stringValue[0].toUpperCase()
+  return ''
+}
 export const buildPageUrl = (categoryName, pageTitle) => {
   return `/pages/${urlify(categoryName)}/${urlify(pageTitle)}`
 }

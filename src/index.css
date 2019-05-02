@@ -444,6 +444,7 @@ code {
 .navbar-end {
     width: 100%;
     margin-left: 0;
+    padding-right: 0.75rem;
 }
 
 .navbar-item.is-1 {
@@ -503,4 +504,22 @@ code {
 
 .quiz-button-box {
     margin: 1rem 1.5rem 0.5rem;
+}
+
+.header-pageinfo {
+    padding-left: 1rem;
+}
+
+.header-pageinfo > div > div {
+    font-weight: 800;
+    padding-left: 1.5rem
+}
+
+.header-pageinfo > div > div > div {
+    display: inline;
+    padding-left: 0.25rem;
+}
+
+.title-header {
+    padding-bottom: 1.5rem;
 }
