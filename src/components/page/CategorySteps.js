@@ -11,25 +11,14 @@ class CategorySteps extends React.Component {
     }
     const steps = []
 
-    for (const page of pages) {
+    for (const [idx, page] of pages.entries()) {
       const isOverview = page.url.endsWith('/')
       const title = isOverview ? 'Overview' : page.title
       const url = `/pages/${category}` + (!isOverview ? `/${urlify(title)}` : '')
 
       steps.push(
-        <li key={page.url} className={`steps-segment ${this.isActivePage(page, isOverview) ? 'is-active' : ''}`}>
-          <Link to={url}>
-            <span className="steps-marker">
-              {isOverview ? (
-                <span className="icon">
-                  <i className="fa fa-circle is-size-7" />
-                </span>
-              ) : null}
-            </span>
-            <div className="steps-content">
-              <p className="is-size-7">{title}</p>
-            </div>
-          </Link>
+        <li title={title} key={page.url} className={this.getStepClasses(page, isOverview, idx)}>
+          <Link to={url}>&nbsp;</Link>
         </li>,
       )
     }
@@ -40,10 +29,16 @@ class CategorySteps extends React.Component {
     let activeCategoryName = this.props.match.params.category
     const activeCategoryPages = this.props.categories[urlify(activeCategoryName.toLowerCase())]
     return (
-      <ul className="steps my-step-style has-content-centered is-hidden-mobile is-small">
+      <ul id={'category-steps'} className="category-steps">
         {this.getStepsForPages(activeCategoryName, activeCategoryPages)}
       </ul>
     )
+  }
+
+  getStepClasses(page, isOverview, idx) {
+    if (this.isActivePage(page, isOverview)) return 'is-active'
+    if (this.isPageCompleted(page, idx)) return 'has-background-info'
+    return 'has-background-grey-light'
   }
 
   isActivePage(page, isOverview) {
@@ -51,6 +46,12 @@ class CategorySteps extends React.Component {
       (isOverview && !this.props.match.params.page) ||
       (this.props.match.params.page && this.props.match.params.page.toLowerCase() === urlify(page.title.toLowerCase()))
     )
+  }
+
+  isPageCompleted(page, idx) {
+    // TODO : Real Implementation with request to API to check if user has already completed page
+    if (idx < 2) return true
+    return idx % 5 === 0
   }
 }
 

@@ -371,9 +371,27 @@ code {
     margin-top: 0;
 }
 
-.steps.my-step-style {
+#category-steps {
     list-style: none;
     margin-left: 0;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+#category-steps > li {
+    display: table-cell;
+    border: 1px solid white;
+    text-align: center;
+    line-height: 1rem;
+}
+
+#category-steps > .is-active  {
+    background-color: #FFD700;
+}
+
+#category-steps > li > a {
+    display: block;
 }
 
 .has-flex-grow {
