@@ -540,4 +540,5 @@ code {
 
 .title-header {
     padding-bottom: 1.5rem;
+    background: radial-gradient(ellipse at bottom,#70bdf4 0,#63b6f2 42%,#209cee 100%)
 }
