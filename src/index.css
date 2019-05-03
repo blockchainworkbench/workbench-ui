@@ -372,26 +372,26 @@ code {
     margin-top: 0;
 }
 
-#category-steps {
-    list-style: none;
-    margin-left: 0;
+.content .category-steps {
     display: table;
     width: 100%;
     table-layout: fixed;
+    list-style: none;
+    margin-left: 0;
 }
 
-#category-steps > li {
+.category-steps > li {
     display: table-cell;
     border: 1px solid white;
     text-align: center;
     line-height: 1rem;
 }
 
-#category-steps > .is-active {
+.category-steps > .is-active {
     background-color: #ed9217;
 }
 
-#category-steps > li > a {
+.category-steps > li > a {
     display: block;
 }
 

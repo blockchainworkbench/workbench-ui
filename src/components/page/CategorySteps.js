@@ -28,11 +28,7 @@ class CategorySteps extends React.Component {
   render() {
     let activeCategoryName = this.props.match.params.category
     const activeCategoryPages = this.props.categories[urlify(activeCategoryName.toLowerCase())]
-    return (
-      <ul id={'category-steps'} className="category-steps">
-        {this.getStepsForPages(activeCategoryName, activeCategoryPages)}
-      </ul>
-    )
+    return <ul className="category-steps">{this.getStepsForPages(activeCategoryName, activeCategoryPages)}</ul>
   }
 
   getStepClasses(page, isOverview, idx) {
