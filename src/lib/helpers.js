@@ -22,15 +22,13 @@ export const urlify = stringValue => {
 }
 
 export const deurlify = stringValue => {
-  if (stringValue) return stringValue.split('_').join(' ')
-  return 'undefined'
+  if (!stringValue) return 'undefined'
+  return stringValue.split('_').join(' ')
 }
 
 export const makePascalCase = stringValue => {
   if (!stringValue) return 'undefined'
-  if (stringValue.length > 1) return stringValue[0].toUpperCase() + stringValue.substr(1)
-  if (stringValue.length === 1) return stringValue[0].toUpperCase()
-  return ''
+  return stringValue.charAt(0).toUpperCase() + stringValue.substr(1)
 }
 export const buildPageUrl = (categoryName, pageTitle) => {
   return `/pages/${urlify(categoryName)}/${urlify(pageTitle)}`
