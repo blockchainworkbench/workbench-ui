@@ -82,7 +82,7 @@ class Navigation extends React.Component {
   getLoginOrProfileNav() {
     if (this.props.user.authenticated) {
       return (
-        <div>
+        <>
           <NavLink
             className={`navbar-item ${this.state.isTop && !this.isSearchActive() ? 'has-text-white' : ''}`}
             activeClassName={'is-active'}
@@ -97,7 +97,7 @@ class Navigation extends React.Component {
           >
             Logout
           </NavLink>
-        </div>
+        </>
       )
     } else {
       return (
