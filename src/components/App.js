@@ -34,7 +34,7 @@ class App extends React.Component {
             <Route exact path={'/profile'} component={Profile} />
             <Route exact path={'/profile/edit'} component={ProfileEdit} />
             <Route path={'/pages/:category/:page'} component={Page} />
-            <Redirect from={'/start'} to={'/pages/0Introduction'} />
+            <Redirect from={'/start'} to={'/pages/Intro'} />
             <Route exact path={'/pages/:category'} component={Pages} />
             <Route path={'/'} component={Page404} />
           </Switch>

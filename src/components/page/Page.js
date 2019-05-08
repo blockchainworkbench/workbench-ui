@@ -24,7 +24,7 @@ class Page extends React.Component {
       return <Redirect to={buildCategoryUrl(categoryName)} />
     }
     return (
-      <section className="hero">
+      <section className="hero mb2">
         <TitleHeader page={page} category={categoryName} />
         <div className="hero-body content">
           <CategorySteps />

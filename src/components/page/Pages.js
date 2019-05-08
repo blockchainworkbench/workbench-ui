@@ -68,7 +68,7 @@ class Pages extends React.Component {
 
   getCategoryInfo(categoryRootPage, categoryName) {
     return (
-      <>
+      <div className={'mb2'}>
         <CategorySteps />
         <div className="columns">
           <div className={'column'}>
@@ -78,7 +78,7 @@ class Pages extends React.Component {
             <CategorySidebar />
           </div>
         </div>
-      </>
+      </div>
     )
   }
 
