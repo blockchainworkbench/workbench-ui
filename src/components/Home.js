@@ -135,7 +135,7 @@ export default function Home() {
         <h1 className={'title has-text-centered is-1'}>Partners</h1>
         <div className={'container is-flex'}>
           {partners.map((partner, index) => (
-            <a href={partner.url} className={'border-shadow'}>
+            <a key={index} href={partner.url} className={'border-shadow'}>
               <figure key={index} className={`image is-full-height ${index % 2 === 0 ? 'is-flex' : ''}`}>
                 <img src={partner.logo} alt={partner.name} />
               </figure>
