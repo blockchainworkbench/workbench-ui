@@ -22,8 +22,32 @@ export default [
   takeEvery(ACTIONS.TEST_EXERCISE_DEPLOY, workerTestExerciseDeploy),
 ]
 
-function onWeb3ConfigStoreUpdate(update) {
-  store.dispatch(web3AccountUpdate(update))
+function getNetworkId() {
+  return new Promise(resolve => {
+    window.web3.version.getNetwork((err, networkId) => {
+      if (err) return resolve('-1')
+      resolve(networkId)
+    })
+  })
+}
+
+function getAccount() {
+  return new Promise(async resolve => {
+    window.web3.eth.getAccounts((err, accounts) => {
+      if (err) return resolve('')
+      resolve(accounts[0])
+    })
+  })
+}
+
+function getWeb3Config() {
+  return new Promise(async resolve => {
+    const web3Config = { selectedAddress: '', networkVersion: '' }
+    web3Config.networkVersion = await getNetworkId()
+    web3Config.selectedAddress = await getAccount()
+    store.dispatch(web3AccountUpdate(web3Config))
+    resolve(true)
+  })
 }
 
 function* workerCheckAccount() {
@@ -35,8 +59,8 @@ function* workerCheckAccount() {
       window.web3 = new Web3(ethereum)
       try {
         yield call(ethereum.enable)
+        yield call(getWeb3Config)
         yield put(checkWeb3AccountSuccess())
-        web3.currentProvider.publicConfigStore.on('update', update => onWeb3ConfigStoreUpdate(update))
       } catch (error) {
         yield put(checkWeb3AccountFailure('Access to Accounts denied by user.'))
       }
@@ -93,7 +117,6 @@ function deploy(contract) {
   const mcontract = web3.eth.contract(JSON.parse(abi))
 
   return new Promise(async (resolve, reject) => {
-    if (!store.getState().appState.web3Account.validNetwork) return reject('You are in the wrong network')
     const estimate = await estimateGas(bc)
     const gasPrice = await estimateGasPrice()
     mcontract.new({ data: bc, from: web3.eth.accounts[0], gas: estimate, gasPrice: gasPrice }, (err, r) => {
