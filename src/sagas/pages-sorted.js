@@ -6,7 +6,7 @@ export default [takeLatest('LOAD_PAGES_SUCCESS', workerOrderPages)]
 
 function addToContainerIfNotYetExist(categoryName, container, page, containerType) {
   if (categoryName.toLowerCase() in container) {
-    console.log(`More than one ${containerType} page for category ${categoryName} found`)
+    console.warn(`More than one ${containerType} page for category ${categoryName} found`)
   } else {
     const targetPage = Object.assign({}, page, { rootOfCategory: categoryName })
     container[urlify(categoryName.toLowerCase())] = targetPage

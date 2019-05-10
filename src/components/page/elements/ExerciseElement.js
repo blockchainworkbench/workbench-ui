@@ -2,7 +2,7 @@ import React from 'react'
 import CodeEditor from '../CodeEditor'
 import { connect } from 'react-redux'
 import ContentArray from '../ContentArray'
-import { EXERCISE_STATE, resetExerciseErrorCount, runExercise } from '../../../actions/exercise'
+import { checkExerciseStatus, EXERCISE_STATE, resetExerciseErrorCount, runExercise } from '../../../actions/exercise'
 
 const COMPILER_VERSION = 'soljson-v0.4.24+commit.e67f0147.js'
 
@@ -18,6 +18,12 @@ class ExerciseElement extends React.Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.showSolutionClicked = this.showSolutionClicked.bind(this)
+  }
+
+  componentDidMount() {
+    if (!this.props.exerciseCompleted) {
+      this.props.checkExerciseStatus(this.props.content[0].id)
+    }
   }
 
   handleChange(event) {
@@ -78,7 +84,10 @@ class ExerciseElement extends React.Component {
         <div className={'hero mb30 has-background-info exercise-box'}>
           <div className={'exercise-header'}>
             <div className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
-              {this.props.content.title || 'Exercise'}
+              <div>
+                {this.props.content.title || 'Exercise'} {this.props.content[0].id}
+                {this.getCompletedIcon()}
+              </div>
               <div onClick={this.handleSubmit} className={'button is-pulled-right is-right has-text-left'}>
                 Submit
               </div>
@@ -95,6 +104,17 @@ class ExerciseElement extends React.Component {
     } else {
       return <span className={'has-background-danger has-text-white'}>Invalid Exercise Element</span>
     }
+  }
+
+  getCompletedIcon() {
+    if (this.props.exerciseCompleted) {
+      return (
+        <span className="ml10 icon has-text-success" title={'You have solved this exercise.'}>
+          <i className="far fa-check-circle" />
+        </span>
+      )
+    }
+    return null
   }
 
   getDescription() {
@@ -127,6 +147,7 @@ class ExerciseElement extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     exercise: state.appState.exercises.find(ex => ex.codeId === ownProps.content[0].id),
+    exerciseCompleted: state.progress.exercises.includes(ownProps.content[0].id),
   }
 }
 
@@ -135,6 +156,7 @@ const mapDispatchToProps = dispatch => {
     runExercise: (id, version, user, solution, validation, optimize) =>
       dispatch(runExercise(id, version, user, solution, validation, optimize)),
     resetExercise: id => dispatch(resetExerciseErrorCount(id)),
+    checkExerciseStatus: id => dispatch(checkExerciseStatus(id)),
   }
 }
 

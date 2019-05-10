@@ -27,7 +27,7 @@ class Page extends React.Component {
       <section className="hero mb2">
         <TitleHeader page={page} category={categoryName} />
         <div className="hero-body content">
-          <CategorySteps />
+          <CategorySteps url={categoryName + (page && page.url ? page.url : '')} />
           <div className="columns">
             <div className={'column'}>
               <PageContent page={page} category={categoryName} />

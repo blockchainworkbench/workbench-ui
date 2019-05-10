@@ -15,7 +15,7 @@ export default class TitleHeader extends React.Component {
   }
 
   getPageDurationText() {
-    return `${this.props.page.duration || 5} Min`
+    return `${this.props.page.time || 5} Min`
   }
 
   render() {

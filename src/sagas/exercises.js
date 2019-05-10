@@ -2,6 +2,7 @@ import { call, put, take, takeEvery } from 'redux-saga/effects'
 import { ACTIONS } from '../actions'
 import { checkWeb3Account } from '../actions/web3'
 import {
+  checkExerciseStatusSuccess,
   compile,
   deploy,
   EXERCISE_STATE,
@@ -10,7 +11,7 @@ import {
   setExerciseUpdate,
   testContracts,
 } from '../actions/exercise'
-import { postUrl } from '../lib/helpers'
+import { fetchUrl, postUrl } from '../lib/helpers'
 import {
   compilerLoaded,
   exerciseCompiledFailure,
@@ -21,7 +22,10 @@ import {
   exerciseTestSuccess,
 } from '../lib/saga-action-filter'
 
-export default [takeEvery(ACTIONS.RUN_EXERCISE, workerExecuteExercise)]
+export default [
+  takeEvery(ACTIONS.RUN_EXERCISE, workerExecuteExercise),
+  takeEvery(ACTIONS.CHECK_EXERCISE_STATUS, workerCheckExerciseStatus),
+]
 
 function* workerExecuteExercise(action) {
   try {
@@ -84,5 +88,14 @@ async function postExerciseResult(exerciseId) {
       return
     }
     throw new Error(`Failed to save user progress: ${error.response.data}`)
+  }
+}
+
+function* workerCheckExerciseStatus(action) {
+  try {
+    const response = yield call(fetchUrl, `/api/exercises/${action.exerciseId}/completed`)
+    yield put(checkExerciseStatusSuccess(action.exerciseId, response.data))
+  } catch (error) {
+    console.log('checkExerciseStatus', error)
   }
 }

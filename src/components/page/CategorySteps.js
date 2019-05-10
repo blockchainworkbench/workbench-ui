@@ -3,21 +3,49 @@ import { withRouter } from 'react-router'
 import connect from 'react-redux/es/connect/connect'
 import { Link } from 'react-router-dom'
 import { urlify } from '../../lib/helpers'
+import { checkPageStatus } from '../../actions/pages'
 
 class CategorySteps extends React.Component {
-  getStepsForPages(category, pages) {
-    if (!pages) {
-      return []
+  constructor(props) {
+    super(props)
+    this.state = { checkedPages: false, url: '' }
+  }
+
+  componentDidMount() {
+    this.checkPagesStatus()
+  }
+
+  componentDidUpdate() {
+    this.checkPagesStatus()
+  }
+
+  checkPagesStatus() {
+    if (!this.state.checkedPages || this.state.url !== this.props.url) {
+      const categoryPages = this.props.categories[urlify(this.props.match.params.category.toLowerCase())]
+      if (categoryPages) {
+        this.setState({ checkedPages: true, url: this.props.url })
+        for (let page of categoryPages) {
+          if (!this.isPageCompleted(page)) {
+            this.props.checkPageStatus(page.url)
+          }
+        }
+      }
     }
+  }
+
+  getStepsForPages() {
+    if (!this.props.categories) return []
+    const categoryPages = this.props.categories[urlify(this.props.match.params.category.toLowerCase())]
+    if (!categoryPages) return []
     const steps = []
 
-    for (const [idx, page] of pages.entries()) {
+    for (const page of categoryPages.values()) {
       const isOverview = page.url.endsWith('/')
       const title = isOverview ? 'Overview' : page.title
-      const url = `/pages/${category}` + (!isOverview ? `/${urlify(title)}` : '')
+      const url = `/pages/${this.props.match.params.category}` + (!isOverview ? `/${urlify(title)}` : '')
 
       steps.push(
-        <li title={title} key={page.url} className={this.getStepClasses(page, isOverview, idx)}>
+        <li title={title} key={page.url} className={this.getStepClasses(page, isOverview)}>
           <Link to={url}>&nbsp;</Link>
         </li>,
       )
@@ -26,14 +54,12 @@ class CategorySteps extends React.Component {
   }
 
   render() {
-    let activeCategoryName = this.props.match.params.category
-    const activeCategoryPages = this.props.categories[urlify(activeCategoryName.toLowerCase())]
-    return <ul className="category-steps">{this.getStepsForPages(activeCategoryName, activeCategoryPages)}</ul>
+    return <ul className="category-steps">{this.getStepsForPages()}</ul>
   }
 
-  getStepClasses(page, isOverview, idx) {
+  getStepClasses(page, isOverview) {
     if (this.isActivePage(page, isOverview)) return 'is-active'
-    if (this.isPageCompleted(page, idx)) return 'has-background-info'
+    if (this.isPageCompleted(page)) return 'has-background-info'
     return 'has-background-grey-light'
   }
 
@@ -44,16 +70,22 @@ class CategorySteps extends React.Component {
     )
   }
 
-  isPageCompleted(page, idx) {
-    // TODO : Real Implementation with request to API to check if user has already completed page
-    if (idx < 2) return true
-    return idx % 5 === 0
+  isPageCompleted(page) {
+    return this.props.completedPages.includes(page.url)
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   categories: state.categories,
+  completedPages: state.progress.pages,
 })
 
-const ConnectedCategorySteps = connect(mapStateToProps)(CategorySteps)
+const mapDispatchToProps = dispatch => ({
+  checkPageStatus: pageUrl => dispatch(checkPageStatus(pageUrl)),
+})
+
+const ConnectedCategorySteps = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CategorySteps)
 export default withRouter(ConnectedCategorySteps)
