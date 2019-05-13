@@ -15,7 +15,7 @@ export const loadUserProfile = () => ({
   type: ACTIONS.LOAD_USER_PROFILE,
 })
 
-export const loadUserProfileSuccess = profile => Object.assign({ type: ACTIONS.LOAD_USER_PROFILE_SUCCESS }, profile)
+export const loadUserProfileSuccess = profile => ({ type: ACTIONS.LOAD_USER_PROFILE_SUCCESS, ...profile })
 
 export const loadUserProfileFailure = (error, code = null) => ({
   type: ACTIONS.LOAD_USER_PROFILE_FAILURE,

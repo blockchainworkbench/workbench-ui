@@ -1,6 +1,12 @@
 {
-  "extends": ["standard", "standard-react", "prettier"],
-  "plugins": ["prettier"],
+  "extends": [
+    "standard",
+    "standard-react",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
   "env": {
     "browser": true
   },
@@ -17,9 +23,13 @@
         "trailingComma": "all",
         "semi": false
       }
-    ]
+    ],
+    "prefer-object-spread": "error"
   },
   "globals": {
     "__DEV__": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9
   }
 }

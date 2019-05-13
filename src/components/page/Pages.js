@@ -69,7 +69,7 @@ class Pages extends React.Component {
   getCategoryInfo(categoryRootPage, categoryName) {
     return (
       <div className={'mb2'}>
-        <CategorySteps url={categoryName + (categoryRootPage && categoryRootPage.url ? categoryRootPage.url : '')} />
+        <CategorySteps />
         <div className="columns">
           <div className={'column'}>
             <PageContent page={categoryRootPage} category={categoryName} categoryPage />

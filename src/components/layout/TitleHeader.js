@@ -1,6 +1,8 @@
 import React from 'react'
 import { deurlify, makePascalCase } from '../../lib/helpers'
 
+const DEFAULT_TIME_FOR_PAGE = 5
+
 export default class TitleHeader extends React.Component {
   static getStaticTitleHeader() {
     return (
@@ -15,7 +17,7 @@ export default class TitleHeader extends React.Component {
   }
 
   getPageDurationText() {
-    return `${this.props.page.time || 5} Min`
+    return `${this.props.page.time || DEFAULT_TIME_FOR_PAGE} Min`
   }
 
   render() {

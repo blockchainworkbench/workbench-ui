@@ -6,9 +6,9 @@ import { urlify } from '../../lib/helpers'
 import { checkPageStatus } from '../../actions/pages'
 
 class CategorySteps extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { checkedPages: false, url: '' }
+  state = {
+    checkedPages: false,
+    url: '',
   }
 
   componentDidMount() {
@@ -20,10 +20,10 @@ class CategorySteps extends React.Component {
   }
 
   checkPagesStatus() {
-    if (!this.state.checkedPages || this.state.url !== this.props.url) {
-      const categoryPages = this.props.categories[urlify(this.props.match.params.category.toLowerCase())]
+    if (!this.state.checkedPages || this.state.url !== this.props.location.pathname) {
+      const categoryPages = this.getCategoryPages()
       if (categoryPages) {
-        this.setState({ checkedPages: true, url: this.props.url })
+        this.setState({ checkedPages: true, url: this.props.location.pathname })
         for (let page of categoryPages) {
           if (!this.isPageCompleted(page)) {
             this.props.checkPageStatus(page.url)
@@ -35,7 +35,7 @@ class CategorySteps extends React.Component {
 
   getStepsForPages() {
     if (!this.props.categories) return []
-    const categoryPages = this.props.categories[urlify(this.props.match.params.category.toLowerCase())]
+    const categoryPages = this.getCategoryPages()
     if (!categoryPages) return []
     const steps = []
 
@@ -55,6 +55,10 @@ class CategorySteps extends React.Component {
 
   render() {
     return <ul className="category-steps">{this.getStepsForPages()}</ul>
+  }
+
+  getCategoryPages() {
+    return this.props.categories[urlify(this.props.match.params.category.toLowerCase())]
   }
 
   getStepClasses(page, isOverview) {

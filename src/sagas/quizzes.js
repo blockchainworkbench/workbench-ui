@@ -10,9 +10,7 @@ export default [
 
 function* workerCheckQuizStatus(action) {
   try {
-    console.log('check quiz', action.quizId)
     const response = yield call(fetchUrl, `/api/quizzes/${action.quizId}/completed`)
-    console.log('check quiz result', action.quizId, response.data)
     yield put(checkQuizStatusSuccess(action.quizId, response.data))
   } catch (error) {
     console.log('checkQuizStatus', error)

@@ -37,7 +37,7 @@ class QuizElement extends React.Component {
     return (
       <div className={'hero mb30 has-background-info exercise-box'}>
         <div className={'exercise-header'}>
-          <div className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
+          <h2 className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
             <div>
               Quiz
               {this.getCompletedIcon()}
@@ -45,7 +45,7 @@ class QuizElement extends React.Component {
             <div className={'is-pulled-right is-right has-text-left'}>
               {`Question ${this.state.currentQuestion + 1}/${this.props.content.length}`}
             </div>
-          </div>
+          </h2>
         </div>
         <div className={'exercise-body'}>
           {this.state.finished ? (
