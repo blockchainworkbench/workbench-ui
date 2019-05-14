@@ -21,7 +21,7 @@ class ExerciseElement extends React.Component {
   }
 
   componentDidMount() {
-    if (!this.props.exerciseCompleted) {
+    if (this.props.user.authenticated && !this.props.exerciseCompleted) {
       this.props.checkExerciseStatus(this.props.content[0].id)
     }
   }
@@ -85,7 +85,7 @@ class ExerciseElement extends React.Component {
           <div className={'exercise-header'}>
             <div className={'subtitle has-text-white has-text-weight-bold is-marginless'}>
               <div>
-                {this.props.content.title || 'Exercise'} {this.props.content[0].id}
+                {this.props.content[0].title}
                 {this.getCompletedIcon()}
               </div>
               <div onClick={this.handleSubmit} className={'button is-pulled-right is-right has-text-left'}>
@@ -148,6 +148,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     exercise: state.appState.exercises.find(ex => ex.codeId === ownProps.content[0].id),
     exerciseCompleted: state.progress.exercises.includes(ownProps.content[0].id),
+    user: state.appState.user,
   }
 }
 

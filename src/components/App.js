@@ -14,6 +14,7 @@ import ProfileEdit from './user/ProfileEdit'
 import Playground from './Playground'
 import SearchPage from './search/SearchPage'
 import { Page404 } from './page/Page404'
+import Testing from './testing/Testing'
 
 class App extends React.Component {
   componentDidMount() {
@@ -35,6 +36,7 @@ class App extends React.Component {
             <Route exact path={'/profile/edit'} component={ProfileEdit} />
             <Route path={'/pages/:category/:page'} component={Page} />
             <Redirect from={'/start'} to={'/pages/Intro'} />
+            <Route path={'/testing'} component={Testing} />
             <Route exact path={'/pages/:category'} component={Pages} />
             <Route path={'/'} component={Page404} />
           </Switch>

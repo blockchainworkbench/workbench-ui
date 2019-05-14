@@ -20,7 +20,7 @@ class CategorySteps extends React.Component {
   }
 
   checkPagesStatus() {
-    if (!this.state.checkedPages || this.state.url !== this.props.location.pathname) {
+    if (this.isLoggedIn() && this.didNotCheckStatusForCurrentPage()) {
       const categoryPages = this.getCategoryPages()
       if (categoryPages) {
         this.setState({ checkedPages: true, url: this.props.location.pathname })
@@ -31,6 +31,14 @@ class CategorySteps extends React.Component {
         }
       }
     }
+  }
+
+  didNotCheckStatusForCurrentPage() {
+    return !this.state.checkedPages || this.state.url !== this.props.location.pathname
+  }
+
+  isLoggedIn() {
+    return this.props.user.authenticated
   }
 
   getStepsForPages() {
@@ -82,6 +90,7 @@ class CategorySteps extends React.Component {
 const mapStateToProps = (state) => ({
   categories: state.categories,
   completedPages: state.progress.pages,
+  user: state.appState.user,
 })
 
 const mapDispatchToProps = dispatch => ({
